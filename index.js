@@ -15,6 +15,8 @@ const colors = [
   '#ff7902',
 ];
 
+console.log("Entered index.js");
+
 //create svg canvas
 const svg = select('body')
   .append('svg')
