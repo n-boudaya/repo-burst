@@ -97,6 +97,7 @@
       .selectAll('path')
       .data(d3$1.range(n))
       .join('path')
+      .attr("id", function(d,i) { return i; })
       .attr(
         'd',
         d3
@@ -122,8 +123,10 @@
         pastColors.push(rand);
 
         return colors[rand];
-      });
-
+      })
+      .attr('stroke', 'white')
+      .attr('stroke-width', '0')
+      .on("mouseover", function(d,i) {d3.select(this).attr('stroke-width', '10');} );
     if (maskid != 'none') {
       rings.attr('mask', `url(#${maskid})`);
     }
