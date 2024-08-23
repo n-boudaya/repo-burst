@@ -1,15 +1,9 @@
 package data_and_processing;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.ZoneId;
+import java.nio.file.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * fileReader
@@ -21,12 +15,12 @@ public class fileReader {
 
         fileReader fR = new fileReader();
 
-        File f = new File("./data_and_processing/raw_data/");
+        Path p = Paths.get("./data_and_processing/raw_data/");
 
-        fR.outputFiles(f);
+        fR.outputFiles(p);
     }
 
-    public void outputFiles(File directory) {
+    public void outputFiles(Path directory) {
         try {
             String currTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss"));
 
@@ -34,15 +28,17 @@ public class fileReader {
 
             System.out.println("Files are:");
 
-            for (File f : FileUtils.listFiles(directory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+            Files.walk(directory, FileVisitOption.FOLLOW_LINKS).filter(f -> !Files.isDirectory(f)).forEach(p -> {
                 try (BufferedWriter br = new BufferedWriter(new FileWriter(outputFile, true))) {
-                    br.write(f.getPath() + "\n");
+                    br.write(p.toString() + "\n");
+                    System.out.println(p.toString());
                 }
 
                 catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
-            }
+            });
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
