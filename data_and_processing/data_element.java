@@ -24,4 +24,12 @@ public class data_element {
     public Path getReferencedFile() {
         return referencedFile;
     }
+
+    public String toString(){
+        String output = "Line Number: " + lineNumber + System.lineSeparator();
+        output = output + "Line Content: " + lineContent + System.lineSeparator();
+        output = output + "Referenced File: " + referencedFile.toString() + System.lineSeparator();
+
+        return output;
+    }
 }

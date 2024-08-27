@@ -21,7 +21,7 @@ public class javascript_processor extends processor {
     public ArrayList<data_element> getImports(Path path) {
         ArrayList<data_element> result = new ArrayList<data_element>();
 
-        Pattern pattern = Pattern.compile("^import(.+?)from\s\"(?'path'.+)\";$");
+        Pattern pattern = Pattern.compile("^import(.+?)from\\s\\\"(?<path>.+)\\\";$");
 
         try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             int lineNumber = 0;
