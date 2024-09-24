@@ -1,4 +1,11 @@
 # Planung
+- Verarbeitung von einzelnem Zeitpunkt des Datensatzes soweit fertig
+- Nächster Schritt: Verarbeitung weiterer Zeitschritte ermöglichen
+- Dann: Referenz-Implementation von Sunburst-Diagramm auf eigene Daten anpassen
+- Reihenfolge der Ebenen umtauschen, sodass höchste Hierarchie-Ebene außen steht.
+
+
+
 - ~~D3 Einarbeitung~~  
   Einarbeitung in javascript und D3 mithilfe von [diesem Tutorial](https://youtu.be/xkBheRZTkaw?si=9wbG6xvtOIbCFZ8w)
   Hat gute Grundlage für Arbeit mit D3 gegeben. Hauptsächlich Fokus auf Bogensegmente gelegt, da diese später für das Sunburst-Diagramm benötigt werden. [Eins der Ergebnisse.](https://vizhub.com/n-boudaya/815b09be96e8430592b357a7217a2598)

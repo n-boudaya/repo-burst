@@ -5,3 +5,4 @@ data_and_processing/raw_data/*
 !data_and_processing/raw_data/.gitkeep
 data_and_processing/file_lists/*
 !data_and_processing/file_lists/.gitkeep
+out/*
