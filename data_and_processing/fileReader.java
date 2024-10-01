@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import data_and_processing.processors.javascript_processor;
@@ -105,9 +106,9 @@ public class FileReader {
 
     private JSONObject fileTreeToJSON(Path currentPath) {
         JSONObject output = new JSONObject();
-        
+
         if (Files.isDirectory(currentPath, LinkOption.NOFOLLOW_LINKS)) {
-            System.out.println("Is Directory:"+currentPath.toString());                                    
+            System.out.println("Is Directory:" + currentPath.toString());
 
             JSONArray directoryContentArray = new JSONArray();
 
@@ -118,41 +119,51 @@ public class FileReader {
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
-            
+
             output.put("dir_name", currentPath.getFileName());
-            output.put("children", directoryContentArray);            
+            output.put("children", directoryContentArray);
         } else {
-            System.out.println("Is File:"+currentPath.toString());
-            
+            System.out.println("Is File:" + currentPath.toString());
+
             int dotIndex = currentPath.toString().lastIndexOf(".");
+            
             ArrayList<data_element> imports = new ArrayList<data_element>();
+            String extension = "";
 
-            String extension = currentPath.toString().substring(dotIndex + 1);
+            if (dotIndex > 0) {
+                extension = currentPath.toString().substring(dotIndex + 1);
 
-            // System.out.println("Manual extension found:" + extension);
-            // System.out.println("probeContentType:" + Files.probeContentType(p));
-            if (accessibleFiletypes.contains(extension)) {
-                for (processor fP : processors) {
-                    for (String type : fP.getFileTypes()) {
-                        if (type.equals(extension)) {
-                            imports = fP.getImports(currentPath);
+                // System.out.println("Manual extension found:" + extension);
+                // System.out.println("probeContentType:" + Files.probeContentType(p));
+                if (accessibleFiletypes.contains(extension)) {
+                    for (processor fP : processors) {
+                        for (String type : fP.getFileTypes()) {
+                            if (type.equals(extension)) {
+                                imports = fP.getImports(currentPath);
+                            }
                         }
                     }
-                }
-                if (!imports.isEmpty()) {
-                    for (data_element d : imports) {
-                        System.out.println(d.toString());
+                    if (!imports.isEmpty()) {
+                        for (data_element d : imports) {
+                            System.out.println(d.toString());
+                        }
                     }
-                }
 
+                }
             }
 
             output.put("file_name", currentPath.getFileName());
             output.put("extension", extension);
-            output.put("imports", imports);            
+            output.put("imports", imports);
+            try {
+                output.put("value", Files.size(currentPath));
+            } catch (IOException e) {
+                output.put("value", -1);
+                System.err.println(e.getMessage());
+            }
         }
 
-        output.put("path", currentPath);
+        output.put("path", currentPath);        
         return output;
     }
 }
