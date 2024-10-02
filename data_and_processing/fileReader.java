@@ -5,17 +5,15 @@ import java.nio.file.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import data_and_processing.processors.javascript_processor;
 import data_and_processing.processors.processor;
 
 /**
- * fileReader
+ * FileReader
  */
 public class FileReader {
 
