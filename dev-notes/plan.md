@@ -1,9 +1,9 @@
 # Planung
+
 - Verarbeitung von einzelnem Zeitpunkt des Datensatzes soweit fertig
-- Nächster Schritt: Verarbeitung weiterer Zeitschritte ermöglichen
 - Dann: Referenz-Implementation von Sunburst-Diagramm auf eigene Daten anpassen
 - Reihenfolge der Ebenen umtauschen, sodass höchste Hierarchie-Ebene außen steht.
-
+- Verarbeitung weiterer Zeitschritte ermöglichen
 
 
 - ~~D3 Einarbeitung~~  
