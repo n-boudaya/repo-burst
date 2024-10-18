@@ -1,149 +1,175 @@
-import { select, range } from 'd3';
+import * as d3 from 'd3';
 
-const width = window.innerWidth;
-const height = width;
-const n = 50;
-const arcwidth = width * 0.019;
-const padding = width * 0.02;
 
-const colors = [
-  '#007ac9',
-  '#01a110',
-  '#fed302',
-  '#562f9e',
-  '#d1151e',
-  '#ff7902',
-];
+d3.json("flare-2.json").then(function (flare) {
+  const chart = Sunburst2(flare);
+  console.log(chart);
+  const output = d3.select('body').append('svg').append('chart');
+  console.log(output);
+});
 
-console.log("Entered index.js");
+console.log("aeiou");
 
-//create svg canvas
-const svg = select('body')
-  .append('svg')
-  .attr('width', width)
-  .attr('height', height);
-
-//function to create rectangular mask
-// w is width, h is height
-const generateRectMask = (maskId, x, y, w, h) => {
-  const mask = svg.append('mask').attr('id', `${maskId}`);
-
-  mask
-    .append('rect')
-    .attr('width', window.innerWidth)
-    .attr('height', window.innerHeight)
-    .attr('fill', 'black');
-
-  mask
-    .append('rect')
-    .attr('width', w)
-    .attr('height', h)
-    .attr('x', x)
-    .attr('y', y)
-    .attr('fill', 'white');
+function Sunburst2(data){
+    // Specify the chart’s colors and approximate radius (it will be adjusted at the end).
+    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+    const radius = 928 / 2;
+  
+    // Prepare the layout.
+    const partition = data => d3.partition()
+      .size([2 * Math.PI, radius])
+    (d3.hierarchy(data)
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value));
+  
+    const arc = d3.arc()
+      .startAngle(d => d.x0)
+      .endAngle(d => d.x1)
+      .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+      .padRadius(radius / 2)
+      .innerRadius(d => d.y0)
+      .outerRadius(d => d.y1 - 1);
+  
+    const root = partition(data);
+  
+    // Create the SVG container.
+    const svg = d3.create("svg");
+  
+    // Add an arc for each element, with a title for tooltips.
+    const format = d3.format(",d");
+    svg.append("g")
+        .attr("fill-opacity", 0.6)
+      .selectAll("path")
+      .data(root.descendants().filter(d => d.depth))
+      .join("path")
+        .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+        .attr("d", arc)
+      .append("title")
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+  
+    // Add a label for each element.
+    svg.append("g")
+        .attr("pointer-events", "none")
+        .attr("text-anchor", "middle")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+      .selectAll("text")
+      .data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
+      .join("text")
+        .attr("transform", function(d) {
+          const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+          const y = (d.y0 + d.y1) / 2;
+          return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+        })
+        .attr("dy", "0.35em")
+        .text(d => d.data.name);
+    
+    return svg.node(); 
 };
 
-//Top left mask
-generateRectMask(
-  'tL',
-  padding,
-  padding,
-  width / 2 - 1.5 * padding,
-  height / 2 - 1.5 * padding,
-);
+// Copyright 2021-2023 Observable, Inc.
+// Released under the ISC license.
+// https://observablehq.com/@d3/sunburst
+function Sunburst(data, { // data is either tabular (array of objects) or hierarchy (nested objects)
+  path, // as an alternative to id and parentId, returns an array identifier, imputing internal nodes
+  id = Array.isArray(data) ? d => d.id : null, // if tabular data, given a d in data, returns a unique identifier (string)
+  parentId = Array.isArray(data) ? d => d.parentId : null, // if tabular data, given a node d, returns its parent’s identifier
+  children, // if hierarchical data, given a d in data, returns its children
+  value, // given a node d, returns a quantitative value (for area encoding; null for count)
+  sort = (a, b) => d3.descending(a.value, b.value), // how to sort nodes prior to layout
+  label, // given a node d, returns the name to display on the rectangle
+  title, // given a node d, returns its hover text
+  link, // given a node d, its link (if any)
+  linkTarget = "_blank", // the target attribute for links (if any)
+  width = 640, // outer width, in pixels
+  height = 400, // outer height, in pixels
+  margin = 1, // shorthand for margins
+  marginTop = margin, // top margin, in pixels
+  marginRight = margin, // right margin, in pixels
+  marginBottom = margin, // bottom margin, in pixels
+  marginLeft = margin, // left margin, in pixels
+  padding = 1, // separation between arcs
+  startAngle = 0, // the starting angle for the sunburst
+  endAngle = 2 * Math.PI, // the ending angle for the sunburst
+  radius = Math.min(width - marginLeft - marginRight, height - marginTop - marginBottom) / 2, // outer radius
+  color = d3.interpolateRainbow, // color scheme, if any
+  fill = "#ccc", // fill for arcs (if no color encoding)
+  fillOpacity = 0.6, // fill opacity for arcs
+} = {}) {
 
-//Bottom left mask
-generateRectMask(
-  'bL',
-  padding,
-  height / 2 + 0.5 * padding,
-  width / 2 - 1.5 * padding,
-  height / 2 - 1.5 * padding,
-);
+  // If id and parentId options are specified, or the path option, use d3.stratify
+  // to convert tabular data to a hierarchy; otherwise we assume that the data is
+  // specified as an object {children} with nested objects (a.k.a. the “flare.json”
+  // format), and use d3.hierarchy.
+  const root = path != null ? d3.stratify().path(path)(data)
+    : id != null || parentId != null ? d3.stratify().id(id).parentId(parentId)(data)
+      : d3.hierarchy(data, children);
 
-//Right mask
-generateRectMask(
-  'r',
-  width / 2 + 0.5 * padding,
-  padding,
-  width / 2 - 1.5 * padding,
-  height - 2 * padding,
-);
 
-//Creates black background
-svg
-  .append('rect')
-  .attr('width', width)
-  .attr('height', height)
-  .attr('fill', 'black');
+  // Compute the values of internal nodes by aggregating from the leaves.
+  value == null ? root.count() : root.sum(d => Math.max(0, value(d)));
 
-//Saves past colors to avoid repitition
-let pastColors = [];
+  // Sort the leaves (typically by descending value for a pleasing layout).
+  if (sort != null) root.sort(sort);
 
-//Renders rainbow colored rings
-//x and y = origin
-//maskid = applied mask
-const renderRings = (
-  x,
-  y,
-  startAngle,
-  endAngle,
-  maskid,
-) => {
-  const rings = svg.append('g');
+  // Compute the partition layout. Note polar coordinates: x is angle and y is radius.
+  d3.partition().size([endAngle - startAngle, radius])(root);
 
-  rings
-    .selectAll('path')
-    .data(range(n))
-    .join('path')
-    .attr("id", function(d,i) { return i; })
-    .attr(
-      'd',
-      d3
-        .arc()
-        .innerRadius((d) => d * arcwidth)
-        .outerRadius((d) => d * arcwidth + arcwidth)
-        .startAngle(startAngle)
-        .endAngle(endAngle),
-    )
-    .attr('transform', `translate(${x},${y})`)
-    .attr('fill', (c) => {
-      let rand;
-      do rand = Math.floor(Math.random() * colors.length);
-      while (
-        pastColors.find((element) => element == rand) !=
-        undefined
-      );
-
-      if (pastColors.length > 3) {
-        pastColors.shift();
-      }
-
-      pastColors.push(rand);
-
-      return colors[rand];
-    })
-    .attr('stroke', 'white')
-    .attr('stroke-width', '0')
-    .on("mouseover", function(d,i) {d3.select(this).attr('stroke-width', '10')} );
-  if (maskid != 'none') {
-    rings.attr('mask', `url(#${maskid})`);
+  // Construct a color scale.
+  if (color != null) {
+    color = d3.scaleSequential([0, root.children.length], color).unknown(fill);
+    root.children.forEach((child, i) => child.index = i);
   }
-};
 
-renderRings(padding, padding, Math.PI / 2, Math.PI, 'tL');
+  // Construct an arc generator.
+  const arc = d3.arc()
+    .startAngle(d => d.x0 + startAngle)
+    .endAngle(d => d.x1 + startAngle)
+    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 2 * padding / radius))
+    .padRadius(radius / 2)
+    .innerRadius(d => d.y0)
+    .outerRadius(d => d.y1 - padding);
 
-renderRings(
-  width / 2 - 0.5 * padding,
-  height - padding,
-  Math.PI * 1.5,
-  Math.PI * 2,
-  'bL',
-);
-renderRings(
-  width / 2 + 0.5 * padding,
-  height / 2,
-  0,
-  Math.PI,
-  'r',
-);
+  const svg = d3.create("svg")
+    .attr("viewBox", [
+      marginRight - marginLeft - width / 2,
+      marginBottom - marginTop - height / 2,
+      width,
+      height
+    ])
+    .attr("width", width)
+    .attr("height", height)
+    .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", 10)
+    .attr("text-anchor", "middle");
+
+  const cell = svg
+    .selectAll("a")
+    .data(root.descendants())
+    .join("a")
+    .attr("xlink:href", link == null ? null : d => link(d.data, d))
+    .attr("target", link == null ? null : linkTarget);
+
+  cell.append("path")
+    .attr("d", arc)
+    .attr("fill", color ? d => color(d.ancestors().reverse()[1]?.index) : fill)
+    .attr("fill-opacity", fillOpacity);
+
+  if (label != null) cell
+    .filter(d => (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10)
+    .append("text")
+    .attr("transform", d => {
+      if (!d.depth) return;
+      const x = ((d.x0 + d.x1) / 2 + startAngle) * 180 / Math.PI;
+      const y = (d.y0 + d.y1) / 2;
+      return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+    })
+    .attr("dy", "0.32em")
+    .text(d => label(d.data, d));
+
+  if (title != null) cell.append("title")
+    .text(d => title(d.data, d));
+
+  return svg.node();
+}

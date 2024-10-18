@@ -118,7 +118,7 @@ public class FileReader {
                 System.err.println(e.getMessage());
             }
 
-            output.put("dir_name", currentPath.getFileName());
+            output.put("name", currentPath.getFileName());
             output.put("children", directoryContentArray);
         } else {
             System.out.println("Is File:" + currentPath.toString());
@@ -150,7 +150,7 @@ public class FileReader {
                 }
             }
 
-            output.put("file_name", currentPath.getFileName());
+            output.put("name", currentPath.getFileName());
             output.put("extension", extension);
             output.put("imports", imports);
             try {

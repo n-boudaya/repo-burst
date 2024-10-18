@@ -80,7 +80,7 @@ function _chart(d3,data)
 
   // Handle zoom on click.
   function clicked(event, p) {
-    parent.datum(p.parent || root);
+    parent.datum(p.parent || root);  
 
     root.each(d => d.target = {
       x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
