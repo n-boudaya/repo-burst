@@ -2,8 +2,10 @@
   <library name="commons-io-2.16.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/libraries/commons-io-2.16.1.jar!/" />
+      <root url="file://$PROJECT_DIR$/libraries" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/libraries" recursive="false" />
   </library>
 </component>
