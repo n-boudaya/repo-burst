@@ -55,51 +55,6 @@ public class FileReader {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-
-        // System.out.println("Files are:");
-
-        // try (Stream<Path> paths = Files.walk(directory)) {
-        // paths.forEach(p -> {
-        // try (BufferedWriter br = new BufferedWriter(new FileWriter(outputFile,
-        // true))) {
-        // br.write(p.toString() + "\n");
-        // System.out.println(p.toString());
-
-        // int dotIndex = p.toString().lastIndexOf(".");
-        // ArrayList<data_element> imports = new ArrayList<data_element>();
-
-        // if (dotIndex > 0) {
-        // String extension = p.toString().substring(dotIndex + 1);
-
-        // System.out.println("Manual extension found:" + extension);
-        // System.out.println("probeContentType:" + Files.probeContentType(p));
-        // if (accessibleFiletypes.contains(extension)) {
-        // for (processor fP : processors) {
-        // for (String type : fP.getFileTypes()) {
-        // if (type.equals(extension)) {
-        // imports = fP.getImports(p);
-        // }
-        // }
-        // }
-        // if (!imports.isEmpty()) {
-        // for (data_element d : imports) {
-        // System.out.println(d.toString());
-        // }
-        // }
-
-        // }
-        // }
-
-        // }
-
-        // catch (Exception e) {
-        // System.err.println(e.getMessage());
-        // }
-        // });
-
-        // } catch (Exception e) {
-        // System.err.println(e.getMessage());
-        // }
     }
 
     private JSONObject fileTreeToJSON(Path currentPath) {

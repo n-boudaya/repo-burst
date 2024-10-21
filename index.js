@@ -5,7 +5,7 @@ d3.json("fileprocout.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
-    svg.node().appendChild(SunburstZoom(data));
+    svg.node().appendChild(SunburstSimple(data, 1, 1000 / 2));
 
 });
 
@@ -16,11 +16,7 @@ function autoBox() {
     return [x, y, width, height];
 }
 
-function SunburstSimple(data) {
-    // Specify the chart’s colors and approximate radius (it will be adjusted at the end).
-    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-    const radius = 928 / 2;
-
+function SunburstSimple(data, cutoff, radius) {
     // Prepare the layout.
     const partition = data => d3.partition()
         .size([2 * Math.PI, radius])
@@ -28,15 +24,34 @@ function SunburstSimple(data) {
             .sum(d => d.value)
             .sort((a, b) => b.value - a.value));
 
+
+    const root = partition(data);
+
+    const level = root.descendants().filter(d => d.depth > cutoff).reduce((total, value) => {
+        if (total < value.depth) {
+            total = value.depth;
+        }
+        return total;
+    }, 0);
+
+    console.log("Level:" + level);
+
+
+
+    // Specify the chart’s colors.
+    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, root.descendants().filter(d => d.depth > cutoff && d.depth < cutoff+2).length + 1));
+
+
+    const innerR = d =>((radius*2)/10)*(level+1)-d.y0;
+    const outerR = d =>((radius*2)/10)*(level+2)-d.y0;
+
     const arc = d3.arc()
         .startAngle(d => d.x0)
         .endAngle(d => d.x1)
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
         .padRadius(radius / 2)
-        .innerRadius(d => d.y0)
-        .outerRadius(d => d.y1 - 1);
-
-    const root = partition(data);
+        .innerRadius(d => innerR(d))
+        .outerRadius(d => outerR(d) - 1);
 
     // Create the SVG container.
     const svg = d3.create("svg");
@@ -46,10 +61,11 @@ function SunburstSimple(data) {
     svg.append("g")
         .attr("fill-opacity", 0.6)
         .selectAll("path")
-        .data(root.descendants().filter(d => d.depth))
+        .data(root.descendants().filter(d => d.depth > cutoff))
         .join("path")
         .attr("fill", d => {
-            while (d.depth > 1) d = d.parent;
+            while (d.depth > cutoff+1) d = d.parent;
+            console.log(d.data.name);
             return color(d.data.name);
         })
         .attr("d", arc)
@@ -63,14 +79,14 @@ function SunburstSimple(data) {
         .attr("font-size", 10)
         .attr("font-family", "sans-serif")
         .selectAll("text")
-        .data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
+        .data(root.descendants().filter(d => d.depth > cutoff && ((outerR(d)-innerR(d)) * (d.x1-d.x0))>5))
         .join("text")
         .attr("transform", function (d) {
             const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = (d.y0 + d.y1) / 2;
+            const y = ((innerR(d)) + (outerR(d))) / 2;
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         })
-        .attr("dy", "0.35em")
+        .attr("dy", "0.1em")
         .text(d => d.data.name);
 
     return svg.attr("viewBox", autoBox).node();
@@ -184,78 +200,81 @@ function SunburstMiddle(data, { // data is either tabular (array of objects) or 
 }
 
 function SunburstZoom(data) {
-        // Specify the chart’s dimensions.
-        const width = 928;
-        const height = width;
-        const radius = width / 6;
+    // Specify the chart’s dimensions.
+    const width = 928;
+    const height = width;
+    const radius = width / 6;
 
-        // Create the color scale.
-        const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+    // Create the color scale.
+    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
 
-        // Compute the layout.
-        const hierarchy = d3.hierarchy(data)
-            .sum(d => d.value)
-            .sort((a, b) => b.value - a.value);
-        const root = d3.partition()
-            .size([2 * Math.PI, hierarchy.height + 1])
-            (hierarchy);
-        root.each(d => d.current = d);
+    // Compute the layout.
+    const hierarchy = d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value);
+    const root = d3.partition()
+        .size([2 * Math.PI, hierarchy.height + 1])
+        (hierarchy);
+    root.each(d => d.current = d);
 
-        // Create the arc generator.
-        const arc = d3.arc()
-            .startAngle(d => d.x0)
-            .endAngle(d => d.x1)
-            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-            .padRadius(radius * 1.5)
-            .innerRadius(d => d.y0 * radius)
-            .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
+    // Create the arc generator.
+    const arc = d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+        .padRadius(radius * 1.5)
+        .innerRadius(d => d.y0 * radius)
+        .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
-        // Create the SVG container.
-        const svg = d3.create("svg")
-            .attr("viewBox", [-width / 2, -height / 2, width, width])
-            .style("font", "10px sans-serif");
+    // Create the SVG container.
+    const svg = d3.create("svg")
+        .attr("viewBox", [-width / 2, -height / 2, width, width])
+        .style("font", "10px sans-serif");
 
-        // Append the arcs.
-        const path = svg.append("g")
-            .selectAll("path")
-            .data(root.descendants().slice(1))
-            .join("path")
-            .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-            .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-            .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
+    // Append the arcs.
+    const path = svg.append("g")
+        .selectAll("path")
+        .data(root.descendants().slice(1))
+        .join("path")
+        .attr("fill", d => {
+            while (d.depth > 1) d = d.parent;
+            return color(d.data.name);
+        })
+        .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+        .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
 
-            .attr("d", d => arc(d.current));
+        .attr("d", d => arc(d.current));
 
-        // Make them clickable if they have children.
-        path.filter(d => d.children)
-            .style("cursor", "pointer")
-            .on("click", clicked);
+    // Make them clickable if they have children.
+    path.filter(d => d.children)
+        .style("cursor", "pointer")
+        .on("click", clicked);
 
-        const format = d3.format(",d");
-        path.append("title")
-            .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+    const format = d3.format(",d");
+    path.append("title")
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
-        const label = svg.append("g")
-            .attr("pointer-events", "none")
-            .attr("text-anchor", "middle")
-            .style("user-select", "none")
-            .selectAll("text")
-            .data(root.descendants().slice(1))
-            .join("text")
-            .attr("dy", "0.35em")
-            .attr("fill-opacity", d => +labelVisible(d.current))
-            .attr("transform", d => labelTransform(d.current))
-            .text(d => d.data.name);
+    const label = svg.append("g")
+        .attr("pointer-events", "none")
+        .attr("text-anchor", "middle")
+        .style("user-select", "none")
+        .selectAll("text")
+        .data(root.descendants().slice(1))
+        .join("text")
+        .attr("dy", "0.35em")
+        .attr("fill-opacity", d => +labelVisible(d.current))
+        .attr("transform", d => labelTransform(d.current))
+        .text(d => d.data.name);
 
-        const parent = svg.append("circle")
-            .datum(root)
-            .attr("r", radius)
-            .attr("fill", "none")
-            .attr("pointer-events", "all")
-            .on("click", clicked);
+    const parent = svg.append("circle")
+        .datum(root)
+        .attr("r", radius)
+        .attr("fill", "none")
+        .attr("pointer-events", "all")
+        .on("click", clicked);
 
-        // Handle zoom on click.
-        function clicked(event, p) {
+    // Handle zoom on click.
+    function clicked(event, p) {
         parent.datum(p.parent || root);
 
         root.each(d => d.target = {
@@ -275,7 +294,7 @@ function SunburstZoom(data) {
                 const i = d3.interpolate(d.current, d.target);
                 return t => d.current = i(t);
             })
-            .filter(function(d) {
+            .filter(function (d) {
                 return +this.getAttribute("fill-opacity") || arcVisible(d.target);
             })
             .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
@@ -283,7 +302,7 @@ function SunburstZoom(data) {
 
             .attrTween("d", d => () => arc(d.current));
 
-        label.filter(function(d) {
+        label.filter(function (d) {
             return +this.getAttribute("fill-opacity") || labelVisible(d.target);
         }).transition(t)
             .attr("fill-opacity", d => +labelVisible(d.target))

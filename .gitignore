@@ -6,3 +6,5 @@ data_and_processing/raw_data/*
 data_and_processing/file_lists/*
 !data_and_processing/file_lists/.gitkeep
 out/*
+bundle.js
+bundle.js.map
