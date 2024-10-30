@@ -3,14 +3,16 @@ package data_and_processing;
 import java.nio.file.*;
 
 public class data_element {
-    private int lineNumber;
-    private String lineContent;
-    private Path referencedFile;
+    private final int lineNumber;
+    private final String lineContent;
+    private final Path referencedFile;
+    private final boolean external;
 
-    public data_element(int pLineNumber, String pLineContent, Path pReferencedFile) {
+    public data_element(int pLineNumber, String pLineContent, Path pReferencedFile, boolean pExternal) {
         lineNumber = pLineNumber;
         lineContent = pLineContent;
         referencedFile = pReferencedFile;
+        external = pExternal;
     }
 
     public int getLineNumber() {
@@ -24,6 +26,8 @@ public class data_element {
     public Path getReferencedFile() {
         return referencedFile;
     }
+
+    public boolean isExternal() { return external; }
 
     public String toString(){
         String output = "Line Number: " + lineNumber + System.lineSeparator();

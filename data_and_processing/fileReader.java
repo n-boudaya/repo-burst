@@ -61,7 +61,7 @@ public class FileReader {
         JSONObject output = new JSONObject();
 
         if (Files.isDirectory(currentPath, LinkOption.NOFOLLOW_LINKS)) {
-            System.out.println("Is Directory:" + currentPath.toString());
+            //System.out.println("Is Directory:" + currentPath.toString());
 
             JSONArray directoryContentArray = new JSONArray();
 
@@ -76,7 +76,7 @@ public class FileReader {
             output.put("name", currentPath.getFileName());
             output.put("children", directoryContentArray);
         } else {
-            System.out.println("Is File:" + currentPath.toString());
+            //System.out.println("Is File:" + currentPath.toString());
 
             int dotIndex = currentPath.toString().lastIndexOf(".");
             
@@ -98,7 +98,7 @@ public class FileReader {
                     }
                     if (!imports.isEmpty()) {
                         for (data_element d : imports) {
-                            System.out.println(d.toString());
+                            //System.out.println(d.toString());
                         }
                     }
 

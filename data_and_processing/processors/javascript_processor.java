@@ -31,7 +31,24 @@ public class javascript_processor extends processor {
                 if (matcher.matches()) {
                     Path referencedPath = Paths.get(matcher.group("path"));
 
-                    result.add(new data_element(lineNumber, line, referencedPath));
+                    boolean external;
+
+                    try {
+                        Path absoluteReferencedPath = path.toAbsolutePath().toRealPath().resolveSibling(referencedPath).toRealPath();
+                        external = false;
+                        System.out.println("Working Path found");
+                        System.out.println("Current File: " + path.toString());
+                        System.out.println("Current import: " + referencedPath.toString());
+                        System.out.println("Absolute referenced path: " + absoluteReferencedPath.toString());
+                    } catch (IOException e) {
+                        external = true;
+                        System.out.println("External Path found");
+                        System.out.println("Current File: " + path.toString());
+                        System.out.println("Current import: " + referencedPath.toString());
+                    }
+
+
+                    result.add(new data_element(lineNumber, line, referencedPath, external));
                 }
 
                 lineNumber++;
