@@ -1,115 +1,122 @@
 (function (d3) {
-    'use strict';
+  'use strict';
 
-    function _interopNamespaceDefault(e) {
-        var n = Object.create(null);
-        if (e) {
-            Object.keys(e).forEach(function (k) {
-                if (k !== 'default') {
-                    var d = Object.getOwnPropertyDescriptor(e, k);
-                    Object.defineProperty(n, k, d.get ? d : {
-                        enumerable: true,
-                        get: function () { return e[k]; }
-                    });
-                }
-            });
+  function _interopNamespaceDefault(e) {
+    var n = Object.create(null);
+    if (e) {
+      Object.keys(e).forEach(function (k) {
+        if (k !== 'default') {
+          var d = Object.getOwnPropertyDescriptor(e, k);
+          Object.defineProperty(n, k, d.get ? d : {
+            enumerable: true,
+            get: function () { return e[k]; }
+          });
         }
-        n.default = e;
-        return Object.freeze(n);
+      });
     }
+    n.default = e;
+    return Object.freeze(n);
+  }
 
-    var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
+  var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
-    d3__namespace.json("fileprocout.json").then(function (data) {
+  d3__namespace.csv("flare_depends.csv").then(function (data) {
 
-        const svg = d3__namespace.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+    const svg = d3__namespace.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
-        svg.node().appendChild(SunburstSimple(data, 1, 1000 / 2));
+    console.log(data);
 
-    });
+    svg.node().appendChild(chord_dependency(data));
 
-    function autoBox() {
-        document.body.appendChild(this);
-        const {x, y, width, height} = this.getBBox();
-        document.body.removeChild(this);
-        return [x, y, width, height];
-    }
+  });
 
-    function SunburstSimple(data, cutoff, radius) {
-        // Prepare the layout.
-        const partition = data => d3__namespace.partition()
-            .size([2 * Math.PI, radius])
-            (d3__namespace.hierarchy(data)
-                .sum(d => d.value)
-                .sort((a, b) => b.value - a.value));
+  function autoBox() {
+    document.body.appendChild(this);
+    const {x, y, width, height} = this.getBBox();
+    document.body.removeChild(this);
+    return [x, y, width, height];
+  }
 
+  function chord_dependency(data)
+  {
+    console.log(data);
 
-        const root = partition(data);
+    const width = 1080;
+    const height = width;
+    const innerRadius = Math.min(width, height) * 0.5 - 90;
+    const outerRadius = innerRadius + 10;
 
-        const level = root.descendants().filter(d => d.depth > cutoff).reduce((total, value) => {
-            if (total < value.depth) {
-                total = value.depth;
-            }
-            return total;
-        }, 0);
+    
+    // Compute a dense matrix from the weighted links in data.
+    const names = d3__namespace.sort(d3__namespace.union(data.map(d => d.source), data.map(d => d.target)));
+    const index = new Map(names.map((name, i) => [name, i]));
+    const matrix = Array.from(index, () => new Array(names.length).fill(0));
+    for (const {source, target, value} of data) matrix[index.get(source)][index.get(target)] += value;
 
-        console.log("Level:" + level);
+    console.log(matrix);
 
+    const chord = d3__namespace.chordDirected()
+        .padAngle(10 / innerRadius)
+        .sortSubgroups(d3__namespace.descending)
+        .sortChords(d3__namespace.descending);
 
+    const arc = d3__namespace.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
 
-        // Specify the chart’s colors.
-        const color = d3__namespace.scaleOrdinal(d3__namespace.quantize(d3__namespace.interpolateRainbow, root.descendants().filter(d => d.depth > cutoff && d.depth < cutoff+2).length + 1));
+    const ribbon = d3__namespace.ribbonArrow()
+        .radius(innerRadius - 1)
+        .padAngle(1 / innerRadius);
 
+    const colors = d3__namespace.quantize(d3__namespace.interpolateRainbow, names.length);
 
-        const innerR = d =>((radius*2)/10)*(level+1)-d.y0;
-        const outerR = d =>((radius*2)/10)*(level+2)-d.y0;
+    const svg = d3__namespace.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("style", "width: 100%; height: auto; font: 10px sans-serif;");
 
-        const arc = d3__namespace.arc()
-            .startAngle(d => d.x0)
-            .endAngle(d => d.x1)
-            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-            .padRadius(radius / 2)
-            .innerRadius(d => innerR(d))
-            .outerRadius(d => outerR(d) - 1);
+    const chords = chord(matrix);
 
-        // Create the SVG container.
-        const svg = d3__namespace.create("svg");
+    const group = svg.append("g")
+      .selectAll()
+      .data(chords.groups)
+      .join("g");
 
-        // Add an arc for each element, with a title for tooltips.
-        const format = d3__namespace.format(",d");
-        svg.append("g")
-            .attr("fill-opacity", 0.6)
-            .selectAll("path")
-            .data(root.descendants().filter(d => d.depth > cutoff))
-            .join("path")
-            .attr("fill", d => {
-                while (d.depth > cutoff+1) d = d.parent;
-                console.log(d.data.name);
-                return color(d.data.name);
-            })
-            .attr("d", arc)
-            .append("title")
-            .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+    group.append("path")
+        .attr("fill", d => colors[d.index])
+        .attr("d", arc);
 
-        // Add a label for each element.
-        svg.append("g")
-            .attr("pointer-events", "none")
-            .attr("text-anchor", "middle")
-            .attr("font-size", 10)
-            .attr("font-family", "sans-serif")
-            .selectAll("text")
-            .data(root.descendants().filter(d => d.depth > cutoff && ((outerR(d)-innerR(d)) * (d.x1-d.x0))>5))
-            .join("text")
-            .attr("transform", function (d) {
-                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-                const y = ((innerR(d)) + (outerR(d))) / 2;
-                return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-            })
-            .attr("dy", "0.1em")
-            .text(d => d.data.name);
+    group.append("text")
+        .each(d => (d.angle = (d.startAngle + d.endAngle) / 2))
+        .attr("dy", "0.35em")
+        .attr("transform", d => `
+        rotate(${(d.angle * 180 / Math.PI - 90)})
+        translate(${outerRadius + 5})
+        ${d.angle > Math.PI ? "rotate(180)" : ""}
+      `)
+        .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
+        .text(d => names[d.index]);
 
-        return svg.attr("viewBox", autoBox).node();
-    }
+    group.append("title")
+        .text(d => `${names[d.index]}
+${d3__namespace.sum(chords, c => (c.source.index === d.index) * c.source.value)} outgoing →
+${d3__namespace.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
+
+    svg.append("g")
+        .attr("fill-opacity", 0.75)
+      .selectAll()
+      .data(chords)
+      .join("path")
+        .style("mix-blend-mode", "multiply")
+        .attr("fill", d => colors[d.target.index])
+        .attr("d", ribbon)
+      .append("title")
+        .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
+
+    console.log(svg.node());
+    return svg.attr("viewBox", autoBox).node();
+  }
 
 })(d3);
 //# sourceMappingURL=bundle.js.map

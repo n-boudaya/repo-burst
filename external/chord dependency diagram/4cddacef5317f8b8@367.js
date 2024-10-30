@@ -1,34 +1,18 @@
-import * as d3 from 'd3';
+function _1(md){return(
+md`<div style="color: grey; font: 13px/25.5px var(--sans-serif); text-transform: uppercase;"><h1 style="display: none;">Chord dependency diagram</h1><a href="https://d3js.org/">D3</a> › <a href="/@d3/gallery">Gallery</a></div>
 
-d3.csv("flare_depends.csv").then(function (data) {
+# Chord dependency diagram
 
-  const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+This [chord diagram](/@d3/chord-diagram/2) shows dependencies among a software class hierarchy. Although it does not reveal class-level detail, as [hierarchical edge bundling](/@d3/hierarchical-edge-bundling/2) does, it conveys the total number of imports between and within packages. Note, for example, that the *util* package does not import anything besides itself.`
+)}
 
-  svg.node().appendChild(chord_dependency(data));
-
-});
-
-function autoBox() {
-  document.body.appendChild(this);
-  const {x, y, width, height} = this.getBBox();
-  document.body.removeChild(this);
-  return [x, y, width, height];
-}
-
-function computeMatrix(){
-
-  
-}
-
-
-function chord_dependency(data)
+function _chart(d3,data)
 {
   const width = 1080;
   const height = width;
   const innerRadius = Math.min(width, height) * 0.5 - 90;
   const outerRadius = innerRadius + 10;
 
-  
   // Compute a dense matrix from the weighted links in data.
   const names = d3.sort(d3.union(data.map(d => d.source), data.map(d => d.target)));
   const index = new Map(names.map((name, i) => [name, i]));
@@ -94,6 +78,23 @@ ${d3.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming �
     .append("title")
       .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
 
-  console.log(svg.node());
-  return svg.attr("viewBox", autoBox).node();
+  return svg.node();
+}
+
+
+function _data(FileAttachment){return(
+FileAttachment("flare-imports.csv").csv({typed: true})
+)}
+
+export default function define(runtime, observer) {
+  const main = runtime.module();
+  function toString() { return this.url; }
+  const fileAttachments = new Map([
+    ["flare-imports.csv", {url: new URL("./files/bc3ae83fbfa3629f6d84f32ced165b4c09ebc4c4c8402bd365c0a8debc0bb6d1c9a94e42ca9cd955fc681f3347da7715a5be03ceb7cbace224260021f33f5d1a.csv", import.meta.url), mimeType: "text/csv", toString}]
+  ]);
+  main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
+  main.variable(observer()).define(["md"], _1);
+  main.variable(observer("chart")).define("chart", ["d3","data"], _chart);
+  main.variable(observer("data")).define("data", ["FileAttachment"], _data);
+  return main;
 }
