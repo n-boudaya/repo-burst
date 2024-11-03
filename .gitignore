@@ -3,8 +3,10 @@ package-lock.json
 .DS_Store
 data_and_processing/raw_data/*
 !data_and_processing/raw_data/.gitkeep
-data_and_processing/file_lists/*
-!data_and_processing/file_lists/.gitkeep
+data_and_processing/file_lists/hierarchy/*
+!data_and_processing/file_lists/hierarchy/.gitkeep
+data_and_processing/file_lists/dependencies/*
+!data_and_processing/file_lists/dependencies/.gitkeep
 out/*
 bundle.js
 bundle.js.map
