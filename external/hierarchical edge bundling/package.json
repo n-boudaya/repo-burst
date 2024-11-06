@@ -1,8 +1,8 @@
 {
-  "name": "@d3/hierarchical-edge-bundling/2",
-  "main": "16ea6ba8fc487e0a@798.js",
-  "version": "798.0.0",
-  "homepage": "https://observablehq.com/@d3/hierarchical-edge-bundling/2",
+  "name": "@d3/hierarchical-edge-bundling",
+  "main": "22ac214fe83d7053@439.js",
+  "version": "439.0.0",
+  "homepage": "https://observablehq.com/@d3/hierarchical-edge-bundling",
   "author": {
     "name": "D3",
     "url": "https://observablehq.com/@d3"

@@ -1,0 +1,2934 @@
+[
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\rollup.config.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "fs",
+        "lineContent": "import {readFileSync} from \"fs\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\rollup.config.js"
+      },
+      {
+        "external": true,
+        "referencedFile": "rollup-plugin-terser",
+        "lineContent": "import {terser} from \"rollup-plugin-terser\";",
+        "lineNumber": 1,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\rollup.config.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "fs"
+      },
+      {
+        "external": true,
+        "file": "rollup-plugin-terser"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\arc.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\arc.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {abs, acos, asin, atan2, cos, epsilon, halfPi, max, min, pi, sin, sqrt, tau} from \"./math.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\arc.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+        "lineContent": "import {withPath} from \"./path.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\arc.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+        "lineContent": "import array from \"./array.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js",
+        "lineContent": "import curveLinear from \"./curve/linear.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js",
+        "lineContent": "import line from \"./line.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+        "lineContent": "import {withPath} from \"./path.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js",
+        "lineContent": "import {x as pointX, y as pointY} from \"./point.js\";",
+        "lineNumber": 5,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\areaRadial.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js",
+        "lineContent": "import curveRadial, {curveRadialLinear} from \"./curve/radial.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\areaRadial.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js",
+        "lineContent": "import area from \"./area.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\areaRadial.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\lineRadial.js",
+        "lineContent": "import {lineRadial} from \"./lineRadial.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\areaRadial.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\area.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\lineRadial.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisClosed.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js",
+        "lineContent": "import noop from \"../noop.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisClosed.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js",
+        "lineContent": "import {point} from \"./basis.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisClosed.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisOpen.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js",
+        "lineContent": "import {point} from \"./basis.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisOpen.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bump.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pointRadial.js",
+        "lineContent": "import pointRadial from \"../pointRadial.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bump.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pointRadial.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bundle.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js",
+        "lineContent": "import {Basis} from \"./basis.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bundle.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js",
+        "lineContent": "import noop from \"../noop.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js",
+        "lineContent": "import {point} from \"./cardinal.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalOpen.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js",
+        "lineContent": "import {point} from \"./cardinal.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalOpen.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {epsilon} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js",
+        "lineContent": "import {Cardinal} from \"./cardinal.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomClosed.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js",
+        "lineContent": "import {CardinalClosed} from \"./cardinalClosed.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomClosed.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js",
+        "lineContent": "import noop from \"../noop.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomClosed.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js",
+        "lineContent": "import {point} from \"./catmullRom.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomClosed.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomOpen.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalOpen.js",
+        "lineContent": "import {CardinalOpen} from \"./cardinalOpen.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomOpen.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js",
+        "lineContent": "import {point} from \"./catmullRom.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRomOpen.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalOpen.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\catmullRom.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linearClosed.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js",
+        "lineContent": "import noop from \"../noop.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linearClosed.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js",
+        "lineContent": "import curveLinear from \"./linear.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+        "lineContent": "import array from \"./array.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js",
+        "lineContent": "import curveLinear from \"./curve/linear.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+        "lineContent": "import {withPath} from \"./path.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js",
+        "lineContent": "import {x as pointX, y as pointY} from \"./point.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\lineRadial.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js",
+        "lineContent": "import curveRadial, {curveRadialLinear} from \"./curve/radial.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\lineRadial.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js",
+        "lineContent": "import line from \"./line.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\lineRadial.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+        "lineContent": "import {slice} from \"./array.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bump.js",
+        "lineContent": "import {bumpX, bumpY, bumpRadial} from \"./curve/bump.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+        "lineContent": "import {withPath} from \"./path.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js",
+        "lineContent": "import {x as pointX, y as pointY} from \"./point.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\link.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\bump.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\expand.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\expand.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\silhouette.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\silhouette.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\wiggle.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\wiggle.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\appearance.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\appearance.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\descending.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js",
+        "lineContent": "import ascending from \"./ascending.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\descending.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\insideOut.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\appearance.js",
+        "lineContent": "import appearance from \"./appearance.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\insideOut.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js",
+        "lineContent": "import {sum} from \"./ascending.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\insideOut.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\appearance.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\ascending.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\reverse.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js",
+        "lineContent": "import none from \"./none.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\reverse.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "d3-path",
+        "lineContent": "import {Path} from \"d3-path\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "d3-path"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+        "lineContent": "import array from \"./array.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\descending.js",
+        "lineContent": "import descending from \"./descending.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\identity.js",
+        "lineContent": "import identity from \"./identity.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {tau} from \"./math.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pie.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\descending.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\identity.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+        "lineContent": "import array from \"./array.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js",
+        "lineContent": "import offsetNone from \"./offset/none.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js",
+        "lineContent": "import orderNone from \"./order/none.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\asterisk.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {min, sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\asterisk.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\circle.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {pi, sqrt, tau} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\circle.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\cross.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\cross.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond2.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond2.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\plus.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {min, sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\plus.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square2.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square2.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\star.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sin, cos, sqrt, pi, tau} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\star.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\times.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {min, sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\times.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle2.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle2.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\wye.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+        "lineContent": "import {sqrt} from \"../math.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\wye.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js",
+    "importData": [
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+        "lineContent": "import constant from \"./constant.js\";",
+        "lineNumber": 0,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js",
+        "lineContent": "import {withPath} from \"./path.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\asterisk.js",
+        "lineContent": "import asterisk from \"./symbol/asterisk.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\circle.js",
+        "lineContent": "import circle from \"./symbol/circle.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\cross.js",
+        "lineContent": "import cross from \"./symbol/cross.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond.js",
+        "lineContent": "import diamond from \"./symbol/diamond.js\";",
+        "lineNumber": 5,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond2.js",
+        "lineContent": "import diamond2 from \"./symbol/diamond2.js\";",
+        "lineNumber": 6,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\plus.js",
+        "lineContent": "import plus from \"./symbol/plus.js\";",
+        "lineNumber": 7,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square.js",
+        "lineContent": "import square from \"./symbol/square.js\";",
+        "lineNumber": 8,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square2.js",
+        "lineContent": "import square2 from \"./symbol/square2.js\";",
+        "lineNumber": 9,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\star.js",
+        "lineContent": "import star from \"./symbol/star.js\";",
+        "lineNumber": 10,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle.js",
+        "lineContent": "import triangle from \"./symbol/triangle.js\";",
+        "lineNumber": 11,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle2.js",
+        "lineContent": "import triangle2 from \"./symbol/triangle2.js\";",
+        "lineNumber": 12,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\wye.js",
+        "lineContent": "import wye from \"./symbol/wye.js\";",
+        "lineNumber": 13,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\times.js",
+        "lineContent": "import times from \"./symbol/times.js\";",
+        "lineNumber": 14,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\path.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\asterisk.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\circle.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\cross.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\diamond2.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\plus.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\square2.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\star.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\triangle2.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\wye.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\times.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\arc-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\arc-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {arc} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\arc-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\arc-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\area-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\area-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, curveCardinal, curveLinear} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\area-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\area-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\areaRadial-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\areaRadial-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {areaRadial, curveCardinal, curveLinear} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\areaRadial-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\areaRadial-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basis-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basis-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveBasis} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basis-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basis-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisClosed-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {line, curveBasisClosed} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisClosed-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisOpen-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveBasisOpen} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\basisOpen-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpX-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpX-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveBumpX} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpX-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpX-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpY-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpY-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveBumpY} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpY-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bumpY-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bundle-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bundle-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {line, curveBundle} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bundle-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\bundle-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinal-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinal-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCardinal} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinal-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinal-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalClosed-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCardinalClosed} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalClosed-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalOpen-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCardinalOpen} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\cardinalOpen-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRom-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRom-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCatmullRom} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRom-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRom-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomClosed-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCatmullRomClosed} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomClosed-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomOpen-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveCatmullRomOpen} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomOpen-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\catmullRomOpen-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linear-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linear-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveLinear} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linear-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linear-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linearClosed-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linearClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {line, curveLinearClosed} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linearClosed-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\linearClosed-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneX-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneX-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveMonotoneX} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneX-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneX-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneY-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneY-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveMonotoneY} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneY-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\monotoneY-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\natural-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\natural-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveNatural} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\natural-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\natural-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\step-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\step-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveStep} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\step-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\step-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepAfter-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepAfter-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveStepAfter} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepAfter-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepAfter-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepBefore-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepBefore-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {area, line, curveStepBefore} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepBefore-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"../asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\curve\\stepBefore-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\line-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\line-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {line, curveLinear, curveLinearClosed} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\line-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\line-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\lineRadial-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\lineRadial-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {curveLinear, lineRadial} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\lineRadial-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\lineRadial-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js"
+      },
+      {
+        "external": true,
+        "referencedFile": "d3-path",
+        "lineContent": "import {pathRound} from \"d3-path\";",
+        "lineNumber": 1,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {link, linkHorizontal, linkVertical, linkRadial} from \"../src/index.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {curveLinear, curveBumpX, curveBumpY} from \"../src/index.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 4,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\link-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": true,
+        "file": "d3-path"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\diverging-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\diverging-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOffsetDiverging, stackOrderNone, stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\diverging-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\expand-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\expand-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOffsetExpand, stackOrderNone, stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\expand-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\none-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\none-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOffsetNone, stackOrderNone, stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\none-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\silhouette-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\silhouette-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOffsetSilhouette, stackOrderNone, stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\silhouette-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\wiggle-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\wiggle-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOffsetWiggle, stackOrderNone, stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\wiggle-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\appearance-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\appearance-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderAppearance} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\appearance-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\ascending-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\ascending-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderAscending} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\ascending-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\descending-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\descending-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderDescending} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\descending-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\insideOut-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\insideOut-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderInsideOut} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\insideOut-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\none-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\none-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderNone} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\none-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\reverse-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\reverse-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stackOrderReverse} from \"../../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\order\\reverse-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\pie-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 1,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\pie-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {pie} from \"../src/index.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\pie-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\polygonContext.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "d3-polygon",
+        "lineContent": "import {polygonArea} from \"d3-polygon\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\polygonContext.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "d3-polygon"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\stack-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\stack-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {stack, stackOffsetExpand, stackOffsetNone, stackOrderNone, stackOrderReverse} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\stack-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbol-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbol-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {symbol, symbolAsterisk, symbolCircle, symbolCross, symbolDiamond, symbolDiamond2, symbolPlus, symbolSquare, symbolSquare2, symbolStar, symbolTriangle, symbolTriangle2, symbolWye, symbolTimes} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbol-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js",
+        "lineContent": "import {assertInDelta, assertPathEqual} from \"./asserts.js\";",
+        "lineNumber": 2,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbol-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\polygonContext.js",
+        "lineContent": "import {polygonContext} from \"./polygonContext.js\";",
+        "lineNumber": 3,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbol-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\asserts.js"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\polygonContext.js"
+      }
+    ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbols-test.js",
+    "importData": [
+      {
+        "external": true,
+        "referencedFile": "assert",
+        "lineContent": "import assert from \"assert\";",
+        "lineNumber": 0,
+        "sourceFile": ".\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbols-test.js"
+      },
+      {
+        "external": false,
+        "referencedFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+        "lineContent": "import {symbols, symbolsFill, symbolsStroke, symbolCircle, symbolCross, symbolDiamond, symbolSquare, symbolStar, symbolTriangle, symbolWye, symbolPlus, symbolTimes, symbolTriangle2, symbolAsterisk, symbolSquare2, symbolDiamond2} from \"../src/index.js\";",
+        "lineNumber": 1,
+        "sourceFile": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\symbols-test.js"
+      }
+    ],
+    "value": 0,
+    "dependencies": [
+      {
+        "external": true,
+        "file": "assert"
+      },
+      {
+        "external": false,
+        "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
+      }
+    ]
+  }
+]
