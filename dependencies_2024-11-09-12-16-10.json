@@ -1,5 +1,323 @@
 [
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\.gitkeep",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\.eslintrc.json",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\.github\\eslint.json",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\.github\\workflows\\node.js.yml",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\.gitignore",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\area-defined.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\area-difference.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\area-radial.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\area-stacked.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\area.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\basis.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\basisClosed.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\basisOpen.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\bumpX.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\bumpY.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\bundle.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\cardinal.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\cardinalClosed.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\cardinalOpen.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\catmullRom.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\catmullRomClosed.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\catmullRomOpen.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\centroid-annular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\centroid-circular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\circle.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\cross.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\diamond.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\donut.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\line-defined.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\line-radial.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\line.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\linear.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\linearClosed.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\monotoneX.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\monotoneY.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\natural.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\padded-annular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\padded-circular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\pie.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\rounded-annular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\rounded-circular-sector.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\square.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\stacked-bar.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\stacked-stream.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\star.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\step.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\stepAfter.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\stepBefore.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\triangle.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\img\\wye.png",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\LICENSE",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\package.json",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\README.md",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\rollup.config.js",
     "importData": [
       {
@@ -186,6 +504,24 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\array.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\constant.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basisClosed.js",
     "importData": [
       {
@@ -271,6 +607,12 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\basis.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinal.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   },
   {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\cardinalClosed.js",
@@ -423,6 +765,12 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linearClosed.js",
     "importData": [
       {
@@ -442,6 +790,18 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\monotone.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\natural.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\radial.js",
     "importData": [
       {
@@ -459,6 +819,30 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\linear.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\curve\\step.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\descending.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\identity.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   },
   {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\line.js",
@@ -617,6 +1001,24 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\noop.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\diverging.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\expand.js",
     "importData": [
       {
@@ -634,6 +1036,12 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\none.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   },
   {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\offset\\silhouette.js",
@@ -761,6 +1169,12 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\none.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\order\\reverse.js",
     "importData": [
       {
@@ -860,6 +1274,18 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\math.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\point.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\pointRadial.js",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   },
   {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\stack.js",
@@ -1332,6 +1758,12 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\symbol\\times.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\.eslintrc.json",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   },
   {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\arc-test.js",
@@ -2441,6 +2873,12 @@
     ]
   },
   {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\noextension",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
+  },
+  {
     "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\test\\offset\\diverging-test.js",
     "importData": [
       {
@@ -2930,5 +3368,11 @@
         "file": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\src\\index.js"
       }
     ]
+  },
+  {
+    "path": "J:\\repo-burst\\data_and_processing\\raw_data\\d3-shape-main\\yarn.lock",
+    "importData": [],
+    "value": 0,
+    "dependencies": []
   }
 ]

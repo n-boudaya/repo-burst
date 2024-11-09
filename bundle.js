@@ -20,7 +20,7 @@
 
     var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
-    d3__namespace.json("flare_depends.json").then(function (data) {
+    d3__namespace.json("dependencies_2024-11-09-12-16-10.json").then(function (data) {
 
         const svg = d3__namespace.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
@@ -40,7 +40,7 @@
         const tree = d3__namespace.cluster()
             .size([2 * Math.PI, radius - 100]);
         const root = tree(bilink(d3__namespace.hierarchy(data)
-            .sort((a, b) => d3__namespace.ascending(a.height, b.height) || d3__namespace.ascending(a.data.name, b.data.name))));
+            .sort((a, b) => d3__namespace.ascending(a.height, b.height) || d3__namespace.ascending(a.data.path, b.data.path))));
 
         const svg = d3__namespace.create("svg")
             .attr("width", width)
@@ -58,7 +58,7 @@
             .attr("x", d => d.x < Math.PI ? 6 : -6)
             .attr("text-anchor", d => d.x < Math.PI ? "start" : "end")
             .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
-            .text(d => d.data.name)
+            .text(d => d.data.path)
             .each(function(d) { d.text = this; })
             .on("mouseover", overed)
             .on("mouseout", outed)
@@ -102,36 +102,65 @@ ${d.incoming.length} incoming`));
         return svg.node();
     }
 
-    function hierarchy(data, delimiter = ".") {
+    function hierarchy(data, delimiter = "\\") {
+        // console.log(data);
+
         let root;
         const map = new Map;
         data.forEach(function find(data) {
-            const {name} = data;
-            if (map.has(name)) return map.get(name);
-            const i = name.lastIndexOf(delimiter);
-            map.set(name, data);
+            const {path} = data;
+            if (map.has(path)) return map.get(path);
+            const i = path.lastIndexOf(delimiter);
+            map.set(path, data);
             if (i >= 0) {
-                find({name: name.substring(0, i), children: []}).children.push(data);
-                data.name = name.substring(i + 1);
+                find({path: path.substring(0, i), children: []}).children.push(data);
+                data.path = path.substring(i + 1);
             } else {
                 root = data;
             }
             return data;
         });
+
+        // console.log(root);
         return root;
     }
 
     function bilink(root) {
-        console.log(root.leaves());
+
+        // for (const d of root.leaves()){
+        //     // console.log(d3.map(d.data.dependencies, (d)=> d.file));
+        //     // console.log(d3.filter(d.data.dependencies, (d)=>d.external===false));
+        //
+        //     console.log(d3.map(d3.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file));
+        //
+        // }
+        // for (const d of root.leaves()){
+        //     console.log(d);
+        //     console.log(id(d));
+        // }
 
         const map = new Map(root.leaves().map(d => [id(d), d]));
-        for (const d of root.leaves()) d.incoming = [], d.outgoing = d.data.imports.map(i => [d, map.get(i)]);
+        console.log(map);
+
+        for (const d of root.leaves()){
+            console.log(d3__namespace.map(d3__namespace.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file));
+        }
+        for (const d of root.leaves()){
+            d.incoming = [];
+            d.outgoing = d3__namespace.map(d3__namespace.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file).map(i => [d, map.get(i)]);
+        }
+        // for (const d of root.leaves()) for (const o of d.outgoing) console.log(o);
         for (const d of root.leaves()) for (const o of d.outgoing) o[1].incoming.push(o);
         return root;
     }
 
     function id(node) {
-        return `${node.parent ? id(node.parent) + "." : ""}${node.data.name}`;
+        const output = `${node.parent ? id(node.parent) + "\\" : ""}${node.data.path}`;
+
+        // console.log(node);
+        // console.log(output);
+
+        return output;
     }
 
 })(d3);

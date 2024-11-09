@@ -124,7 +124,7 @@ public class FileReader {
                 }
             }
 
-            if(!currentDependenciesArray.isEmpty()){
+//            if(!currentDependenciesArray.isEmpty()){
                 try {
                     currentDependenciesEntry.put("path", currentPath.toRealPath());
                 } catch (IOException e) {
@@ -135,7 +135,7 @@ public class FileReader {
                 currentDependenciesEntry.put("importData", imports);
 
                 dependencies.put(currentDependenciesEntry);
-            }
+//            }
 
 
             hierarchy.put("name", currentPath.getFileName());
