@@ -47,7 +47,8 @@ public class FileReader {
 
         String currTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss"));
 
-        HierarchyAndDepends outputs = fileTreeToJSON(directory, new HierarchyAndDepends(new JSONObject(), new JSONArray()));
+        HierarchyAndDepends outputs = fileTreeToJSON(directory,
+                new HierarchyAndDepends(new JSONObject(), new JSONArray()));
 
         File hierarchyFile = new File("./data_and_processing/file_lists/hierarchy/hierarchy_" + currTime + ".json");
 
@@ -57,7 +58,8 @@ public class FileReader {
             System.err.println(e.getMessage());
         }
 
-        File dependenciesFile = new File("./data_and_processing/file_lists/dependencies/dependencies_" + currTime + ".json");
+        File dependenciesFile = new File(
+                "./data_and_processing/file_lists/dependencies/dependencies_" + currTime + ".json");
 
         try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
             br.write(outputs.getDependencies().toString());
@@ -71,12 +73,13 @@ public class FileReader {
         JSONArray dependencies = lastHierarchyAndDepends.getDependencies();
 
         if (Files.isDirectory(currentPath, LinkOption.NOFOLLOW_LINKS)) {
-            //System.out.println("Is Directory:" + currentPath.toString());
+            // System.out.println("Is Directory:" + currentPath.toString());
 
-            //Stores all the child elements of this directory
+            // Stores all the child elements of this directory
             JSONArray directoryContentArray = new JSONArray();
 
-            //Tries opening this directory and recursively running this method on each of its elements
+            // Tries opening this directory and recursively running this method on each of
+            // its elements
             try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(currentPath)) {
                 directoryContentStream.forEach(directoryElement -> {
                     HierarchyAndDepends childOutputs = fileTreeToJSON(directoryElement, lastHierarchyAndDepends);
@@ -90,17 +93,18 @@ public class FileReader {
             hierarchy.put("name", currentPath.getFileName());
             hierarchy.put("children", directoryContentArray);
         } else {
-            //System.out.println("Is File:" + currentPath.toString());
+            // System.out.println("Is File:" + currentPath.toString());
 
             int dotIndex = currentPath.toString().lastIndexOf(".");
-            
+
             ArrayList<data_element> imports = new ArrayList<data_element>();
             String extension = "";
 
             JSONObject currentDependenciesEntry = new JSONObject();
             JSONArray currentDependenciesArray = new JSONArray();
 
-            //If the filetype of the current file is supported, its imports get processed and added to the list of imports and dependencies
+            // If the filetype of the current file is supported, its imports get processed
+            // and added to the list of imports and dependencies
             if (dotIndex > 0) {
                 extension = currentPath.toString().substring(dotIndex + 1);
 
@@ -116,26 +120,26 @@ public class FileReader {
                     }
                     if (!imports.isEmpty()) {
                         for (data_element d : imports) {
-                            currentDependenciesArray.put(Map.of("file",d.getReferencedFile(),"external",d.isExternal()));
+                            currentDependenciesArray
+                                    .put(Map.of("file", d.getReferencedFile(), "external", d.isExternal()));
                         }
                     }
 
+                    try {
+                        currentDependenciesEntry.put("path", currentPath.toRealPath());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    currentDependenciesEntry.put("value", 0);
+                    currentDependenciesEntry.put("dependencies", currentDependenciesArray);
+                    currentDependenciesEntry.put("importData", imports);
+
+                    dependencies.put(currentDependenciesEntry);
 
                 }
             }
 
-//            if(!currentDependenciesArray.isEmpty()){
-                try {
-                    currentDependenciesEntry.put("path", currentPath.toRealPath());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                currentDependenciesEntry.put("value", 0);
-                currentDependenciesEntry.put("dependencies", currentDependenciesArray);
-                currentDependenciesEntry.put("importData", imports);
 
-                dependencies.put(currentDependenciesEntry);
-//            }
 
 
             hierarchy.put("name", currentPath.getFileName());

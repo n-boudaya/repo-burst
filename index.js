@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-d3.json("dependencies_2024-11-09-12-16-10.json").then(function (data) {
+d3.json("dependencies_2024-11-10-15-01-14.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
@@ -15,8 +15,7 @@ function autoBox() {
     return [x, y, width, height];
 }
 
-function singleDependencyChart(data)
-{
+function singleDependencyChart(data) {
     const width = 954;
     const radius = width / 2;
 
@@ -46,7 +45,9 @@ function singleDependencyChart(data)
         .attr("text-anchor", d => d.x < Math.PI ? "start" : "end")
         .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
         .text(d => d.data.path)
-        .each(function(d) { d.text = this; })
+        .each(function (d) {
+            d.text = this;
+        })
         .on("mouseover", overed)
         .on("mouseout", outed)
         .call(text => text.append("title").text(d => `${id(d)}
@@ -66,7 +67,9 @@ ${d.incoming.length} incoming`));
         .join("path")
         .style("mix-blend-mode", "multiply")
         .attr("d", ([i, o]) => line(i.path(o)))
-        .each(function(d) { d.path = this; });
+        .each(function (d) {
+            d.path = this;
+        });
 
     function overed(event, d) {
         link.style("mix-blend-mode", null);
@@ -90,7 +93,6 @@ ${d.incoming.length} incoming`));
 }
 
 function hierarchy(data, delimiter = "\\") {
-    // console.log(data);
 
     let root;
     const map = new Map;
@@ -108,44 +110,33 @@ function hierarchy(data, delimiter = "\\") {
         return data;
     });
 
-    // console.log(root);
     return root;
 }
 
 function bilink(root) {
 
-    // for (const d of root.leaves()){
-    //     // console.log(d3.map(d.data.dependencies, (d)=> d.file));
-    //     // console.log(d3.filter(d.data.dependencies, (d)=>d.external===false));
-    //
-    //     console.log(d3.map(d3.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file));
-    //
-    // }
-    // for (const d of root.leaves()){
-    //     console.log(d);
-    //     console.log(id(d));
-    // }
-
     const map = new Map(root.leaves().map(d => [id(d), d]));
-    console.log(map);
 
-    for (const d of root.leaves()){
-        console.log(d3.map(d3.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file));
-    }
-    for (const d of root.leaves()){
+    for (const d of root.leaves()) {
         d.incoming = [];
-        d.outgoing = d3.map(d3.filter(d.data.dependencies, (d)=>d.external===false), (d)=> d.file).map(i => [d, map.get(i)]);
+        d.outgoing = d3.map(d3.filter(d.data.dependencies, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
     }
-    // for (const d of root.leaves()) for (const o of d.outgoing) console.log(o);
-    for (const d of root.leaves()) for (const o of d.outgoing) o[1].incoming.push(o);
+
+    for (const d of root.leaves()) {
+        for (const o of d.outgoing) {
+            o[1].incoming.push(o);
+        }
+    }
+
     return root;
+}
+
+function cleanNonConnected(root){
+
 }
 
 function id(node) {
     const output = `${node.parent ? id(node.parent) + "\\" : ""}${node.data.path}`;
-
-    // console.log(node);
-    // console.log(output);
 
     return output;
 }
