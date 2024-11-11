@@ -20,9 +20,11 @@
 
     var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
-    d3__namespace.json("dependencies_2024-11-10-15-01-14.json").then(function (data) {
+    d3__namespace.json("dependencies_2024-11-11-16-18-27.json").then(function (data) {
 
         const svg = d3__namespace.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+
+        console.log(data);
 
         svg.node().appendChild(singleDependencyChart(hierarchy(data)));
 
@@ -123,6 +125,7 @@ ${d.incoming.length} incoming`));
             return data;
         });
 
+        console.log(root);
         return root;
     }
 
@@ -132,7 +135,7 @@ ${d.incoming.length} incoming`));
 
         for (const d of root.leaves()) {
             d.incoming = [];
-            d.outgoing = d3__namespace.map(d3__namespace.filter(d.data.dependencies, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
+            d.outgoing = d3__namespace.map(d3__namespace.filter(d.data.outgoing, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
         }
 
         for (const d of root.leaves()) {
@@ -140,7 +143,12 @@ ${d.incoming.length} incoming`));
                 o[1].incoming.push(o);
             }
         }
+        // for (const d of root.leaves()){
+        //     d.incoming = d.data.incoming;
+        //     d.outgoing = d3.map(d3.filter(d.data.outgoing, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
+        // }
 
+        console.log(root);
         return root;
     }
 

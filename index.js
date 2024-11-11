@@ -1,8 +1,10 @@
 import * as d3 from 'd3';
 
-d3.json("dependencies_2024-11-10-15-01-14.json").then(function (data) {
+d3.json("dependencies_2024-11-11-16-18-27.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+
+    console.log(data);
 
     svg.node().appendChild(singleDependencyChart(hierarchy(data)));
 
@@ -110,6 +112,28 @@ function hierarchy(data, delimiter = "\\") {
         return data;
     });
 
+    console.log(root);
+    return root;
+}
+
+function oldhierarchy(data, delimiter = "\\") {
+
+    let root;
+    const map = new Map;
+    data.forEach(function find(data) {
+        const {path} = data;
+        if (map.has(path)) return map.get(path);
+        const i = path.lastIndexOf(delimiter);
+        map.set(path, data);
+        if (i >= 0) {
+            find({path: path.substring(0, i), children: []}).children.push(data);
+            data.path = path.substring(i + 1);
+        } else {
+            root = data;
+        }
+        return data;
+    });
+
     return root;
 }
 
@@ -119,7 +143,7 @@ function bilink(root) {
 
     for (const d of root.leaves()) {
         d.incoming = [];
-        d.outgoing = d3.map(d3.filter(d.data.dependencies, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
+        d.outgoing = d3.map(d3.filter(d.data.outgoing, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
     }
 
     for (const d of root.leaves()) {
@@ -127,7 +151,12 @@ function bilink(root) {
             o[1].incoming.push(o);
         }
     }
+    // for (const d of root.leaves()){
+    //     d.incoming = d.data.incoming;
+    //     d.outgoing = d3.map(d3.filter(d.data.outgoing, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
+    // }
 
+    console.log(root);
     return root;
 }
 

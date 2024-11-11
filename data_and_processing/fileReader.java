@@ -48,7 +48,9 @@ public class FileReader {
         String currTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss"));
 
         HierarchyAndDepends outputs = fileTreeToJSON(directory,
-                new HierarchyAndDepends(new JSONObject(), new JSONArray()));
+                new HierarchyAndDepends(new JSONObject(), new JSONArray()), 0);
+
+        addIncomingDependencies(outputs.getDependencies());
 
         File hierarchyFile = new File("./data_and_processing/file_lists/hierarchy/hierarchy_" + currTime + ".json");
 
@@ -62,15 +64,16 @@ public class FileReader {
                 "./data_and_processing/file_lists/dependencies/dependencies_" + currTime + ".json");
 
         try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
-            br.write(outputs.getDependencies().toString());
+            br.write(addIncomingDependencies(outputs.getDependencies()).toString());
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private HierarchyAndDepends fileTreeToJSON(Path currentPath, HierarchyAndDepends lastHierarchyAndDepends) {
+    private HierarchyAndDepends fileTreeToJSON(Path currentPath, HierarchyAndDepends lastHierarchyAndDepends, int currentLevel) {
         JSONObject hierarchy = new JSONObject();
         JSONArray dependencies = lastHierarchyAndDepends.getDependencies();
+        boolean isDirectory;
 
         if (Files.isDirectory(currentPath, LinkOption.NOFOLLOW_LINKS)) {
             // System.out.println("Is Directory:" + currentPath.toString());
@@ -82,7 +85,7 @@ public class FileReader {
             // its elements
             try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(currentPath)) {
                 directoryContentStream.forEach(directoryElement -> {
-                    HierarchyAndDepends childOutputs = fileTreeToJSON(directoryElement, lastHierarchyAndDepends);
+                    HierarchyAndDepends childOutputs = fileTreeToJSON(directoryElement, lastHierarchyAndDepends, currentLevel + 1);
 
                     directoryContentArray.put(childOutputs.getHierarchy());
                 });
@@ -90,7 +93,8 @@ public class FileReader {
                 System.err.println(e.getMessage());
             }
 
-            hierarchy.put("name", currentPath.getFileName());
+            isDirectory = true;
+
             hierarchy.put("children", directoryContentArray);
         } else {
             // System.out.println("Is File:" + currentPath.toString());
@@ -100,8 +104,8 @@ public class FileReader {
             ArrayList<data_element> imports = new ArrayList<data_element>();
             String extension = "";
 
-            JSONObject currentDependenciesEntry = new JSONObject();
-            JSONArray currentDependenciesArray = new JSONArray();
+            JSONObject outgoingEntry = new JSONObject();
+            JSONArray outgoingArray = new JSONArray();
 
             // If the filetype of the current file is supported, its imports get processed
             // and added to the list of imports and dependencies
@@ -120,31 +124,30 @@ public class FileReader {
                     }
                     if (!imports.isEmpty()) {
                         for (data_element d : imports) {
-                            currentDependenciesArray
+                            outgoingArray
                                     .put(Map.of("file", d.getReferencedFile(), "external", d.isExternal()));
                         }
                     }
 
                     try {
-                        currentDependenciesEntry.put("path", currentPath.toRealPath());
+                        outgoingEntry.put("path", currentPath.toRealPath());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    currentDependenciesEntry.put("value", 0);
-                    currentDependenciesEntry.put("dependencies", currentDependenciesArray);
-                    currentDependenciesEntry.put("importData", imports);
+                    outgoingEntry.put("value", 0);
+                    outgoingEntry.put("outgoing", outgoingArray);
+                    outgoingEntry.put("dirLevel", currentLevel);
+                    //outgoingEntry.put("importData", imports);
 
-                    dependencies.put(currentDependenciesEntry);
+                    dependencies.put(outgoingEntry);
 
                 }
             }
 
-
-
-
-            hierarchy.put("name", currentPath.getFileName());
             hierarchy.put("extension", extension);
             hierarchy.put("imports", imports);
+
+            isDirectory = false;
 
             try {
                 hierarchy.put("value", Files.size(currentPath));
@@ -154,11 +157,45 @@ public class FileReader {
             }
         }
 
+        hierarchy.put("dirLevel", currentLevel);
+        hierarchy.put("name", currentPath.getFileName());
+        hierarchy.put("isDirectory", isDirectory);
+
         try {
             hierarchy.put("path", currentPath.toRealPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return new HierarchyAndDepends(hierarchy, dependencies);
+    }
+
+    private JSONArray addIncomingDependencies(JSONArray dependencies) {
+        for(Object currEditedObject : dependencies){
+            JSONObject currEditedElement = (JSONObject) currEditedObject;
+
+            JSONArray incoming  = new JSONArray();
+
+            for(Object currViewingObject : dependencies){
+                JSONObject currViewingElement = (JSONObject) currViewingObject;
+
+                JSONArray currViewingOutgoings = currViewingElement.getJSONArray("outgoing");
+
+                for (Object outgoingObject : currViewingOutgoings) {
+                    JSONObject outgoingElement = (JSONObject) outgoingObject;
+
+                    String currOutgoingPath = outgoingElement.get("file").toString();
+
+                    //System.out.println(currOutgoingPath);
+
+                    if(currOutgoingPath.equals(currEditedElement.get("path").toString())){
+                        incoming.put(currViewingElement.get("path").toString());
+                    }
+                }
+            }
+
+            currEditedElement.put("incoming", incoming);
+        }
+
+        return dependencies;
     }
 }

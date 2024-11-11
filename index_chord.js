@@ -46,6 +46,8 @@ function chord_dependency(data)
 
     const ribbon = d3.ribbonArrow()
         .radius(innerRadius - 1)
+        // .sourceRadius(innerRadius -1)
+        // .headRadius(innerRadius - 1)
         .padAngle(1 / innerRadius);
 
     const colors = d3.quantize(d3.interpolateRainbow, names.length);
@@ -95,5 +97,6 @@ ${d3.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming â
         .text(d => `${names[d.source.index]} â†’ ${names[d.target.index]} ${d.source.value}`);
 
     console.log(svg.node());
-    return svg.attr("viewBox", autoBox).node();
+    // return svg.attr("viewBox", autoBox).node();
+    return svg.node();
 }

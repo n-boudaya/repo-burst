@@ -31,9 +31,9 @@ public class javascript_processor extends processor {
                 if (matcher.matches()) {
                     Path referencedPath = Paths.get(matcher.group("path"));
 
-                    System.out.println("Line: "+line);
-                    System.out.println("ReferencedPath: " + referencedPath.toString());
-                    System.out.println("Path: "+path.toString());
+//                    System.out.println("Line: "+line);
+//                    System.out.println("ReferencedPath: " + referencedPath.toString());
+//                    System.out.println("Path: "+path.toString());
 
                     boolean external;
 
