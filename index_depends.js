@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-d3.json("dependencies_2024-11-11-16-18-27.json").then(function (data) {
+d3.json("dependencies_2024-11-14-11-45-27.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 

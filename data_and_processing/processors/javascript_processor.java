@@ -29,14 +29,10 @@ public class javascript_processor extends processor {
             while ((line = reader.readLine()) != null) {
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.matches()) {
-                    Path referencedPath = Paths.get(matcher.group("path"));
-
-//                    System.out.println("Line: "+line);
-//                    System.out.println("ReferencedPath: " + referencedPath.toString());
-//                    System.out.println("Path: "+path.toString());
-
-                    boolean external;
-
+                    // ? in import paths can denote additional parameters passed to the imported file
+                    //All imports should also be absolute, so no : in the path
+                    //Those mess up later path detection, so they are split off
+                    Path referencedPath = Paths.get(matcher.group("path").split("\\?", 2)[0].split(":", 2)[0]);
                     try {
                         Path absoluteReferencedPath = path.toAbsolutePath().toRealPath().resolveSibling(referencedPath).toRealPath();
 //                        System.out.println("Working Path found");
@@ -54,6 +50,9 @@ public class javascript_processor extends processor {
                         result.add(new data_element(lineNumber, line, path, referencedPath, true));
                     }
 
+//                    System.out.println("Line: "+line);
+//                    System.out.println("ReferencedPath: " + referencedPath.toString());
+//                    System.out.println("Path: "+path.toString());
 
 
                 }

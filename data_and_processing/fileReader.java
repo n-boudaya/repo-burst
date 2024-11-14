@@ -57,7 +57,7 @@ public class FileReader {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(hierarchyFile, true))) {
             br.write(outputs.getHierarchy().toString());
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Hierarchy Writer: " + e.getMessage());
         }
 
         File dependenciesFile = new File(
@@ -66,7 +66,7 @@ public class FileReader {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
             br.write(addIncomingDependencies(outputs.getDependencies()).toString());
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Depends Writer: " + e.getMessage());
         }
     }
 
@@ -85,12 +85,14 @@ public class FileReader {
             // its elements
             try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(currentPath)) {
                 directoryContentStream.forEach(directoryElement -> {
+//                    System.out.println(directoryElement.getFileName());
+
                     HierarchyAndDepends childOutputs = fileTreeToJSON(directoryElement, lastHierarchyAndDepends, currentLevel + 1);
 
                     directoryContentArray.put(childOutputs.getHierarchy());
                 });
             } catch (Exception e) {
-                System.err.println(e.getMessage());
+                System.err.println("Directory Access: " + e.getMessage() + " Current path: " + currentPath.toString());
             }
 
             isDirectory = true;
@@ -106,6 +108,8 @@ public class FileReader {
 
             JSONObject outgoingEntry = new JSONObject();
             JSONArray outgoingArray = new JSONArray();
+
+            JSONArray externalArray = new JSONArray();
 
             // If the filetype of the current file is supported, its imports get processed
             // and added to the list of imports and dependencies
@@ -124,18 +128,28 @@ public class FileReader {
                     }
                     if (!imports.isEmpty()) {
                         for (data_element d : imports) {
-                            outgoingArray
-                                    .put(Map.of("file", d.getReferencedFile(), "external", d.isExternal()));
+                            Path referencedFile = d.getReferencedFile();
+                            Boolean external = d.isExternal();
+
+                            if(external){
+                                externalArray.put(referencedFile);
+                            }
+                            else {
+                                outgoingArray.put(referencedFile);
+                            }
+//                            outgoingArray
+//                                    .put(Map.of("file", d.getReferencedFile(), "external", d.isExternal()));
                         }
                     }
 
                     try {
                         outgoingEntry.put("path", currentPath.toRealPath());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.err.println("Path Access Depends: " + e.getMessage());
                     }
                     outgoingEntry.put("value", 0);
                     outgoingEntry.put("outgoing", outgoingArray);
+                    outgoingEntry.put("external", externalArray);
                     outgoingEntry.put("dirLevel", currentLevel);
                     //outgoingEntry.put("importData", imports);
 
@@ -153,7 +167,7 @@ public class FileReader {
                 hierarchy.put("value", Files.size(currentPath));
             } catch (IOException e) {
                 hierarchy.put("value", -1);
-                System.err.println(e.getMessage());
+                System.err.println("Filesize Access: " + e.getMessage());
             }
         }
 
@@ -164,7 +178,7 @@ public class FileReader {
         try {
             hierarchy.put("path", currentPath.toRealPath());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Path Access Hierarchy: " + e.getMessage());
         }
         return new HierarchyAndDepends(hierarchy, dependencies);
     }
@@ -181,9 +195,7 @@ public class FileReader {
                 JSONArray currViewingOutgoings = currViewingElement.getJSONArray("outgoing");
 
                 for (Object outgoingObject : currViewingOutgoings) {
-                    JSONObject outgoingElement = (JSONObject) outgoingObject;
-
-                    String currOutgoingPath = outgoingElement.get("file").toString();
+                    String currOutgoingPath = outgoingObject.toString();
 
                     //System.out.println(currOutgoingPath);
 
