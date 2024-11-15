@@ -4,7 +4,7 @@ d3.json("dependencies_2024-11-14-14-57-34.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
-    svg.node().appendChild(chord_dependency(data, 10));
+    svg.node().appendChild(chord_dependency(data, 9));
     // computeMatrix(data, 8);
 });
 
@@ -23,56 +23,56 @@ function autoBox() {
     return [x, y, width, height];
 }
 
-function computeMatrix(data, level){
-    // console.log(data);
-
-    var allDepends = [];
-    for(const d of data){
-        const source = d.path;
-
-        for(const target of d.outgoing){
-            allDepends.push([source,target]);
-        }
-    }
-
-    const newData = d3.rollup(allDepends,(D)=>D.length, (d)=>cutoff(d[0],level), (d)=>cutoff(d[1],level));
-
-    console.log(newData);
-
-    const uniqueFiles = new Set;
-    data.map(d => cutoff(d.path, level)).forEach(e => uniqueFiles.add(e));
-    console.log(uniqueFiles);
-
-    const names = d3.sort(uniqueFiles);
-
-    const index = new Map(names.map((name, i) => [name, i]));
-    console.log(index);
-
-
-    const matrix = Array.from(index, () => new Array(names.length).fill(0));
-    // console.log(matrix);
-
-    let numberOfConnects = 0;
-    for(const n of names){
-        const nIndex = index.get(n)
-
-        for(const e of names){
-            const eIndex = index.get(e);
-
-            if(typeof newData.get(n) !== "undefined"){
-                if(typeof newData.get(n).get(e) !== "undefined"){
-                    matrix[nIndex][eIndex] = newData.get(n).get(e);
-                    console.log("From: "+n+" To: "+e+" Value: "+newData.get(n).get(e));
-                }
-
-            }
-        }
-    }
-
-     console.log(matrix);
-    console.log(numberOfConnects);
-
-}
+// function computeMatrix(data, level){
+//     // console.log(data);
+//
+//     var allDepends = [];
+//     for(const d of data){
+//         const source = d.path;
+//
+//         for(const target of d.outgoing){
+//             allDepends.push([source,target]);
+//         }
+//     }
+//
+//     const newData = d3.rollup(allDepends,(D)=>D.length, (d)=>cutoff(d[0],level), (d)=>cutoff(d[1],level));
+//
+//     console.log(newData);
+//
+//     const uniqueFiles = new Set;
+//     data.map(d => cutoff(d.path, level)).forEach(e => uniqueFiles.add(e));
+//     console.log(uniqueFiles);
+//
+//     const names = d3.sort(uniqueFiles);
+//
+//     const index = new Map(names.map((name, i) => [name, i]));
+//     console.log(index);
+//
+//
+//     const matrix = Array.from(index, () => new Array(names.length).fill(0));
+//     // console.log(matrix);
+//
+//     let numberOfConnects = 0;
+//     for(const n of names){
+//         const nIndex = index.get(n)
+//
+//         for(const e of names){
+//             const eIndex = index.get(e);
+//
+//             if(typeof newData.get(n) !== "undefined"){
+//                 if(typeof newData.get(n).get(e) !== "undefined"){
+//                     matrix[nIndex][eIndex] = newData.get(n).get(e);
+//                     console.log("From: "+n+" To: "+e+" Value: "+newData.get(n).get(e));
+//                 }
+//
+//             }
+//         }
+//     }
+//
+//      console.log(matrix);
+//     console.log(numberOfConnects);
+//
+// }
 
 
 
@@ -88,6 +88,22 @@ function computeMatrix(data, level){
     // console.log("Path: "+path+" Path level: "+pathArr.length+" Level: "+level+" Output: "+output);
 
     return output;
+}
+
+//https://stackoverflow.com/a/1917041
+function sharedStart(array){
+    var A= array.concat(),
+        a1= A[0], a2= A[A.length-1], L= a1.length, i= 0;
+    while(i<L && a1.charAt(i)=== a2.charAt(i)) i++;
+    // return a1.substring(0, i);
+
+    var outputArr = [];
+    for(const e of array){
+        outputArr.push(e.slice(i));
+    }
+
+    console.log(d3.sort(outputArr));
+    return d3.sort(outputArr);
 }
 
 function chord_dependency(data, level)
@@ -114,7 +130,7 @@ function chord_dependency(data, level)
     data.map(d => cutoff(d.path, level)).forEach(e => uniqueFiles.add(e));
     console.log(uniqueFiles);
 
-    const names = d3.sort(uniqueFiles);
+    var names = d3.sort(uniqueFiles);
 
     const index = new Map(names.map((name, i) => [name, i]));
     console.log(index);
@@ -142,6 +158,8 @@ function chord_dependency(data, level)
 
     console.log(matrix);
     console.log(numberOfConnects);
+
+    names = sharedStart(names);
 
 
     // // Compute a dense matrix from the weighted links in data.
