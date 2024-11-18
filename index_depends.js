@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-d3.json("dependencies_2024-11-14-11-45-27.json").then(function (data) {
+d3.json("dependencies_2024-11-14-14-57-34.json").then(function (data) {
 
     const svg = d3.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
@@ -27,8 +27,11 @@ function singleDependencyChart(data) {
 
     const tree = d3.cluster()
         .size([2 * Math.PI, radius - 100]);
-    const root = tree(bilink(d3.hierarchy(data)
-        .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.path, b.data.path))));
+    const root = tree(cleanNonConnected(bilink(d3.hierarchy(data)
+        .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.path, b.data.path)))));
+    // const root = tree(bilink(d3.hierarchy(data)
+    //     .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.path, b.data.path))));
+
 
     const svg = d3.create("svg")
         .attr("width", width)
@@ -48,13 +51,20 @@ function singleDependencyChart(data) {
         .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
         .text(d => d.data.path)
         .each(function (d) {
+            // console.log(d);
             d.text = this;
+            if(d.noConnections === false){
+
+            }
+
         })
         .on("mouseover", overed)
         .on("mouseout", outed)
         .call(text => text.append("title").text(d => `${id(d)}
 ${d.outgoing.length} outgoing
 ${d.incoming.length} incoming`));
+
+    // root.leaves().flatMap(leaf => leaf.outgoing).forEach(r=>console.log(r[1]));
 
     const line = d3.lineRadial()
         .curve(d3.curveBundle.beta(0.85))
@@ -64,13 +74,28 @@ ${d.incoming.length} incoming`));
     const link = svg.append("g")
         .attr("stroke", colornone)
         .attr("fill", "none")
-        .selectAll()
+        .selectAll("path")
         .data(root.leaves().flatMap(leaf => leaf.outgoing))
         .join("path")
         .style("mix-blend-mode", "multiply")
         .attr("d", ([i, o]) => line(i.path(o)))
+        .attr("fake", ([i, o]) => {
+            for(const e of i.path(o)){
+                const x = e.x;
+                const y = e.y;
+                const path = e.data.path;
+                const iPath = i.data.path;
+                const oPath = o.data.path;
+                // console.log("i Path: "+iPath+" o Path: "+oPath+" X: "+x+" Y: "+y+" Path: "+path);
+            }
+            // console.log(root);
+        })
+        //------------------------------------------------path in i.path(o) gibt NaN werte
+        // .attr("fake", ([i, o]) => console.log(o))
+        // .attr("fake", ([i, o]) => console.log(i.path(o)))
         .each(function (d) {
             d.path = this;
+            // console.log(this);
         });
 
     function overed(event, d) {
@@ -99,16 +124,30 @@ function hierarchy(data, delimiter = "\\") {
     let root;
     const map = new Map;
     data.forEach(function find(data) {
+        // console.log(data);
         const {path} = data;
-        if (map.has(path)) return map.get(path);
+        if (map.has(path)){
+            return map.get(path);
+        }
         const i = path.lastIndexOf(delimiter);
         map.set(path, data);
+
         if (i >= 0) {
+            // if(!data.hasOwnProperty("children")){
+            //     if(data.incoming.length===0 && data.outgoing.length ===0){
+            //         console.log(data);
+            //     }
+            //     else{
+            //
+            //     }
+            // }
             find({path: path.substring(0, i), children: []}).children.push(data);
             data.path = path.substring(i + 1);
         } else {
+            // console.log(path);
             root = data;
         }
+        // console.log(data);
         return data;
     });
 
@@ -116,26 +155,26 @@ function hierarchy(data, delimiter = "\\") {
     return root;
 }
 
-function oldhierarchy(data, delimiter = "\\") {
-
-    let root;
-    const map = new Map;
-    data.forEach(function find(data) {
-        const {path} = data;
-        if (map.has(path)) return map.get(path);
-        const i = path.lastIndexOf(delimiter);
-        map.set(path, data);
-        if (i >= 0) {
-            find({path: path.substring(0, i), children: []}).children.push(data);
-            data.path = path.substring(i + 1);
-        } else {
-            root = data;
-        }
-        return data;
-    });
-
-    return root;
-}
+// function oldhierarchy(data, delimiter = "\\") {
+//
+//     let root;
+//     const map = new Map;
+//     data.forEach(function find(data) {
+//         const {path} = data;
+//         if (map.has(path)) return map.get(path);
+//         const i = path.lastIndexOf(delimiter);
+//         map.set(path, data);
+//         if (i >= 0) {
+//             find({path: path.substring(0, i), children: []}).children.push(data);
+//             data.path = path.substring(i + 1);
+//         } else {
+//             root = data;
+//         }
+//         return data;
+//     });
+//
+//     return root;
+// }
 
 function bilink(root) {
 
@@ -143,7 +182,7 @@ function bilink(root) {
 
     for (const d of root.leaves()) {
         d.incoming = [];
-        d.outgoing = d3.map(d3.filter(d.data.outgoing, (d) => d.external === false), (d) => d.file).map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
+        d.outgoing = d.data.outgoing.map(i => [d, map.get(i)]).filter((d) => typeof d[1] !== 'undefined');
     }
 
     for (const d of root.leaves()) {
@@ -161,12 +200,30 @@ function bilink(root) {
     // }
     //
     // console.log("simple");
-    console.log(root);
+
     return root;
 }
 
 function cleanNonConnected(root){
+    for(const e of root){
+        if(!e.hasOwnProperty("children")){
+            if(e.incoming.length===0 && e.outgoing.length ===0){
+                // e.parent.children.splice(e.parent.children.indexOf(e),1);
+                // console.log(e);
+                // root.data.find()
 
+                e.noConnections = true;
+            }
+            else{
+                e.noConnections = false;
+            }
+        }
+        else{
+            e.noConnections = false;
+        }
+    }
+
+    return root;
 }
 
 function id(node) {
