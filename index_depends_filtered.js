@@ -18,12 +18,13 @@ function autoBox() {
 }
 
 function singleDependencyChart(data) {
-    const width = 954;
+    const width = 1000;
     const radius = width / 2;
 
     const colorin = "#00f";
     const colorout = "#f00";
     const colornone = "#ccc";
+    const colorScale = t => d3.interpolateRdBu(1 - t);
 
     const tree = d3.cluster()
         .size([2 * Math.PI, radius - 100]);
@@ -72,12 +73,12 @@ ${d.incoming.length} incoming`));
         .angle(d => d.x);
 
     const link = svg.append("g")
-        .attr("stroke", colornone)
+        .attr("stroke", (d, i) => colorScale(d3.easeQuad(i / ((1 << 6) - 1))))
         .attr("fill", "none")
         .selectAll("path")
         .data(root.leaves().flatMap(leaf => leaf.outgoing))
         .join("path")
-        .style("mix-blend-mode", "multiply")
+        .style("mix-blend-mode", "darken")
         .attr("d", ([i, o]) => line(i.path(o)))
         .attr("fake", ([i, o]) => {
             for(const e of i.path(o)){
