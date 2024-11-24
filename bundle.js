@@ -31,7 +31,7 @@
 
     function zoomableSunburst(data, visibleLevels)
     {
-        console.log(data);
+        // console.log(data);
 
         // Specify the chart’s dimensions.
         const width = 10000;
@@ -54,9 +54,9 @@
         console.log(root);
 
 
-        const maxLevel = d3__namespace.max(root.leaves(), (d) => d.y0);
+        d3__namespace.max(root.leaves(), (d) => d.y0);
 
-        console.log(maxLevel);
+        // console.log(maxLevel);
 
         // Create the arc generator.
         const arc = d3__namespace.arc()
@@ -71,26 +71,39 @@
 
         // Create the SVG container.
         const svg = d3__namespace.create("svg")
-            .attr("viewBox", [-width / 2, -height / 2, width, width])
-            .style("font", "10px sans-serif");
+            .attr("viewBox", [-width / 2, -height / 2, width, width]).attr("y", 100);
+            // .style("font", "10px sans-serif");
 
         // Append the arcs.
         const path = svg.append("g")
             .selectAll("path")
+            // .data(root.descendants().slice(1).filter(d=>d.depth<=visibleLevels))
             .data(root.descendants().slice(1))
             .join("path")
+            // .attr("fill", d =>
+            // {
+            //     if(!arcSmall(d)){
+            //         while (d.depth > 1) d = d.parent;
+            //         return color(d.data.name);
+            //     }
+            //     else{
+            //         return "#f00";
+            //     }
+            //
+            // })
             .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
             .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
             .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
-
             .attr("d", d => arc(d.current));
 
-        console.log(path);
+
+        // console.log(path);
 
         // Make them clickable if they have children.
         path.filter(d => d.children)
             .style("cursor", "pointer")
             .on("click", clicked);
+
 
         const format = d3__namespace.format(",d");
         path.append("title")
@@ -101,10 +114,13 @@
             .attr("text-anchor", "middle")
             .style("user-select", "none")
             .selectAll("text")
+            // .data(root.descendants().slice(1).filter(d=>d.depth<=visibleLevels))
             .data(root.descendants().slice(1))
             .join("text")
-            // .attr("dy", "0.35em")
-            .attr("dy", "1.00em")
+            .attr("dy", "0.35em")
+            .attr("font-size", d=>(radius)/d.data.name.toString().length)
+            .attr("font-family", "monospace")
+            // .attr("dy", "10.00em")
             .attr("fill-opacity", d => +labelVisible(d.current))
             .attr("transform", d => labelTransform(d.current))
             .text(d => d.data.name);
@@ -118,38 +134,46 @@
 
         // Handle zoom on click.
         function clicked(event, p) {
-            parent.datum(p.parent || root);
+            console.log(p);
+            console.log(event);
 
-            root.each(d => d.target = {
-                x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-                x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-                y0: Math.max(0, d.y0 - p.depth),
-                y1: Math.max(0, d.y1 - p.depth)
-            });
+            //https://stackoverflow.com/a/69036892
+            if (event.ctrlKey) {
+                d3__namespace.select(this).attr('stroke', 'black').attr('stroke-width', '5');
+            } else {
 
-            const t = svg.transition().duration(2000);
+                parent.datum(p.parent || root);
 
-            // Transition the data on all arcs, even the ones that aren’t visible,
-            // so that if this transition is interrupted, entering arcs will start
-            // the next transition from the desired position.
-            path.transition(t)
-                .tween("data", d => {
-                    const i = d3__namespace.interpolate(d.current, d.target);
-                    return t => d.current = i(t);
-                })
-                .filter(function(d) {
-                    return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-                })
-                .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
-                .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
+                root.each(d => d.target = {
+                    x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    y0: Math.max(0, d.y0 - p.depth),
+                    y1: Math.max(0, d.y1 - p.depth)
+                });
 
-                .attrTween("d", d => () => arc(d.current));
+                const t = svg.transition().duration(1);
 
-            label.filter(function(d) {
-                return +this.getAttribute("fill-opacity") || labelVisible(d.target);
-            }).transition(t)
-                .attr("fill-opacity", d => +labelVisible(d.target))
-                .attrTween("transform", d => () => labelTransform(d.current));
+                // Transition the data on all arcs, even the ones that aren’t visible,
+                // so that if this transition is interrupted, entering arcs will start
+                // the next transition from the desired position.
+                path.transition(t)
+                    .tween("data", d => {
+                        const i = d3__namespace.interpolate(d.current, d.target);
+                        return t => d.current = i(t);
+                    })
+                    .filter(function (d) {
+                        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+                    })
+                    .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
+                    .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
+                    .attrTween("d", d => () => arc(d.current));
+
+                label.filter(function (d) {
+                    return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+                }).transition(t)
+                    .attr("fill-opacity", d => +labelVisible(d.target))
+                    .attrTween("transform", d => () => labelTransform(d.current));
+            }
         }
 
         function arcVisible(d) {
@@ -166,8 +190,19 @@
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         }
 
+        function resetBorders(){
+            console.log("RESET");
+            d3__namespace.selectAll("path").filter(function(){
+                return d3__namespace.select(this).attr("stroke-width") === "5";
+            }).selectChildren().attr("fake", d=>console.log(d));
+        }
+
+        d3__namespace.select("#resetbutton").on("click",resetBorders);
+
         return svg.node();
     }
+
+
 
     // function SunburstSimple(data, cutoff, radius) {
     //     // Prepare the layout.

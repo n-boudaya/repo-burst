@@ -50,6 +50,7 @@ function _chart(d3,data)
 
       .attr("d", d => arc(d.current));
 
+
   // Make them clickable if they have children.
   path.filter(d => d.children)
       .style("cursor", "pointer")
