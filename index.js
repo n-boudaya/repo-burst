@@ -24,9 +24,10 @@ function zoomableSunburst(data, visibleLevels)
     // Specify the chart’s dimensions.
     const width = 10000;
     const height = width;
-    const radius = 600;
+    const radius = 1000;
     // const radius = 100;
     const levelPadding = 1;
+    let currVisibleLevels = visibleLevels;
 
     // Create the color scale.
     const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
@@ -35,10 +36,11 @@ function zoomableSunburst(data, visibleLevels)
     const hierarchy = d3.hierarchy(data)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
-    const root = d3.partition()
+    let root = d3.partition()
         .size([2 * Math.PI, hierarchy.height + 1])
         (hierarchy);
     root.each(d => d.current = d);
+    root.each(d=>d.hasChildren = hasChildren(d));
     console.log(root);
 
 
@@ -52,7 +54,15 @@ function zoomableSunburst(data, visibleLevels)
         .endAngle(d => d.x1)
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
         .padRadius(radius * 1.5)
-        .innerRadius(d => (visibleLevels - d.y0 +1) * radius)
+        .innerRadius(d => {
+            console.log(d);
+            if(d.hasChildren){
+                return (visibleLevels - d.y0 +1) * radius;
+            }
+            else{
+                return radius;
+            }
+            })
         // .innerRadius(d => d.y0 * radius)
         .outerRadius(d => ((visibleLevels - d.y0 +2) * radius) - levelPadding);
         // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
@@ -120,6 +130,20 @@ function zoomableSunburst(data, visibleLevels)
         .attr("pointer-events", "all")
         .on("click", clicked);
 
+    function hasChildren(d){
+        if(typeof d.data.children !== "undefined"){
+            if(d.data.children.length === 0){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+
     // Handle zoom on click.
     function clicked(event, p) {
         console.log(p);
@@ -136,7 +160,9 @@ function zoomableSunburst(data, visibleLevels)
                 x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
                 x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
                 y0: Math.max(0, d.y0 - p.depth),
-                y1: Math.max(0, d.y1 - p.depth)
+                y1: Math.max(0, d.y1 - p.depth),
+                hasChildren: d.hasChildren,
+                name: d.data.name
             });
 
             const t = svg.transition().duration(1);
@@ -184,12 +210,37 @@ function zoomableSunburst(data, visibleLevels)
 
     function resetBorders(){
         console.log("RESET");
-        d3.selectAll("path").filter(function(){
-            return d3.select(this).attr("stroke-width") === "5";
-        });
+        // d3.selectAll("path").filter(function(){
+        //     return d3.select(this).attr("stroke-width") === "5";
+        // });
+
+        console.log(d3.hierarchy(data).find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages"));
+
+        const newHierarchy = d3.hierarchy(data);
+        newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages").children = null;
+        // const foundPackages = newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages").children = null;
+        // foundPackages.children = null;
+        console.log(newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages"));
+
+        root = d3.partition()
+            .size([2 * Math.PI, hierarchy.height + 1])
+            (hierarchy);
+        root.each(d => d.current = d);
+        console.log(root);
+
+        update(root);
+
+    }
+
+    function slider(event){
+        console.log(event.target.value);
+
+        currVisibleLevels = event.target.value;
     }
 
     d3.select("#resetbutton").on("click",resetBorders);
+
+    d3.select("#visibleLevels").on("input",slider);
 
     return svg.node();
 }
