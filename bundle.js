@@ -241,9 +241,8 @@
 
         function slider(event){
             console.log(event.target.value);
-            const number = svg.append("g").append("rect");
 
-            number.attr("fill","black");
+            event.target.value;
         }
 
         d3__namespace.select("#resetbutton").on("click",resetBorders);

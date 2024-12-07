@@ -38,3 +38,30 @@ TBD:
 - Überblickspaper zu Datenvergleich: Verschiedene Typen sind Nebeneinander, ~~Ineinander~~ oder Differenz anzeigen
 
 Tasks und Requirements aufschreiben und erklären 
+
+
+061224:
+
+TBD:
+Iterierung über mehrere Commits
+Vergleich (siehe Paper, juxtaposition+farbliche markierung der unterschiede)
+Codefenster
+Einbinden der Chords in die Grafik
+Übergangsanimation gestrichen, nicht performant
+
+
+Quellen größtenteils gefunden. Sollen Libraries in related work erwähnt werden oder in eigener Arbeit? In eigene Arbeit.
+Soll übersicht über funktionsweise von d3 gegeben werden. Nein
+
+Zoom-funktion: gute oder schlechte Idee? Gute Idee
+
+Löschen verschiedener Elemente der Hierarchie keine gute Idee, sowohl Implementationstechnisch, als auch bezogen auf Korrektheit der Darstellung
+Aber: irrelevante Elemente könnten transparenter werden, um nicht zu stören
+
+Grund: Wenn Elemente komplett ausgeblendet werden könnten, wäre Chord diagramm nicht sehr nützlich, da viele Elemente plötzlich external werden -> unübersichtlich
+
+Möglichkeit hinzufügen, einen Ordner auszuwählen und durch alle child files darstellen zu können.
+
+Suchfunktion einbauen! 
+
+Iterierung über Klicks, bei Iterierung immer das Vergleichsfenster mit links vorher und rechts nachher
