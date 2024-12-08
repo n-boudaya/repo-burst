@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.2)  7 DEC 2024 15:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.2)  7 DEC 2024 15:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**j:/repo-burst/BA/main.tex
-(j:/repo-burst/BA/main.tex
+**j:/repo-burst/BA2/main.tex
+(j:/repo-burst/BA2/main.tex
 LaTeX2e <2024-11-01> patch level 1
 L3 programming layer <2024-11-02>
 (c:/texlive/2024/texmf-dist/tex/latex/base/article.cls
@@ -441,62 +441,41 @@ l.27 \newpage \ \newpage
 
 [5]
 
-[1]
-
-LaTeX Warning: Citation `Molchanov19' on page 2 undefined on input line 86.
-
-
-LaTeX Warning: Citation `Rave21' on page 2 undefined on input line 86.
-
-(./main.bbl
+[1] (./main.bbl
 
 [2{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 11.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 16.
  (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 11.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 16.
  (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ))
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 113--116
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 113--116
-
- []
-
-
 
 [4] (./main.aux (./titelblatt.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 1
 L3 programming layer <2024-11-02>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 4B74F0AF6E639354A802D2C3D7FF29F8;1510.
  ) 
 Here is how much of TeX's memory you used:
- 13294 strings out of 473329
- 209803 string characters out of 5723857
- 631886 words of memory out of 5000000
- 36239 multiletter control sequences out of 15000+600000
+ 13296 strings out of 473329
+ 209827 string characters out of 5723857
+ 630915 words of memory out of 5000000
+ 36240 multiletter control sequences out of 15000+600000
  562434 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,8n,79p,686b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,8n,79p,612b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (10 pages, 132819 bytes).
+Output written on main.pdf (10 pages, 131659 bytes).
 PDF statistics:
- 142 PDF objects out of 1000 (max. 8388607)
- 112 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
+ 144 PDF objects out of 1000 (max. 8388607)
+ 114 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
  59 words of extra memory for PDF output out of 10000 (max. 10000000)
 

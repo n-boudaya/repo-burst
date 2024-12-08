@@ -13,11 +13,17 @@
   <body>
     <script src='bundle.js'></script>
 
-    <button id="resetbutton">Reset</button>
+    <button id="applyLevels">Apply</button>
 
     <div>
-      <input type="range" id="visibleLevels" name="visibleLevels" min="1" max="6" step="1"/>
-      <label for="visibleLevels">Visible Levels</label>
+<!--      https://stackoverflow.com/a/18936328-->
+      <input type="range" id="startLevelInput" name="startLevelInput" value="1" min="1" max="10" step="1" oninput="startLevelOutput.value = startLevelInput.value"/>
+      <output id="startLevelOutput">1</output>
+      <label for="startLevelInput">Start Level</label>
+
+      <input type="range" id="stopLevelInput" name="stopLevelInput" value="1" min="1" max="10" step="1" oninput="stopLevelOutput.value = stopLevelInput.value"/>
+      <output id="stopLevelOutput">1</output>
+      <label for="startLevelInput">Stop Level</label>
     </div>
 
   </body>

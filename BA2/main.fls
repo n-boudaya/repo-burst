@@ -1,8 +1,8 @@
-PWD j:/repo-burst/BA
+PWD j:/repo-burst/BA2
 INPUT c:/texlive/2024/texmf.cnf
 INPUT c:/texlive/2024/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT j:/repo-burst/BA/main.tex
+INPUT j:/repo-burst/BA2/main.tex
 OUTPUT main.log
 INPUT c:/texlive/2024/texmf-dist/tex/latex/base/article.cls
 INPUT c:/texlive/2024/texmf-dist/tex/latex/base/article.cls
