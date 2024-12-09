@@ -17,7 +17,7 @@ function autoBox() {
     return [x, y, width, height];
 }
 
-function zoomableSunburst(data, visibleLevels)
+function zoomableSunburst(data, startVisibleLevels)
 {
     // console.log(data);
 
@@ -25,24 +25,21 @@ function zoomableSunburst(data, visibleLevels)
     const width = 10000;
     const height = width;
     const radius = 500;
-    const offset = 1000;
+    const innerCircleRadius = 2000;
+    const outerCircleWidth = 1000;
 
     let startLvl = 0;
-    let stopLvl = startLvl + visibleLevels;
+    let stopLvl = startLvl + startVisibleLevels;
 
     let sliderStartLvl = startLvl;
     let sliderStopLvl = stopLvl;
     // let endLvl = visibleLevels;
     // const radius = 100;
     const levelPadding = 10;
-    let currVisibleLevels = visibleLevels;
+    let visibleLevels = stopLvl-startLvl+1;
 
     // Create the color scale.
     const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-
-    function colorAlt(domain,amountOfColors){
-        return d3.scaleOrdinal(domain,d3.quantize(d3.interpolateRainbow, amountOfColors));
-    }
 
     // Compute the layout.
     const hierarchy = d3.hierarchy(data)
@@ -67,8 +64,23 @@ function zoomableSunburst(data, visibleLevels)
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
         .padRadius(radius * 1.5)
         // .cornerRadius(100)
-        .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
-        .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
+        .innerRadius(d => calculateRadius(d.y0, true))
+        .outerRadius(d => calculateRadius(d.y0, false));
+        // .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
+        // .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
+
+    function calculateRadius(yValue, isInnerRadius){
+        const result = ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels))+innerCircleRadius;
+
+        console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
+
+        if(isInnerRadius){
+            return result;
+        }
+        else{
+            return (((visibleLevels - (yValue-startLvl)) * (outerCircleWidth/visibleLevels)) - levelPadding)+innerCircleRadius;
+        }
+    }
 
     // // Create the arc generator.
     // const longArc = d3.arc()
@@ -110,11 +122,13 @@ function zoomableSunburst(data, visibleLevels)
             stopLvl=sliderStopLvl;
         }
 
+        visibleLevels = stopLvl-startLvl+1;
+
 
         const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
 
         const colorNumbers = da.filter(m=>m.depth==startLvl).length;
-        console.log(colorNumbers);
+        console.log(visibleLevels);
 
         console.log(da);
         drawArcs(da);
@@ -139,17 +153,15 @@ function zoomableSunburst(data, visibleLevels)
 
     function drawArcs(pData, numOfCol){
         // Append the arcs.
-
-
         svg.selectAll("path")
             // .data(root.descendants().slice(1).filter(d=>d.depth>=startLvl&&d.depth<=startLvl+visibleLevels-1))
             .data(pData)
             .join("path")
             // .attr("fill", d=>d3.interpolateTurbo(d.x0/(2 * Math.PI)))
-            .attr("fill", d=>d3.interpolateRainbow(d.x0/(2 * Math.PI)))
-            .attr("fake",d=>console.log(d3.interpolateRainbow(d.x0/(2 * Math.PI))))
+            .attr("fill", d=>d3.interpolatePlasma(d.x0/(2 * Math.PI)))
+            // .attr("fake",d=>console.log((visibleLevels - (d.y0-startLvl) +1) * radius))
             // .attr("fake",d=>d.x0/(2 * Math.PI))
-            // .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+            .attr("fill-opacity", d => d.children ? 1 : 0.2)
             // .attr("fill-opacity", "0.3")
             // .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
             .attr("d", d => arc(d.current));
@@ -157,7 +169,6 @@ function zoomableSunburst(data, visibleLevels)
         // console.log(svg);
         // console.log(startLvl);
         return svg.node();
-
     }
     // const longArcPath = svg.append("g")
     //     .selectAll("path")
