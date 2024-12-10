@@ -130,7 +130,7 @@
 
 
             // const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
-            const shortArcData = root.descendants().slice(1).filter(d=>d.depth <= stopLvl);
+            const shortArcData = root.descendants().slice(1).filter(d=>d.depth <= stopLvl && d.depth >= startLvl);
             const longArcData = root.descendants().slice(1).filter(d=>(d.depth <= stopLvl)&&!d.children);
             // console.log(visibleLevels);
 
@@ -142,7 +142,7 @@
         d3__namespace.select("#startLevelInput").on("input",adjustStart);
 
         function adjustStart(event){
-            console.log("Start Level Adjusted:" + event.target.value);
+            // console.log("Start Level Adjusted:" + event.target.value);
 
             sliderStartLvl = event.target.value;
         }
@@ -150,7 +150,7 @@
         d3__namespace.select("#stopLevelInput").on("input",adjustStop);
 
         function adjustStop(event){
-            console.log("Stop Level Adjusted:" + event.target.value);
+            // console.log("Stop Level Adjusted:" + event.target.value);
 
             sliderStopLvl = event.target.value;
         }
@@ -186,6 +186,7 @@
                 .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
                 // .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
                 .attr("d", d => arc(d.current));
+                // .attr("path", d=>d.data.path);
 
             // path.filter(d => d.children)
             //     .style("cursor", "pointer")
@@ -197,7 +198,34 @@
             return svg.node();
         }
 
+        let searchText = "";
 
+        d3__namespace.select("#fileSearchText").on("input",changeFileSearchText);
+
+        function changeFileSearchText(){
+            // console.log(event.target.value);
+
+            searchText = event.target.value;
+        }
+
+        d3__namespace.select("#fileSearchButton").on("click",fileSearch);
+
+        function fileSearch(){
+
+            shortArcPath.selectAll("path").filter(function(d) {
+                return d.data.path.startsWith(searchText);
+            })
+                .sort((a,b)=>a.depth - b.depth)
+                .attr("fill", (d,i)=>{
+                    if(i===0){
+                        return "black";
+                    }
+                    else {
+                        return "red";
+                    }
+                });
+
+        }
 
         // console.log(root.descendants().slice(1));
 
