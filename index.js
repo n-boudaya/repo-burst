@@ -10,12 +10,12 @@ d3.json("hierarchy_2024-11-18-11-19-10.json").then(function (data) {
 
 });
 
-function autoBox() {
-    document.body.appendChild(this);
-    const {x, y, width, height} = this.getBBox();
-    document.body.removeChild(this);
-    return [x, y, width, height];
-}
+// function autoBox() {
+//     document.body.appendChild(this);
+//     const {x, y, width, height} = this.getBBox();
+//     document.body.removeChild(this);
+//     return [x, y, width, height];
+// }
 
 function zoomableSunburst(data, startVisibleLevels)
 {
@@ -26,7 +26,7 @@ function zoomableSunburst(data, startVisibleLevels)
     const height = width;
     const radius = 500;
     const innerCircleRadius = 2000;
-    const outerCircleWidth = 1000;
+    const outerCircleWidth = 2000;
 
     let startLvl = 0;
     let stopLvl = startLvl + startVisibleLevels;
@@ -37,9 +37,6 @@ function zoomableSunburst(data, startVisibleLevels)
     // const radius = 100;
     const levelPadding = 10;
     let visibleLevels = stopLvl-startLvl+1;
-
-    // Create the color scale.
-    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
 
     // Compute the layout.
     const hierarchy = d3.hierarchy(data)
@@ -53,7 +50,7 @@ function zoomableSunburst(data, startVisibleLevels)
     // console.log(root);
 
 
-    const maxLevel = d3.max(root.leaves(), (d) => d.y0);
+    // const maxLevel = d3.max(root.leaves(), (d) => d.y0);
 
     // console.log(maxLevel);
 
@@ -64,47 +61,35 @@ function zoomableSunburst(data, startVisibleLevels)
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
         .padRadius(radius * 1.5)
         // .cornerRadius(100)
-        .innerRadius(d => calculateRadius(d.y0, true))
-        .outerRadius(d => calculateRadius(d.y0, false));
+        .innerRadius(d => calculateRadius(d.y0, true, levelPadding))
+        .outerRadius(d => calculateRadius(d.y0, false, levelPadding));
         // .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
         // .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
 
-    function calculateRadius(yValue, isInnerRadius){
+    function calculateRadius(yValue, isInnerRadius, padding){
         const result = ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels))+innerCircleRadius;
 
-        console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
+        // console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
 
         if(isInnerRadius){
             return result;
         }
         else{
-            return (((visibleLevels - (yValue-startLvl)) * (outerCircleWidth/visibleLevels)) - levelPadding)+innerCircleRadius;
+            return (((visibleLevels - (yValue-startLvl)) * (outerCircleWidth/visibleLevels)) - padding)+innerCircleRadius;
         }
     }
 
-    // // Create the arc generator.
-    // const longArc = d3.arc()
-    //     .startAngle(d => d.x0)
-    //     .endAngle(d => d.x1)
-    //     .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-    //     .padRadius(radius * 1.5)
-    //     .innerRadius(d => {
-    //         console.log(d);
-    //         if(d.hasChildren){
-    //             return (visibleLevels - d.y0 +1) * radius;
-    //         }
-    //         else{
-    //             return radius;
-    //         }
-    //         })
-    //     // .innerRadius(d => d.y0 * radius)
-    //     .outerRadius(d => ((visibleLevels - d.y0 +2) * radius) - levelPadding);
-    //     // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
+    const longArc = d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
+        .padRadius(radius * 1.5)
+        .innerRadius(innerCircleRadius)
+        // .innerRadius(d => d.y0 * radius)
+        .outerRadius(d => Math.min((calculateRadius(d.y0+1, false, 0)),innerCircleRadius+outerCircleWidth-levelPadding));
+        // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
 
-    // Create the SVG container.
-    const svg = d3.create("svg")
-        .attr("viewBox", [-width / 2, -height / 2, width, width]).attr("y", 100);
-        // .style("font", "10px sans-serif");
+
 
     d3.select("#applyLevels").on("click",callArcs);
 
@@ -125,13 +110,14 @@ function zoomableSunburst(data, startVisibleLevels)
         visibleLevels = stopLvl-startLvl+1;
 
 
-        const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
+        // const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
+        const shortArcData = root.descendants().slice(1).filter(d=>d.depth <= stopLvl);
+        const longArcData = root.descendants().slice(1).filter(d=>(d.depth <= stopLvl)&&!d.children);
+        // console.log(visibleLevels);
 
-        const colorNumbers = da.filter(m=>m.depth==startLvl).length;
-        console.log(visibleLevels);
-
-        console.log(da);
-        drawArcs(da);
+        // console.log(shortArcData);
+        // console.log(longArcData);
+        drawArcs(shortArcData,longArcData);
     }
 
     d3.select("#startLevelInput").on("input",adjustStart);
@@ -150,49 +136,48 @@ function zoomableSunburst(data, startVisibleLevels)
         sliderStopLvl = event.target.value;
     }
 
+    const svg = d3.select('#graph').append("svg")
+        .attr("viewBox", [-width / 2, -height / 2, width, width]).attr("y", 100);
 
-    function drawArcs(pData, numOfCol){
+    const longArcPath = svg.append("g").attr("class", "group1");
+    const shortArcPath = svg.append("g").attr("class", "group2");
+
+
+    function drawArcs(shortData, longData){
+        longArcPath.selectAll("path")
+            .data(longData, function(d) {return d;})
+            .join("path")
+            .attr("fill", "black")
+            .attr("fill-opacity", 0.05)
+            // .attr('stroke', 'black')
+            // .attr('stroke-width', '1')
+            // .attr("stroke-opacity", 0.2)
+            // .attr("fake",d=>console.log(d))
+            .attr("d", d => longArc(d.current));
+
+
         // Append the arcs.
-        svg.selectAll("path")
-            // .data(root.descendants().slice(1).filter(d=>d.depth>=startLvl&&d.depth<=startLvl+visibleLevels-1))
-            .data(pData)
+        shortArcPath.selectAll("path")
+            .data(shortData, function(d) {return d;})
             .join("path")
             // .attr("fill", d=>d3.interpolateTurbo(d.x0/(2 * Math.PI)))
-            .attr("fill", d=>d3.interpolatePlasma(d.x0/(2 * Math.PI)))
+            .attr("fill", d=>d3.interpolateWarm(d.x0/(2 * Math.PI)))
             // .attr("fake",d=>console.log((visibleLevels - (d.y0-startLvl) +1) * radius))
             // .attr("fake",d=>d.x0/(2 * Math.PI))
-            .attr("fill-opacity", d => d.children ? 1 : 0.2)
-            // .attr("fill-opacity", "0.3")
+            .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
             // .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
             .attr("d", d => arc(d.current));
 
-        // console.log(svg);
-        // console.log(startLvl);
+        // path.filter(d => d.children)
+        //     .style("cursor", "pointer")
+        //     .on("click", clicked);
+
+        // longArcPath.raise();
+        console.log(svg);
+        console.log(startLvl);
         return svg.node();
     }
-    // const longArcPath = svg.append("g")
-    //     .selectAll("path")
-    //     .data(root.descendants().slice(1).filter(d=>!d.hasChildren))
-    //     // .data(root.descendants().slice(1))
-    //     .join("path")
-    //     // .attr("fill", d =>
-    //     // {
-    //     //     if(!arcSmall(d)){
-    //     //         while (d.depth > 1) d = d.parent;
-    //     //         return color(d.data.name);
-    //     //     }
-    //     //     else{
-    //     //         return "#f00";
-    //     //     }
-    //     //
-    //     // })
-    //     .attr("fill", "none")
-    //     .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-    //     .attr('stroke', 'black')
-    //     .attr('stroke-width', '5')
-    //     .attr("stroke-opacity", d => arcVisible(d.current) ? 1 : 0)
-    //     .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
-    //     .attr("d", d => longArc(d.current));
+
 
 
     // console.log(root.descendants().slice(1));
@@ -296,7 +281,9 @@ function zoomableSunburst(data, startVisibleLevels)
     // }
 
     function arcVisible(d) {
-        return d.y1 <= visibleLevels+1 && d.y0 >= 1 && d.x1 > d.x0;
+        // return d.y1 <= visibleLevels+1 && d.y0 >= 1 && d.x1 > d.x0;
+
+        return d.depth >= startLvl && d.depth <= stopLvl;
     }
 
     function labelVisible(d) {

@@ -1,30 +1,37 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>This is a test</title>
     <style>
-      body {
-        margin: 0;
-      }
+        body {
+            margin: 0;
+        }
     </style>
     <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
 
-  </head>
-  <body>
-    <script src='bundle.js'></script>
+</head>
+<body>
+<script src='bundle.js'></script>
 
+
+<div id="ui">
     <button id="applyLevels">Apply</button>
 
-    <div>
-<!--      https://stackoverflow.com/a/18936328-->
-      <input type="range" id="startLevelInput" name="startLevelInput" value="1" min="1" max="10" step="1" oninput="startLevelOutput.value = startLevelInput.value"/>
-      <output id="startLevelOutput">1</output>
-      <label for="startLevelInput">Start Level</label>
+    <!--      https://stackoverflow.com/a/18936328-->
+    <input type="range" id="startLevelInput" name="startLevelInput" value="1" min="1" max="10" step="1"
+           oninput="startLevelOutput.value = startLevelInput.value"/>
+    <output id="startLevelOutput">1</output>
+    <label for="startLevelInput">Start Level</label>
 
-      <input type="range" id="stopLevelInput" name="stopLevelInput" value="1" min="1" max="10" step="1" oninput="stopLevelOutput.value = stopLevelInput.value"/>
-      <output id="stopLevelOutput">1</output>
-      <label for="startLevelInput">Stop Level</label>
-    </div>
+    <input type="range" id="stopLevelInput" name="stopLevelInput" value="1" min="1" max="10" step="1"
+           oninput="stopLevelOutput.value = stopLevelInput.value"/>
+    <output id="stopLevelOutput">1</output>
+    <label for="startLevelInput">Stop Level</label>
+</div>
 
-  </body>
+<div id="graph">
+
+</div>
+
+</body>
 </html>
