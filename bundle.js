@@ -22,7 +22,7 @@
 
     d3__namespace.json("hierarchy_2024-11-18-11-19-10.json").then(function (data) {
 
-        const svg = d3__namespace.select("body").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+        const svg = d3__namespace.select("body").append("div").attr("id", "zoomableSunburstComponent").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
 
         svg.node().appendChild(zoomableSunburst(data, 3));
         // svg.node().appendChild(SunburstZoom(data));
@@ -36,8 +36,7 @@
     //     return [x, y, width, height];
     // }
 
-    function zoomableSunburst(data, startVisibleLevels)
-    {
+    function zoomableSunburst(data, startVisibleLevels) {
         // console.log(data);
 
         // Specify the chart’s dimensions.
@@ -55,7 +54,7 @@
         // let endLvl = visibleLevels;
         // const radius = 100;
         const levelPadding = 10;
-        let visibleLevels = stopLvl-startLvl+1;
+        let visibleLevels = stopLvl - startLvl + 1;
 
         // Compute the layout.
         const hierarchy = d3__namespace.hierarchy(data)
@@ -65,7 +64,7 @@
             .size([2 * Math.PI, hierarchy.height + 1])
             (hierarchy);
         root.each(d => d.current = d);
-        root.each(d=>d.hasChildren = hasChildren(d));
+        root.each(d => d.hasChildren = hasChildren(d));
         // console.log(root);
 
 
@@ -82,19 +81,18 @@
             // .cornerRadius(100)
             .innerRadius(d => calculateRadius(d.y0, true, levelPadding))
             .outerRadius(d => calculateRadius(d.y0, false, levelPadding));
-            // .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
-            // .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
+        // .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
+        // .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
 
-        function calculateRadius(yValue, isInnerRadius, padding){
-            const result = ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels))+innerCircleRadius;
+        function calculateRadius(yValue, isInnerRadius, padding) {
+            const result = ((visibleLevels - (yValue - startLvl) - 1) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
 
             // console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
 
-            if(isInnerRadius){
+            if (isInnerRadius) {
                 return result;
-            }
-            else {
-                return (((visibleLevels - (yValue-startLvl)) * (outerCircleWidth/visibleLevels)) - padding)+innerCircleRadius;
+            } else {
+                return (((visibleLevels - (yValue - startLvl)) * (outerCircleWidth / visibleLevels)) - padding) + innerCircleRadius;
             }
         }
 
@@ -105,57 +103,57 @@
             .padRadius(radius * 1.5)
             .innerRadius(innerCircleRadius)
             // .innerRadius(d => d.y0 * radius)
-            .outerRadius(d => Math.min((calculateRadius(d.y0+1, false, 0)),innerCircleRadius+outerCircleWidth-levelPadding));
-            // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
+            .outerRadius(d => Math.min((calculateRadius(d.y0 + 1, false, 0)), innerCircleRadius + outerCircleWidth - levelPadding));
+        // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
 
 
+        d3__namespace.select("#applyLevels").on("click", callArcs);
 
-        d3__namespace.select("#applyLevels").on("click",callArcs);
+        function callArcs() {
+            root.each(d => d.current = d);
 
-        function callArcs(){
-            if(sliderStartLvl===sliderStopLvl){
+            if (sliderStartLvl === sliderStopLvl) {
                 startLvl = sliderStartLvl;
                 stopLvl = sliderStartLvl;
-            }
-            else if(sliderStartLvl>sliderStopLvl){
+            } else if (sliderStartLvl > sliderStopLvl) {
                 startLvl = sliderStopLvl;
                 stopLvl = sliderStartLvl;
-            }
-            else {
-                startLvl=sliderStartLvl;
-                stopLvl=sliderStopLvl;
+            } else {
+                startLvl = sliderStartLvl;
+                stopLvl = sliderStopLvl;
             }
 
-            visibleLevels = stopLvl-startLvl+1;
+            visibleLevels = stopLvl - startLvl + 1;
 
 
             // const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
-            const shortArcData = root.descendants().slice(1).filter(d=>d.depth <= stopLvl && d.depth >= startLvl);
-            const longArcData = root.descendants().slice(1).filter(d=>(d.depth <= stopLvl)&&!d.children);
+            const shortArcData = root.descendants().slice(1).filter(d => d.y0 <= stopLvl);
+            const longArcData = root.descendants().slice(1).filter(d => (d.y0 <= stopLvl) && !d.children);
+            root.descendants().slice(1).filter(d => (labelVisible(d)));
             // console.log(visibleLevels);
 
             // console.log(shortArcData);
             // console.log(longArcData);
-            drawArcs(shortArcData,longArcData);
+            drawArcs(shortArcData, longArcData);
         }
 
-        d3__namespace.select("#startLevelInput").on("input",adjustStart);
+        d3__namespace.select("#startLevelInput").on("input", adjustStart);
 
-        function adjustStart(event){
+        function adjustStart(event) {
             // console.log("Start Level Adjusted:" + event.target.value);
 
             sliderStartLvl = event.target.value;
         }
 
-        d3__namespace.select("#stopLevelInput").on("input",adjustStop);
+        d3__namespace.select("#stopLevelInput").on("input", adjustStop);
 
-        function adjustStop(event){
+        function adjustStop(event) {
             // console.log("Stop Level Adjusted:" + event.target.value);
 
             sliderStopLvl = event.target.value;
         }
 
-        const svg = d3__namespace.select('#graph').append("svg")
+        const svg = d3__namespace.select("body").append("div").append("svg")
             .attr("viewBox", [-width / 2, -height / 2, width, width]).attr("y", 100);
 
         const longArcPath = svg.append("g").attr("class", "group1");
@@ -164,13 +162,29 @@
         const format = d3__namespace.format(",d");
 
         const label = svg.append("g")
+            .attr("class", "group3")
             .attr("pointer-events", "none")
             .attr("text-anchor", "middle")
             .style("user-select", "none");
 
-        function drawArcs(shortData, longData){
+        function drawArcs(shortData, longData, isOriginal) {
+            // function dSubvalue(d){
+            //     if(isOriginal){
+            //         return d.original;
+            //     }
+            //     else{
+            //         return d.target;
+            //     }
+            // }
+
+
+            // console.log(longData);
+            // console.log(isOriginal);
+
             longArcPath.selectAll("path")
-                .data(longData, function(d) {return d;})
+                .data(longData, function (d) {
+                    return d;
+                })
                 .join("path")
                 .attr("fill", "black")
                 .attr("fill-opacity", 0.05)
@@ -183,22 +197,26 @@
 
             // Append the arcs.
             shortArcPath.selectAll("path")
-                .data(shortData, function(d) {return d;})
+                .data(shortData, function (d) {
+                    return d;
+                })
                 .join("path")
                 // .attr("fill", d=>d3.interpolateTurbo(d.x0/(2 * Math.PI)))
-                .attr("fill", d=>d3__namespace.interpolateWarm(d.x0/(2 * Math.PI)))
+                .attr("fill", d => d3__namespace.interpolateWarm(d.x0 / (2 * Math.PI)))
                 // .attr("fake",d=>console.log((visibleLevels - (d.y0-startLvl) +1) * radius))
                 // .attr("fake",d=>d.x0/(2 * Math.PI))
                 .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
-                // .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
+                .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
                 .attr("d", d => arc(d.current))
                 .append("title")
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
-                // .attr("path", d=>d.data.path);
+            // .attr("path", d=>d.data.path);
 
-            // path.filter(d => d.children)
-            //     .style("cursor", "pointer")
-            //     .on("click", clicked);
+            // console.log(shortArcPath);
+
+            shortArcPath.selectAll("path").filter(d => d.children)
+                .style("cursor", "pointer")
+                .on("click", clicked);
 
             label
                 .selectAll("text")
@@ -206,10 +224,10 @@
                 // .data(root.descendants())
                 .join("text")
                 .attr("dy", "0.35em")
-                .attr("font-size", d=>(radius)/d.data.name.toString().length)
+                .attr("font-size", d => (radius) / d.data.name.toString().length)
                 .attr("font-family", "monospace")
                 // .attr("dy", "10.00em")
-                .attr("fill-opacity", d => +labelVisible(d.current))
+                .attr("fill-opacity", "1")
                 .attr("transform", d => labelTransform(d.current))
                 .text(d => d.data.name);
 
@@ -220,27 +238,26 @@
 
         let searchText = "";
 
-        d3__namespace.select("#fileSearchText").on("input",changeFileSearchText);
+        d3__namespace.select("#fileSearchText").on("input", changeFileSearchText);
 
-        function changeFileSearchText(){
+        function changeFileSearchText() {
             // console.log(event.target.value);
 
             searchText = event.target.value;
         }
 
-        d3__namespace.select("#fileSearchButton").on("click",fileSearch);
+        d3__namespace.select("#fileSearchButton").on("click", fileSearch);
 
-        function fileSearch(){
+        function fileSearch() {
 
-            shortArcPath.selectAll("path").filter(function(d) {
+            shortArcPath.selectAll("path").filter(function (d) {
                 return d.data.path.startsWith(searchText);
             })
-                .sort((a,b)=>a.depth - b.depth)
-                .attr("fill", (d,i)=>{
-                    if(i===0){
+                .sort((a, b) => a.depth - b.depth)
+                .attr("fill", (d, i) => {
+                    if (i === 0) {
                         return "black";
-                    }
-                    else {
+                    } else {
                         return "red";
                     }
                 });
@@ -282,70 +299,86 @@
         //     .attr("fill", "none")
         //     .attr("pointer-events", "all")
         //     .on("click", clicked);
-        //
-        //
-        function hasChildren(d){
-            if(typeof d.data.children !== "undefined"){
-                if(d.data.children.length === 0){
+
+
+        function hasChildren(d) {
+            if (typeof d.data.children !== "undefined") {
+                if (d.data.children.length === 0) {
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
-        // // Handle zoom on click.
-        // function clicked(event, p) {
-        //     // console.log(p);
-        //     // console.log(event);
-        //
-        //     //https://stackoverflow.com/a/69036892
-        //     if (event.ctrlKey) {
-        //         d3.select(this).attr('stroke', 'black').attr('stroke-width', '5');
-        //     } else {
-        //
-        //         startLvl = p.depth;
-        //         parent.datum(p.parent || root);
-        //
-        //         root.each(d => d.target = {
-        //             x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-        //             x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-        //             y0: Math.max(0, d.y0 - p.depth),
-        //             y1: Math.max(0, d.y1 - p.depth),
-        //             hasChildren: d.hasChildren,
-        //             name: d.data.name
-        //         });
-        //
-        //         const t = svg.transition().duration(1);
-        //
-        //         path.data(root.descendants().slice(1).filter(d=>d.depth>=startLvl&&d.depth<=startLvl+visibleLevels-1));
-        //
-        //         // Transition the data on all arcs, even the ones that aren’t visible,
-        //         // so that if this transition is interrupted, entering arcs will start
-        //         // the next transition from the desired position.
-        //         path.transition(t)
-        //             .tween("data", d => {
-        //                 const i = d3.interpolate(d.current, d.target);
-        //                 return t => d.current = i(t);
-        //             })
-        //             .filter(function (d) {
-        //                 return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-        //             })
-        //             .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
-        //             .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
-        //             .attrTween("d", d => () => arc(d.current));
-        //
-        //         label.filter(function (d) {
-        //             return +this.getAttribute("fill-opacity") || labelVisible(d.target);
-        //         }).transition(t)
-        //             .attr("fill-opacity", d => +labelVisible(d.target))
-        //             .attrTween("transform", d => () => labelTransform(d.current));
-        //     }
-        // }
+        // Handle zoom on click.
+        function clicked(event, p) {
+            console.log(p);
+            console.log(event);
+
+            //https://stackoverflow.com/a/69036892
+            // if (event.ctrlKey) {
+            //     d3.select(this).attr('stroke', 'black').attr('stroke-width', '5');
+            // } else {
+
+            startLvl = p.depth;
+            stopLvl = startLvl+1;
+
+            visibleLevels = stopLvl - startLvl +1;
+            // parent.datum(p.parent || root);
+
+            root.each(d => d.current = {
+                x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                // y0: Math.max(0, d.y0 - p.depth),
+                // y1: Math.max(0, d.y1 - p.depth),
+                y0: d.y0,
+                y1: d.y1
+                // hasChildren: d.hasChildren,
+                // name: d.data.name
+            });
+
+            // console.log(root.descendants().slice(1).filter(d => d.y0 <= stopLvl));
+
+            // const t = svg.transition().duration(1);
+
+            // root.descendants().slice(1).filter(d => d.y0 <= stopLvl);
+
+            // root.each(d=>d.target);
+
+            const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
+            const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
+
+            console.log(startLvl);
+            console.log(stopLvl);
+            console.log(shortArcData.map(d=>d.current));
+
+            drawArcs(shortArcData, longArcData);
+
+            // // Transition the data on all arcs, even the ones that aren’t visible,
+            // // so that if this transition is interrupted, entering arcs will start
+            // // the next transition from the desired position.
+            // shortArcPath.selectAll("path").transition(t)
+            //     .tween("data", d => {
+            //         const i = d3.interpolate(d.current, d.target);
+            //         return t => d.current = i(t);
+            //     })
+            //     .filter(function (d) {
+            //         return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+            //     })
+            //     .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
+            //     .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
+            //     .attrTween("d", d => () => arc(d.current));
+            //
+            // label.selectAll("text").filter(function (d) {
+            //     return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+            // }).transition(t)
+            //     .attr("fill-opacity", d => +labelVisible(d.target))
+            //     .attrTween("transform", d => () => labelTransform(d.current));
+            // // }
+        }
 
         function arcVisible(d) {
             // return d.y1 <= visibleLevels+1 && d.y0 >= 1 && d.x1 > d.x0;
@@ -359,7 +392,7 @@
 
         function labelTransform(d) {
             const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = ((visibleLevels - (d.y0-startLvl) - 0.5) * (outerCircleWidth/visibleLevels))+innerCircleRadius;
+            const y = ((visibleLevels - (d.y0 - startLvl) - 0.5) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         }
 
