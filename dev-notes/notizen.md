@@ -16,4 +16,15 @@ Features:
 -Innerer Kreis des Sunburst enthält Kanten, die die Abhängigkeiten zwischen den Dateien darstellen (Imports)
 -Edgebundling der Kanten soll lesbarkeit verbessern
 
+Prozess Chords:
+Innerste Sunburst-Elemente auswählen
+Für jedes dieses Elemente:
+    Filter Daten nach Quell-Pfad == Element-Pfad
+    Für alle gefunden Daten:
+        Filter nach Zielpfad in innersten Sunburst-Elementen
+        Für alle gefundenen:
+            Zeichne Chord
+        Für alle außerhalb:
+            Füge zu separater Liste hinzu
+
 

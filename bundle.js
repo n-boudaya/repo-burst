@@ -51,8 +51,7 @@
 
         let sliderStartLvl = startLvl;
         let sliderStopLvl = stopLvl;
-        // let endLvl = visibleLevels;
-        // const radius = 100;
+
         const levelPadding = 10;
         let visibleLevels = stopLvl - startLvl + 1;
 
@@ -67,9 +66,6 @@
         root.each(d => d.hasChildren = hasChildren(d));
         // console.log(root);
 
-
-        // const maxLevel = d3.max(root.leaves(), (d) => d.y0);
-
         // console.log(maxLevel);
 
         // Create the arc generator.
@@ -78,16 +74,27 @@
             .endAngle(d => d.x1)
             .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
             .padRadius(radius * 1.5)
-            // .cornerRadius(100)
             .innerRadius(d => calculateRadius(d.y0, true, levelPadding))
             .outerRadius(d => calculateRadius(d.y0, false, levelPadding));
-        // .innerRadius(d => ((visibleLevels - (d.y0-startLvl) +1) * radius)+offset)
-        // .outerRadius(d => (((visibleLevels - (d.y0-startLvl) +2) * radius) - levelPadding)+offset);
 
         function calculateRadius(yValue, isInnerRadius, padding) {
             const result = ((visibleLevels - (yValue - startLvl) - 1) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
 
-            // console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
+            // console.log(
+            //     "visibleLevels: "+visibleLevels+
+            //     " d.y0: "+yValue+
+            //     " startLvl: "+startLvl+
+            //     " outerCircleWidth: "+outerCircleWidth+
+            //     " innerCircleRadius: "+innerCircleRadius+
+            //     " result: "+result);
+            //
+            // console.log(
+            //     " (yValue-startLvl): "+(yValue-startLvl)+
+            // " (outerCircleWidth/visibleLevels): "+(outerCircleWidth/visibleLevels)+
+            // " (visibleLevels - (yValue-startLvl) - 1): "+(visibleLevels - (yValue-startLvl) - 1)+
+            // "  ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels)): "+ ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels))
+            // );
+
 
             if (isInnerRadius) {
                 return result;
@@ -102,9 +109,7 @@
             .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
             .padRadius(radius * 1.5)
             .innerRadius(innerCircleRadius)
-            // .innerRadius(d => d.y0 * radius)
             .outerRadius(d => Math.min((calculateRadius(d.y0 + 1, false, 0)), innerCircleRadius + outerCircleWidth - levelPadding));
-        // .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - levelPadding))
 
 
         d3__namespace.select("#applyLevels").on("click", callArcs);
@@ -112,10 +117,7 @@
         function callArcs() {
             root.each(d => d.current = d);
 
-            if (sliderStartLvl === sliderStopLvl) {
-                startLvl = sliderStartLvl;
-                stopLvl = sliderStartLvl;
-            } else if (sliderStartLvl > sliderStopLvl) {
+            if (sliderStartLvl > sliderStopLvl) {
                 startLvl = sliderStopLvl;
                 stopLvl = sliderStartLvl;
             } else {
@@ -125,11 +127,8 @@
 
             visibleLevels = stopLvl - startLvl + 1;
 
-
-            // const da = root.descendants().slice(1).filter(d=>d.depth >= startLvl && d.depth <= stopLvl);
             const shortArcData = root.descendants().slice(1).filter(d => d.y0 <= stopLvl);
             const longArcData = root.descendants().slice(1).filter(d => (d.y0 <= stopLvl) && !d.children);
-            root.descendants().slice(1).filter(d => (labelVisible(d)));
             // console.log(visibleLevels);
 
             // console.log(shortArcData);
@@ -137,18 +136,18 @@
             drawArcs(shortArcData, longArcData);
         }
 
-        d3__namespace.select("#startLevelInput").on("input", adjustStart);
+        d3__namespace.select("#startLevelInput").on("change", adjustStart);
 
         function adjustStart(event) {
-            // console.log("Start Level Adjusted:" + event.target.value);
+            console.log("Start Level Adjusted:" + event.target.value);
 
             sliderStartLvl = event.target.value;
         }
 
-        d3__namespace.select("#stopLevelInput").on("input", adjustStop);
+        d3__namespace.select("#stopLevelInput").on("change", adjustStop);
 
         function adjustStop(event) {
-            // console.log("Stop Level Adjusted:" + event.target.value);
+            console.log("Stop Level Adjusted:" + event.target.value);
 
             sliderStopLvl = event.target.value;
         }
@@ -158,25 +157,17 @@
 
         const longArcPath = svg.append("g").attr("class", "group1");
         const shortArcPath = svg.append("g").attr("class", "group2");
-
-        const format = d3__namespace.format(",d");
-
         const label = svg.append("g")
             .attr("class", "group3")
             .attr("pointer-events", "none")
             .attr("text-anchor", "middle")
             .style("user-select", "none");
 
-        function drawArcs(shortData, longData, isOriginal) {
-            // function dSubvalue(d){
-            //     if(isOriginal){
-            //         return d.original;
-            //     }
-            //     else{
-            //         return d.target;
-            //     }
-            // }
 
+        const format = d3__namespace.format(",d");
+
+
+        function drawArcs(shortData, longData, isOriginal) {
 
             // console.log(longData);
             // console.log(isOriginal);
@@ -188,10 +179,6 @@
                 .join("path")
                 .attr("fill", "black")
                 .attr("fill-opacity", 0.05)
-                // .attr('stroke', 'black')
-                // .attr('stroke-width', '1')
-                // .attr("stroke-opacity", 0.2)
-                // .attr("fake",d=>console.log(d))
                 .attr("d", d => longArc(d.current));
 
 
@@ -201,16 +188,12 @@
                     return d;
                 })
                 .join("path")
-                // .attr("fill", d=>d3.interpolateTurbo(d.x0/(2 * Math.PI)))
                 .attr("fill", d => d3__namespace.interpolateWarm(d.x0 / (2 * Math.PI)))
-                // .attr("fake",d=>console.log((visibleLevels - (d.y0-startLvl) +1) * radius))
-                // .attr("fake",d=>d.x0/(2 * Math.PI))
                 .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
                 .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
                 .attr("d", d => arc(d.current))
                 .append("title")
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
-            // .attr("path", d=>d.data.path);
 
             // console.log(shortArcPath);
 
@@ -218,16 +201,18 @@
                 .style("cursor", "pointer")
                 .on("click", clicked);
 
+            longArcPath.selectAll("path").attr("fill", "red").attr("fill-opacity", "1.0");
+            shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake", d => console.log(d));
+
             label
                 .selectAll("text")
-                .data(shortData)
-                // .data(root.descendants())
+                .data(shortData.filter(d => labelVisible(d.current)))
                 .join("text")
                 .attr("dy", "0.35em")
-                .attr("font-size", d => (radius) / d.data.name.toString().length)
+                .attr("font-size", d => (outerCircleWidth / visibleLevels) / d.data.name.toString().length)
                 .attr("font-family", "monospace")
                 // .attr("dy", "10.00em")
-                .attr("fill-opacity", "1")
+                // .attr("fill-opacity", d=>labelVisible(d.current)?"1":"0")
                 .attr("transform", d => labelTransform(d.current))
                 .text(d => d.data.name);
 
@@ -264,34 +249,6 @@
 
         }
 
-        // console.log(root.descendants().slice(1));
-
-        // Make them clickable if they have children.
-        // path.filter(d => d.children)
-        //     .style("cursor", "pointer")
-        //     .on("click", clicked);
-        //
-        //
-        // const format = d3.format(",d");
-        // path.append("title")
-        //     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
-        //
-        // const label = svg.append("g")
-        //     .attr("pointer-events", "none")
-        //     .attr("text-anchor", "middle")
-        //     .style("user-select", "none")
-        //     .selectAll("text")
-        //     .data(root.descendants().slice(1))
-        //     // .data(root.descendants())
-        //     .join("text")
-        //     .attr("dy", "0.35em")
-        //     .attr("font-size", d=>(radius)/d.data.name.toString().length)
-        //     .attr("font-family", "monospace")
-        //     // .attr("dy", "10.00em")
-        //     .attr("fill-opacity", d => +labelVisible(d.current))
-        //     .attr("transform", d => labelTransform(d.current))
-        //     .text(d => d.data.name);
-        //
         // const parent = svg.append("circle")
         //     .datum(root)
         //     // .attr("fake", d=> console.log(d))
@@ -313,20 +270,21 @@
             }
         }
 
+        d3__namespace.select("#ui").append("button").attr("id", "testButton").html("Test Button").on("click", testFunction);
+
+        function testFunction() {
+            console.log("Button clicked!");
+        }
+
         // Handle zoom on click.
         function clicked(event, p) {
             console.log(p);
             console.log(event);
 
-            //https://stackoverflow.com/a/69036892
-            // if (event.ctrlKey) {
-            //     d3.select(this).attr('stroke', 'black').attr('stroke-width', '5');
-            // } else {
-
             startLvl = p.depth;
-            stopLvl = startLvl+1;
+            stopLvl = startLvl + 1;
 
-            visibleLevels = stopLvl - startLvl +1;
+            visibleLevels = stopLvl - startLvl + 1;
             // parent.datum(p.parent || root);
 
             root.each(d => d.current = {
@@ -340,54 +298,25 @@
                 // name: d.data.name
             });
 
-            // console.log(root.descendants().slice(1).filter(d => d.y0 <= stopLvl));
-
-            // const t = svg.transition().duration(1);
-
-            // root.descendants().slice(1).filter(d => d.y0 <= stopLvl);
-
-            // root.each(d=>d.target);
-
             const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
             const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
 
             console.log(startLvl);
             console.log(stopLvl);
-            console.log(shortArcData.map(d=>d.current));
+            console.log(shortArcData.map(d => d.current));
 
             drawArcs(shortArcData, longArcData);
 
-            // // Transition the data on all arcs, even the ones that aren’t visible,
-            // // so that if this transition is interrupted, entering arcs will start
-            // // the next transition from the desired position.
-            // shortArcPath.selectAll("path").transition(t)
-            //     .tween("data", d => {
-            //         const i = d3.interpolate(d.current, d.target);
-            //         return t => d.current = i(t);
-            //     })
-            //     .filter(function (d) {
-            //         return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-            //     })
-            //     .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
-            //     .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
-            //     .attrTween("d", d => () => arc(d.current));
-            //
-            // label.selectAll("text").filter(function (d) {
-            //     return +this.getAttribute("fill-opacity") || labelVisible(d.target);
-            // }).transition(t)
-            //     .attr("fill-opacity", d => +labelVisible(d.target))
-            //     .attrTween("transform", d => () => labelTransform(d.current));
-            // // }
         }
 
         function arcVisible(d) {
             // return d.y1 <= visibleLevels+1 && d.y0 >= 1 && d.x1 > d.x0;
 
-            return d.depth >= startLvl && d.depth <= stopLvl;
+            return d.y0 >= startLvl && d.y0 <= stopLvl;
         }
 
         function labelVisible(d) {
-            return d.depth >= startLvl && d.depth <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+            return d.y0 >= startLvl && d.y0 <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
         }
 
         function labelTransform(d) {
@@ -395,63 +324,6 @@
             const y = ((visibleLevels - (d.y0 - startLvl) - 0.5) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         }
-
-        // const arc = d3.arc()
-        //     .startAngle(d => d.x0)
-        //     .endAngle(d => d.x1)
-        //     .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
-        //     .padRadius(radius * 1.5)
-        //     // .cornerRadius(100)
-        //     .innerRadius(d => calculateRadius(d.y0, true, levelPadding))
-        //     .outerRadius(d => calculateRadius(d.y0, false, levelPadding));
-        //
-        //
-        // function calculateRadius(yValue, isInnerRadius, padding){
-        //     const result = ((visibleLevels - (yValue-startLvl) - 1) * (outerCircleWidth/visibleLevels))+innerCircleRadius;
-        //
-        //     // console.log("visibleLevels: "+visibleLevels+" d.y0: "+yValue+" startLvl: "+startLvl+" outerCircleWidth: "+outerCircleWidth+" innerCircleRadius: "+innerCircleRadius+ " result: "+result);
-        //
-        //     if(isInnerRadius){
-        //         return result;
-        //     }
-        //     else{
-        //         return (((visibleLevels - (yValue-startLvl)) * (outerCircleWidth/visibleLevels)) - padding)+innerCircleRadius;
-        //     }
-        // }
-
-        // function resetBorders(){
-        //     console.log("RESET");
-        //     // d3.selectAll("path").filter(function(){
-        //     //     return d3.select(this).attr("stroke-width") === "5";
-        //     // });
-        //
-        //     console.log(d3.hierarchy(data).find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages"));
-        //
-        //     const newHierarchy = d3.hierarchy(data);
-        //     newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages").children = null;
-        //     // const foundPackages = newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages").children = null;
-        //     // foundPackages.children = null;
-        //     console.log(newHierarchy.find(d=>d.data.path === "J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages"));
-        //
-        //     root = d3.partition()
-        //         .size([2 * Math.PI, hierarchy.height + 1])
-        //         (hierarchy);
-        //     root.each(d => d.current = d);
-        //     console.log(root);
-        //
-        //     update(root);
-        //
-        // }
-        //
-        // function slider(event){
-        //     console.log(event.target.value);
-        //
-        //     currVisibleLevels = event.target.value;
-        // }
-        //
-        // d3.select("#resetbutton").on("click",resetBorders);
-        //
-        // d3.select("#visibleLevels").on("input",slider);
 
         return svg.node();
     }

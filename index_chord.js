@@ -173,7 +173,7 @@ function chord_dependency(data, level)
         matrix[index.get(e[0])][index.get(e[1])] += e[2];
     }
 
-    // console.log(matrix);
+    console.log(matrix);
     // console.log(numberOfConnects);
 
     // names = sharedStart(names);
@@ -251,11 +251,22 @@ ${d3.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming â
         .style("mix-blend-mode", "multiply")
         .attr("fill", d => colors[d.target.index]) //ribbons
         .attr("d", ribbon)
-        .attr("fake", d => console.log(d))
+        // .attr("fake", d => console.log(d))
         .append("title")
         .text(d => `${names[d.source.index]} â†’ ${names[d.target.index]} ${d.source.value}`);
 
-    console.log(svg.node());
+    // console.log(svg.node());
+
+    // svg.selectAll("*").call(d3.zoom().on("zoom", zoomed));
+    //
+    // function zoomed(event) {
+    //     const {transform} = event;
+    //     svg.attr("transform", transform);
+    //     svg.attr("stroke-width", 1 / transform.k);
+    // }
+
+    svg.attr("transform","scale(0.2 0.2)");
+
     return svg.attr("viewBox", autoBox).node();
     // return svg.attr("scale", 0.055).node();
 }
