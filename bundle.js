@@ -20,23 +20,58 @@
 
     var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
-    d3__namespace.json("hierarchy_2024-11-18-11-19-10.json").then(function (data) {
+    const sunburstSVG = d3__namespace
+        .select("body")
+        .append("div")
+        .attr("id", "zoomableSunburstComponent")
+        .append("svg")
+        .attr('width', window.innerHeight)
+        .attr('height', window.innerHeight)
+        .attr("scale", 0.1);
 
-        const svg = d3__namespace.select("body").append("div").attr("id", "zoomableSunburstComponent").append("svg").attr('width', window.innerHeight).attr('height', window.innerHeight);
+    // let testData;
 
-        svg.node().appendChild(zoomableSunburst(data, 3));
-        // svg.node().appendChild(SunburstZoom(data));
 
+    //https://stackoverflow.com/a/51113326
+    Promise.all([
+        d3__namespace.json("hierarchy_2024-11-18-11-19-10.json"),
+        d3__namespace.json("dependencies_2024-11-18-11-19-10.json"),
+    ]).then(function(files) {
+        sunburstSVG.node().appendChild(zoomableSunburst(files[0], files[1], 3));
+        chordSVG.node().appendChild(chord_dependency(files[1], 4));
+        // console.log(files[1])
+    }).catch(function(err) {
+        console.log(err);
     });
 
-    // function autoBox() {
-    //     document.body.appendChild(this);
-    //     const {x, y, width, height} = this.getBBox();
-    //     document.body.removeChild(this);
-    //     return [x, y, width, height];
-    // }
+    const chordSVG = d3__namespace
+        .select("body")
+        .append("div")
+        .attr("id", "chordComponent")
+        .append("svg")
+        .attr('width', window.innerHeight)
+        .attr('height', window.innerHeight)
+        .attr("transform","translate(2000 0 0)");
 
-    function zoomableSunburst(data, startVisibleLevels) {
+    function autoBox() {
+        document.body.appendChild(this);
+        const {x, y, width, height} = this.getBBox();
+        document.body.removeChild(this);
+        return [x, y, width, height];
+    }
+    //
+    // d3.json("hierarchy_2024-11-18-11-19-10.json").then(function (data) {
+    //
+    // // testData = data;
+    //
+    //     svg.node().appendChild(zoomableSunburst(data, 3));
+    //     // svg.node().appendChild(SunburstZoom(data));
+    //
+    // });
+    //
+    // svg.node().appendChild(zoomableSunburst(data, 3));
+
+    function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         // console.log(data);
 
         // Specify the chart’s dimensions.
@@ -56,7 +91,7 @@
         let visibleLevels = stopLvl - startLvl + 1;
 
         // Compute the layout.
-        const hierarchy = d3__namespace.hierarchy(data)
+        const hierarchy = d3__namespace.hierarchy(hierarchyData)
             .sum(d => d.value)
             .sort((a, b) => b.value - a.value);
         let root = d3__namespace.partition()
@@ -152,12 +187,15 @@
             sliderStopLvl = event.target.value;
         }
 
-        const svg = d3__namespace.select("body").append("div").append("svg")
+        const internalSvg = d3__namespace
+            .select("body")
+            .append("div")
+            .append("svg")
             .attr("viewBox", [-width / 2, -height / 2, width, width]).attr("y", 100);
 
-        const longArcPath = svg.append("g").attr("class", "group1");
-        const shortArcPath = svg.append("g").attr("class", "group2");
-        const label = svg.append("g")
+        const longArcPath = internalSvg.append("g").attr("class", "group1");
+        const shortArcPath = internalSvg.append("g").attr("class", "group2");
+        const label = internalSvg.append("g")
             .attr("class", "group3")
             .attr("pointer-events", "none")
             .attr("text-anchor", "middle")
@@ -193,7 +231,12 @@
                 .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
                 .attr("d", d => arc(d.current))
                 .append("title")
-                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+                .text(d => `
+            ${d.ancestors().map(d => d.data.name).reverse().join("/")}\n
+            ${format(d.value)}\n
+            Depth: ${d.depth}
+            `);
+
 
             // console.log(shortArcPath);
 
@@ -218,7 +261,8 @@
 
             // console.log(svg);
             // console.log(startLvl);
-            return svg.node();
+
+            return internalSvg.node();
         }
 
         let searchText = "";
@@ -325,7 +369,213 @@
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         }
 
-        return svg.node();
+        return internalSvg.node();
+    }
+
+
+    function chord_dependency(data, level) {
+        const chordWidth = 10000;
+        const chordHeight = 10000;
+        const chordInnerRadius = Math.min(chordWidth, chordHeight) * 0.5 - 90;
+        const chordOuterRadius = chordInnerRadius + 100;
+
+        const chord = d3__namespace.chordDirected()
+            .padAngle(10 / chordInnerRadius)
+            .sortSubgroups(d3__namespace.descending)
+            .sortChords(d3__namespace.descending);
+
+        const arc = d3__namespace.arc()
+            .padAngle(1 / chordInnerRadius)
+            .innerRadius(chordInnerRadius)
+            .outerRadius(chordOuterRadius);
+
+        const ribbon = d3__namespace.ribbonArrow()
+            .radius(chordInnerRadius - 1)
+            // .sourceRadius(innerRadius -1)
+            // .headRadius(innerRadius - 1)
+            .padAngle(1 / chordInnerRadius)
+            .headRadius(chordInnerRadius / 10);
+
+        const internalSvg = d3__namespace
+            .select("body")
+            .append("div")
+            .append("svg")
+            .attr("width", chordWidth)
+            .attr("height", chordHeight)
+            // .attr("viewBox", [-chordWidth / 2, -chordHeight / 2, chordWidth, chordHeight])
+            .attr("style", "width: 100%; height: auto; font: 10px sans-serif;");
+        // .attr("transform", "scale(0.1 0.1)");
+
+        internalSvg.attr("transform","scale(0.1 0.1)");
+
+        const groupArcs = internalSvg.append("g").attr("class", "donutGroups");
+        const chordObject = internalSvg.append("g").attr("class", "chords");
+
+        calculateData();
+
+        d3__namespace.select("#ui")
+            .append("input")
+            .attr("type", "range")
+            .attr("id", "levelSliderChords")
+            .attr("value", level)
+            .attr("min", "1")
+            .attr("max", "10")
+            .attr("step", "1")
+            .on("change", redraw);
+
+        function redraw() {
+            console.log(event.target.value);
+
+            level = Math.round(event.target.value);
+
+            calculateData();
+
+        }
+
+        function calculateData() {
+
+            // let filteredData;
+            // let allDepends;
+            // let uniqueFiles;
+            // let names;
+            // let index;
+            // let colors;
+            // let matrix;
+            // let chords;
+
+
+            const filteredData = data.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)) && d.outgoing.length > 0);
+            // console.log(filteredData);
+
+            const allDepends = [];
+            for (const d of filteredData) {
+                const source = d.path;
+
+                for (const target of d.outgoing) {
+
+
+                    if (d.isDirectory === true) {
+                        allDepends.push([source, target.path, target.value]);
+                    } else {
+                        allDepends.push([source, target, 1]);
+                    }
+
+                }
+            }
+
+            // console.log(allDepends);
+
+            // const newData = d3.rollup(allDepends,(D)=>D.length, (d)=>d[0], (d)=>d[1]);
+
+            // console.log(newData);
+
+            const uniqueFiles = new Set;
+            // data.map(d => cutoff(d.path, level)).forEach(e => uniqueFiles.add(e));
+            filteredData.map(d => d.path).forEach(e => uniqueFiles.add(e));
+
+            // console.log(uniqueFiles);
+
+            const names = d3__namespace.sort(uniqueFiles);
+
+            const index = new Map(names.map((name, i) => [name, i]));
+            // console.log(index);
+
+
+            const matrix = Array.from(index, () => new Array(names.length).fill(0));
+            // console.log(matrix);
+
+            // let numberOfConnects = 0;
+            // for(const n of names){
+            //     const nIndex = index.get(n)
+            //
+            //     for(const e of names){
+            //         const eIndex = index.get(e);
+            //
+            //         if(typeof newData.get(n) !== "undefined"){
+            //             if(typeof newData.get(n).get(e) !== "undefined"){
+            //                 matrix[nIndex][eIndex] = newData.get(n).get(e);
+            //                 console.log("From: "+n+" To: "+e+" Value: "+newData.get(n).get(e));
+            //             }
+            //
+            //         }
+            //     }
+            // }
+
+            for (const e of allDepends) {
+                matrix[index.get(e[0])][index.get(e[1])] += e[2];
+            }
+
+            // console.log(matrix);
+            // console.log(numberOfConnects);
+
+            // names = sharedStart(names);
+
+
+            // // Compute a dense matrix from the weighted links in data.
+            // const names = d3.sort(d3.union(data.map(d => d.source), data.map(d => d.target)));
+            // console.log(names);
+            //
+            // const index = new Map(names.map((name, i) => [name, i]));
+            // console.log(index);
+            //
+            // const matrix = Array.from(index, () => new Array(names.length).fill(0));
+            // console.log(matrix);
+            // for (const {source, target, value} of data) matrix[index.get(source)][index.get(target)] += value;
+            // console.log(matrix);
+
+            const chords = chord(matrix);
+            const colors = d3__namespace.quantize(d3__namespace.interpolateSinebow, names.length);
+
+
+            displayGraph(chords, chords, colors, names);
+        }
+
+
+        function displayGraph(pData, chords, colors, names, filteredData) {
+            console.log(pData);
+
+            groupArcs.selectAll("path")
+                // .data(chords.groups)
+                .data(pData.groups, function (d) {
+                    return d;
+                })
+                .join("path")
+                .attr("fill", d => colors[d.index]) //outercircle
+                .attr("d", arc)
+                .append("title")
+                .text(d => `${names[d.index]}
+${d3__namespace.sum(chords, c => (c.source.index === d.index) * c.source.value)} outgoing →
+${d3__namespace.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
+
+            // group.append("text")
+            //     .each(d => (d.angle = (d.startAngle + d.endAngle) / 2))
+            //     .attr("dy", "0.35em")
+            //     .attr("transform", d => `
+            //     rotate(${(d.angle * 180 / Math.PI - 90)})
+            //     translate(${chordOuterRadius + 5})
+            //     ${d.angle > Math.PI ? "rotate(180)" : ""}
+            //   `)
+            //     .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
+            //     .text(d => names[d.index]);
+
+            chordObject
+                .attr("fill-opacity", 0.75)
+                .selectAll("path")
+                .data(pData, function (d) {
+                    return d;
+                })
+                // .data(chords)
+                .join("path")
+                .style("mix-blend-mode", "multiply")
+                .attr("fill", d => colors[d.target.index]) //ribbons
+                .attr("d", ribbon)
+                // .attr("fake", d => console.log(d))
+                .append("title")
+                .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
+
+            // return internalSvg.node();
+        }
+        return internalSvg.attr("viewBox", autoBox).node();
     }
 
 })(d3);
