@@ -238,6 +238,19 @@ public class FileReader {
                         System.err.println("Path Access Depends: " + e.getMessage());
                     }
                 }
+//                else{
+//                    try {
+//                        dependenciesEntry.put("path", currentPath.toRealPath());
+//                        dependenciesEntry.put("isDirectory", isDirectory);
+//                        dependenciesEntry.put("dirLevel", currentLevel);
+//                        dependenciesEntry.put("value", 1);
+//                        dependenciesEntry.put("outgoing", outgoingArray);
+//                        dependenciesEntry.put("external", externalArray);
+//                        dependencies.put(dependenciesEntry);
+//                    } catch (IOException e) {
+//                        System.err.println("Path Access Depends: " + e.getMessage());
+//                    }
+//                }
             }
 
 
