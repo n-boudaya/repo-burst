@@ -1,21 +1,23 @@
 import * as d3 from 'd3';
 
 
+const windowHeight = window.innerHeight;
+
 const sunburstSVG = d3
     .select("body")
     .append("div")
     .attr("id", "zoomableSunburstComponent")
     .append("svg")
-    .attr('width', window.innerHeight)
-    .attr('height', window.innerHeight);
+    .attr('width', windowHeight)
+    .attr('height', windowHeight);
 
 const chordSVG = d3
     .select("body")
     .append("div")
     .attr("id", "chordComponent")
     .append("svg")
-    .attr('width', window.innerHeight)
-    .attr('height', window.innerHeight);
+    .attr('width', windowHeight)
+    .attr('height', windowHeight);
 
 //https://stackoverflow.com/a/51113326
 Promise.all([
@@ -55,6 +57,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
     let hierarchy;
     let root;
+
 
 
     // Converts the input json data to a hierarchical data structure.
@@ -128,12 +131,13 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         root.each(d => d.current = d);
 
         if (sliderStartLvl > sliderStopLvl) {
-            startLvl = sliderStopLvl;
-            stopLvl = sliderStartLvl;
+            startLvl = Math.round(sliderStopLvl);
+            stopLvl = Math.round(sliderStartLvl);
         } else {
-            startLvl = sliderStartLvl;
-            stopLvl = sliderStopLvl;
+            startLvl = Math.round(sliderStartLvl);
+            stopLvl = Math.round(sliderStopLvl);
         }
+
 
         visibleLevels = stopLvl - startLvl + 1;
 
@@ -143,6 +147,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
         // console.log(shortArcData);
         // console.log(longArcData);
+
         drawArcs(shortArcData, longArcData, true);
     }
 
@@ -185,7 +190,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     const format = d3.format(",d");
 
 
-    let innerMostElements;
+    let innerMostElements=new Map();
 
     function drawArcs(shortData, longData, isOriginal) {
 
@@ -208,7 +213,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
                 return d;
             })
             .join("path")
-            .attr("fill", d => d3.interpolateWarm(d.x0 / (2 * Math.PI)))
+            .attr("fill", d => d3.interpolateWarm(d.current.x0 / (2 * Math.PI)))
             .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
             .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
             .attr("d", d => sunburstArc(d.current))
@@ -228,9 +233,12 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
         innerMostElements=new Map();
 
-        longArcPath.selectAll("path").attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
-        shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
+        // longArcPath.selectAll("path").attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
+        longArcPath.selectAll("path").attr("fake",d=>innerMostElements.set(d.data.path, d));
+        // shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
+        shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fake",d=>innerMostElements.set(d.data.path, d));
 
+        console.log("innerMostElements:");
         console.log(innerMostElements);
 
 
@@ -250,6 +258,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         // console.log(startLvl);
 
         // return internalSvg.node();
+        redraw();
     }
 
     let searchText = "";
@@ -332,9 +341,9 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
         const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
 
-        console.log(startLvl);
-        console.log(stopLvl);
-        console.log(shortArcData.map(d => d.current));
+        // console.log(startLvl);
+        // console.log(stopLvl);
+        // console.log(shortArcData.map(d => d.current));
 
         drawArcs(shortArcData, longArcData, false);
 
@@ -361,12 +370,13 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     const chordInnerRadius = chordPlotSize * 0.5 - 90;
     const chordOuterRadius = chordInnerRadius + 100;
 
-    let level = 4;
+
+    let level = stopLvl;
 
     const chordSVG = wholeGraphSVG
         .append("svg")
         .attr("viewBox", [-chordPlotSize / 2, -chordPlotSize / 2, chordPlotSize, chordPlotSize])
-        .attr("transform", "scale (0.4 0.4) translate (1000 1000)")
+        .attr("transform", "scale (0.5 0.5) translate("+windowHeight/2+" "+windowHeight/2+")")
         .attr("class","chord diagram");
 
     const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
@@ -389,40 +399,34 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         // .sourceRadius(innerRadius -1)
         // .headRadius(innerRadius - 1)
         .padAngle(1 / chordInnerRadius)
-        .headRadius(chordInnerRadius / 10);
+        .headRadius(chordInnerRadius / 50);
+        // .headRadius(0);
 
-    calculateChordData(false);
+    // calculateChordData(false);
 
-    const testSlider = d3.select("#ui")
-        .append("input")
-        .attr("type", "range")
-        .attr("id", "levelSliderChords")
-        .attr("value", level)
-        .attr("min", "1")
-        .attr("max", "10")
-        .attr("step", "1")
-        .on("change", redraw);
-
-    function redraw() {
-        console.log(event.target.value);
-
-        level = Math.round(event.target.value);
-
-        calculateChordData(false);
-
-    }
+    // const testSlider = d3.select("#ui")
+    //     .append("input")
+    //     .attr("type", "range")
+    //     .attr("id", "levelSliderChords")
+    //     .attr("value", level)
+    //     .attr("min", "1")
+    //     .attr("max", "10")
+    //     .attr("step", "1")
+    //     .on("change", redraw);
 
     const transformChords = d3.select("#ui")
         .append("button")
         .html("transform")
         .attr("id", "transformButton")
-        .on("click", callChords);
+        .on("click", redraw);
 
-    function callChords(){
-        const result = calculateChordData(true, innerMostElements);
+    function redraw(){
+        level = stopLvl;
+
+        const result = calculateChordData(innerMostElements);
     }
 
-    function calculateChordData(isTransformed, fileList) {
+    function calculateChordData(fileList) {
 
         const currentLevelChordData = dependencyData.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)) && d.outgoing.length > 0);
 
@@ -472,28 +476,40 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
                 // console.log(fileList.get(currentPath));
             })
-            console.log(pChords.groups);
+            // console.log(pChords.groups);
 
             pChords.forEach(e=>{
                 e.source.path = names[e.source.index];
                 e.target.path = names[e.target.index];
 
+                const sourceSunburstArc = fileList.get(e.source.path);
                 const targetSunburstArc = fileList.get(e.target.path);
+                const targetColor = targetSunburstArc;
 
-                if(typeof targetSunburstArc !== "undefined"){
+                // console.log(targetColor);
 
+                if(typeof targetSunburstArc !== "undefined" && typeof sourceSunburstArc !== "undefined"){
+
+                    console.log(targetColor);
                     function newAngle(oldAngle, currentGroup){
                         const start = currentGroup.startAngle;
                         const end = currentGroup.endAngle;
                         const oldStart = currentGroup.oldStartAngle;
                         const oldEnd = currentGroup.oldEndAngle;
 
-                        const scalingFactor = Math.abs(end - start) / Math.abs(oldEnd - oldStart);
-                        const offset = start - oldStart;
+                        // console.log(
+                        //     "Current group: "+currentGroup.path+
+                        //     // "\nScaling factor: "+scalingFactor+
+                        //     // "\noffset: "+offset+
+                        //     "\nstart: "+start+
+                        //     "\nend: "+end+
+                        //     "\noldStart: "+oldStart+
+                        //     "\noldEnd: "+oldEnd+
+                        //     "\noldAngle: "+oldAngle+
+                        //     "\nnewAngle: "+(start + (((end-start)/(oldEnd-oldStart))*(oldAngle-oldStart))));
 
-                        console.log("Scaling factor: "+scalingFactor+" offset: "+offset);
-
-                        return ((oldAngle * scalingFactor) + offset);
+                        //https://math.stackexchange.com/a/914843
+                        return (start + (((end-start)/(oldEnd-oldStart))*(oldAngle-oldStart)));
                     }
 
                     e.source.startAngle = newAngle(e.source.startAngle, pChords.groups.find(g => g.path === e.source.path));
@@ -515,26 +531,29 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
             })
 
+            // console.log(pChords);
 
             return pChords;
         }
 
-        let chordData;
+        // let chordData;
 
-        if(isTransformed){
-            chordData = chordTransform(chordGen(matrix));
-        }
-        else{
-            chordData = chordGen(matrix);
-        }
 
-        console.log(chordData);
+        // chordData = chordTransform(chordGen(matrix));
+        // if(isTransformed){
+        //     chordData = chordTransform(chordGen(matrix));
+        // }
+        // else{
+        //     chordData = chordGen(matrix);
+        // }
 
-        displayGraph(chordData,  names, currentLevelChordData)
+        // console.log(chordData);
+
+        displayGraph(chordTransform(chordGen(matrix)),  names)
     }
 
 
-    function displayGraph(pData, names, filteredData) {
+    function displayGraph(pData, names) {
         // console.log(pData);
 
         const colors = d3.quantize(d3.interpolateSinebow, names.length);
@@ -560,152 +579,15 @@ ${d3.sum(pData, c => (c.target.index === d.index) * c.source.value)} incoming �
             })
             .join("path")
             .style("mix-blend-mode", "multiply")
-            .attr("fill", d => colors[d.target.index]) //ribbons
+            .attr("fill", d => d3.interpolateWarm(d.target.startAngle / (2 * Math.PI))) //ribbons
             .attr("d", ribbonGen)
-            .append("title")
-            .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
+            // .attr("fake", d=>console.log(d))
+            .insert("title",":first-child")
+            .text(d => `${d.source.path} → ${d.target.path} ${d.source.value}`);
     }
 
     //______________________________________________________________________________________________
 
-
-    return wholeGraphSVG.node();
-}
-
-
-function chord_dependency(data, level) {
-    const chordPlotSize = 10000;
-    const chordInnerRadius = chordPlotSize * 0.5 - 90;
-    const chordOuterRadius = chordInnerRadius + 100;
-
-    const wholeGraphSVG = d3.create("svg");
-
-    const chordSVG = wholeGraphSVG
-        .append("svg")
-        .attr("viewBox", [-chordPlotSize / 2, -chordPlotSize / 2, chordPlotSize, chordPlotSize])
-        .attr("class","chord diagram");
-
-    const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
-    const chordObject = chordSVG.append("g").attr("class", "chords");
-
-    const chordGen = d3.chordDirected()
-        // .padAngle(10 / chordInnerRadius)
-        .padAngle(0)
-        .sortSubgroups(d3.descending)
-        .sortChords(d3.descending);
-
-    const chordBorderArcGen = d3.arc()
-        // .padAngle(1 / chordInnerRadius)
-        .padAngle(0)
-        .innerRadius(chordInnerRadius)
-        .outerRadius(chordOuterRadius);
-
-    const ribbonGen = d3.ribbonArrow()
-        .radius(chordInnerRadius - 1)
-        // .sourceRadius(innerRadius -1)
-        // .headRadius(innerRadius - 1)
-        .padAngle(1 / chordInnerRadius)
-        .headRadius(chordInnerRadius / 10);
-
-    calculateChordData();
-
-    const testSlider = d3.select("#ui")
-        .append("input")
-        .attr("type", "range")
-        .attr("id", "levelSliderChords")
-        .attr("value", level)
-        .attr("min", "1")
-        .attr("max", "10")
-        .attr("step", "1")
-        .on("change", redraw);
-
-    function redraw() {
-        console.log(event.target.value);
-
-        level = Math.round(event.target.value);
-
-        calculateChordData();
-
-    }
-
-    function calculateChordData() {
-
-        const currentLevelChordData = data.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)) && d.outgoing.length > 0);
-
-        const allDepends = [];
-        for (const d of currentLevelChordData) {
-            const source = d.path;
-
-            for (const target of d.outgoing) {
-                if (d.isDirectory === true) {
-                    allDepends.push([source, target.path, target.value]);
-                } else {
-                    allDepends.push([source, target, 1]);
-                }
-            }
-        }
-
-        const uniqueFiles = new Set;
-        currentLevelChordData.map(d => d.path).forEach(e => uniqueFiles.add(e));
-        const names = d3.sort(uniqueFiles);
-
-        const indices = new Map(names.map((name, i) => [name, i]));
-
-        const matrix = Array.from(indices, () => new Array(names.length).fill(0));
-        for (const e of allDepends) {
-            matrix[indices.get(e[0])][indices.get(e[1])] += e[2];
-        }
-
-        function chordTransform(pChords) {
-            // pChords.groups.forEach(e=>{
-            //     e.endAngle = e.startAngle * 1.1;
-            // })
-            // console.log(pChords);
-            pChords.forEach(e => e.source.path = names[e.source.index]);
-            pChords.forEach(e => e.target.path = names[e.target.index]);
-
-            return pChords;
-        }
-
-        const chordData = chordTransform(chordGen(matrix));
-
-        console.log(chordData);
-
-        displayGraph(chordData,  names, currentLevelChordData)
-    }
-
-
-    function displayGraph(pData, names, filteredData) {
-        // console.log(pData);
-
-        const colors = d3.quantize(d3.interpolateSinebow, names.length);
-
-        chordBorderArcs.selectAll("path")
-            // .data(chords.groups)
-            .data(pData.groups, function (d) {
-                return d;
-            })
-            .join("path")
-            .attr("fill", d => colors[d.index]) //outercircle
-            .attr("d", chordBorderArcGen)
-            .append("title")
-            .text(d => `${names[d.index]}
-${d3.sum(pData, c => (c.source.index === d.index) * c.source.value)} outgoing →
-${d3.sum(pData, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
-
-        chordObject
-            .attr("fill-opacity", 0.75)
-            .selectAll("path")
-            .data(pData, function (d) {
-                return d;
-            })
-            .join("path")
-            .style("mix-blend-mode", "multiply")
-            .attr("fill", d => colors[d.target.index]) //ribbons
-            .attr("d", ribbonGen)
-            .append("title")
-            .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
-    }
 
     return wholeGraphSVG.node();
 }
