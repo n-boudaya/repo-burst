@@ -41,7 +41,7 @@
     //https://stackoverflow.com/a/51113326
     Promise.all([
         d3__namespace.json("hierarchy_2024-11-18-11-19-10.json"),
-        d3__namespace.json("dependencies_2024-12-14-11-54-30.json"),
+        d3__namespace.json("dependencies_2024-11-18-11-19-10.json"),
     ]).then(function(files) {
         sunburstSVG.node().appendChild(zoomableSunburst(files[0], files[1], 3));
         // chordSVG.node().appendChild(chord_dependency(files[1], 4));
@@ -78,7 +78,6 @@
         let root;
 
 
-
         // Converts the input json data to a hierarchical data structure.
         // Then calculates a partition layout out of that.
         // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
@@ -88,6 +87,11 @@
             hierarchy = d3__namespace.hierarchy(hierarchyData)
                 .sum(d => d.value)
                 .sort((a, b) => b.value - a.value);
+
+            d3__namespace.max(hierarchy.leaves().map(d=>d.depth));
+
+            // console.log("Hierarchy depth:"+hierarchyDepth);
+
             root = d3__namespace.partition()
                 .size([2 * Math.PI, hierarchy.height + 1])
                 (hierarchy);
@@ -170,10 +174,65 @@
             drawArcs(shortArcData, longArcData);
         }
 
+        // const testSlider = d3
+        //     .select("#ui")
+        //     .append("div")
+        //     .attr("id","startLevelSliderDiv");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .html("<b>First level </b>");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .html(" Current Level: ");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .attr("id","startLvlCurrLvl")
+        //     .html("1");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .html(" Min Level: ");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .attr("id","startLvlMinLvl")
+        //     .html("1");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .html(" Max Level: ");
+        //
+        // testSlider
+        //     .append("label")
+        //     .attr("for","startLevelSlider")
+        //     .attr("id","startLvlMaxLvl")
+        //     .html("10");
+        //
+        // testSlider
+        //     .append("input")
+        //     .attr("type", "range")
+        //     .attr("id", "startLevelSlider")
+        //     .attr("value", 1)
+        //     .attr("min", "1")
+        //     .attr("max", "10")
+        //     .attr("step", "1")
+        //     .on("change", redraw);
+
         d3__namespace.select("#startLevelInput").on("change", adjustStart);
 
         function adjustStart(event) {
             console.log("Start Level Adjusted:" + event.target.value);
+
+            d3__namespace.select("#startLvlCurrLvl").html(event.target.value);
 
             sliderStartLvl = event.target.value;
 
@@ -257,8 +316,8 @@
             // shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
             shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fake",d=>innerMostElements.set(d.data.path, d));
 
-            console.log("innerMostElements:");
-            console.log(innerMostElements);
+            // console.log("innerMostElements:");
+            // console.log(innerMostElements);
 
 
             label
@@ -298,14 +357,27 @@
                 return d.data.path.startsWith(searchText);
             })
                 .sort((a, b) => a.depth - b.depth)
-                .attr("fill", (d, i) => {
-                    if (i === 0) {
-                        return "black";
-                    } else {
-                        return "red";
-                    }
-                });
+                // .attr("fill", (d, i) => {
+                //     if (i === 0) {
+                //         return "black";
+                //     } else {
+                //         return "red";
+                //     }
+                // })
+                .attr("stroke","black")
+                .attr("stroke-width", "1em");
 
+            chordObject.selectAll("path").filter(function (d) {
+                return d.source.path === searchText;
+            })
+                .attr("stroke","red")
+                .attr("stroke-width", "1em");
+
+            chordObject.selectAll("path").filter(function (d) {
+                return d.target.path === searchText;
+            })
+                .attr("stroke","blue")
+                .attr("stroke-width", "1em");
         }
 
         // const parent = svg.append("circle")
@@ -329,11 +401,11 @@
             }
         }
 
-        d3__namespace.select("#ui").append("button").attr("id", "testButton").html("Test Button").on("click", testFunction);
-
-        function testFunction() {
-            console.log("Button clicked!");
-        }
+        // const testButton = d3.select("#ui").append("button").attr("id", "testButton").html("Test Button").on("click", testFunction);
+        //
+        // function testFunction() {
+        //     console.log("Button clicked!");
+        // }
 
         // Handle zoom on click.
         function clicked(event, p) {
@@ -433,11 +505,11 @@
         //     .attr("step", "1")
         //     .on("change", redraw);
 
-        d3__namespace.select("#ui")
-            .append("button")
-            .html("transform")
-            .attr("id", "transformButton")
-            .on("click", redraw);
+        // const transformChords = d3.select("#ui")
+        //     .append("button")
+        //     .html("transform")
+        //     .attr("id", "transformButton")
+        //     .on("click", redraw);
 
         function redraw(){
             level = stopLvl;
@@ -447,7 +519,7 @@
 
         function calculateChordData(fileList) {
 
-            const currentLevelChordData = dependencyData.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)) && d.outgoing.length > 0);
+            const currentLevelChordData = dependencyData.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)));
 
             const allDepends = [];
             for (const d of currentLevelChordData) {
@@ -457,21 +529,52 @@
                     if (d.isDirectory === true) {
                         allDepends.push([source, target.path, target.value]);
                     } else {
+                        // console.log(d);
+
                         allDepends.push([source, target, 1]);
                     }
                 }
             }
 
+            console.log(allDepends.filter(e=>(e[1]==="J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\benchmarking\\benchmarks\\mol_bench.js")));
+
             const uniqueFiles = new Set;
-            currentLevelChordData.map(d => d.path).forEach(e => uniqueFiles.add(e));
+            // currentLevelChordData.map(d => d.path).forEach(e => uniqueFiles.add(e));
+            // currentLevelChordData.map(d => d.outgoing).forEach(e => e.forEach(k=>uniqueFiles.add(k)));
+            allDepends.forEach(e=>{
+                uniqueFiles.add(e[0]);
+                uniqueFiles.add(e[1]);
+            });
             const names = d3__namespace.sort(uniqueFiles);
+            console.log(names.filter(e=>(e==="J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\benchmarking\\benchmarks\\mol_bench.js")));
+
+            // const indices2 = names.map((name, i) => [name, i]);
+            // console.log(indices2);
+            // console.log(indices2.filter(e=>(e[0]==="J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages\\svelte\\tests\\runtime-legacy\\samples\\await-then-catch-no-values\\_config.js")));
+
 
             const indices = new Map(names.map((name, i) => [name, i]));
+            console.log(indices.get("J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\benchmarking\\benchmarks\\mol_bench.js"));
+
+            // console.log(indices.get(1234234234));
 
             const matrix = Array.from(indices, () => new Array(names.length).fill(0));
+            // console.log(matrix);
+
             for (const e of allDepends) {
-                matrix[indices.get(e[0])][indices.get(e[1])] += e[2];
+                indices.get(e[0]);
+                indices.get(e[1]);
+
+                // if(typeof x === "undefined"){
+                //     console.log("x undefined! Path:" +e[0]);
+                // }
+                // else if(typeof y === "undefined"){
+                //     console.log("y undefined! Path:" +e[1]);
+                // }
+
+                matrix[indices.get(e[0])][indices.get(e[1])] += Math.min(e[2], 1);
             }
+            // console.log(matrix[indices.get("J:\\repo-burst\\data_and_processing\\raw_data\\svelte-main\\packages\\svelte\\tests\\helpers.js")]);
 
             function chordTransform(pChords) {
                 pChords.groups.forEach(e=>{
@@ -489,6 +592,9 @@
                         e.endAngle = currSunburstArc.current.x1;
                     }
                     else {
+                        e.startAngle = 0;
+                        e.endAngle = 0;
+
                         console.log(e.path.toString() + " not found.");
                     }
 
@@ -503,13 +609,13 @@
 
                     const sourceSunburstArc = fileList.get(e.source.path);
                     const targetSunburstArc = fileList.get(e.target.path);
-                    const targetColor = targetSunburstArc;
+                    // const targetColor = targetSunburstArc;
 
                     // console.log(targetColor);
 
                     if(typeof targetSunburstArc !== "undefined" && typeof sourceSunburstArc !== "undefined"){
 
-                        console.log(targetColor);
+                        // console.log(targetColor);
                         function newAngle(oldAngle, currentGroup){
                             const start = currentGroup.startAngle;
                             const end = currentGroup.endAngle;
@@ -535,6 +641,8 @@
                         e.source.endAngle = newAngle(e.source.endAngle, pChords.groups.find(g => g.path === e.source.path));
                         e.target.startAngle = newAngle(e.target.startAngle, pChords.groups.find(g => g.path === e.target.path));
                         e.target.endAngle = newAngle(e.target.endAngle, pChords.groups.find(g => g.path === e.target.path));
+
+                        // console.log(e.source.endAngle);
                     }
                     else {
                         console.log(e.target.path.toString() + " not found.");
@@ -577,6 +685,7 @@
 
             const colors = d3__namespace.quantize(d3__namespace.interpolateSinebow, names.length);
 
+
             chordBorderArcs.selectAll("path")
                 // .data(chords.groups)
                 .data(pData.groups, function (d) {
@@ -593,16 +702,37 @@ ${d3__namespace.sum(pData, c => (c.target.index === d.index) * c.source.value)} 
             chordObject
                 .attr("fill-opacity", 0.75)
                 .selectAll("path")
-                .data(pData, function (d) {
+                .data(pData.filter(d=>chordValid(d)), function (d) {
                     return d;
                 })
                 .join("path")
                 .style("mix-blend-mode", "multiply")
                 .attr("fill", d => d3__namespace.interpolateWarm(d.target.startAngle / (2 * Math.PI))) //ribbons
+                .attr("stroke", d => d3__namespace.interpolateWarm(d.target.startAngle / (2 * Math.PI)))
+                .attr("stroke-width", "0.5em")
+                .attr("stroke-opacity", d=>(chordVisible(d)?"0":"0.3"))
                 .attr("d", ribbonGen)
                 // .attr("fake", d=>console.log(d))
                 .insert("title",":first-child")
                 .text(d => `${d.source.path} → ${d.target.path} ${d.source.value}`);
+        }
+
+        function chordVisible(chord){
+            const sourceInterval = Math.abs(chord.source.endAngle-chord.source.startAngle);
+            const targetInterval= Math.abs(chord.target.endAngle-chord.target.startAngle);
+
+            const interval = Math.min(sourceInterval,targetInterval);
+
+            if((interval * (180/Math.PI))>1){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function chordValid(chord){
+            return !(chord.source.startAngle === 0 && chord.source.endAngle === 0 && chord.target.startAngle === 0 && chord.target.endAngle === 0);
         }
 
         //______________________________________________________________________________________________
