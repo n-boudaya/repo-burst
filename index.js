@@ -11,18 +11,11 @@ const sunburstSVG = d3
     .attr('width', windowHeight)
     .attr('height', windowHeight);
 
-const chordSVG = d3
-    .select("body")
-    .append("div")
-    .attr("id", "chordComponent")
-    .append("svg")
-    .attr('width', windowHeight)
-    .attr('height', windowHeight);
 
 //https://stackoverflow.com/a/51113326
 Promise.all([
-    d3.json("hierarchy_2024-11-18-11-19-10.json"),
-    d3.json("dependencies_2024-11-18-11-19-10.json"),
+    d3.json("5.10.00_hier.json"),
+    d3.json("5.10.00_depend.json"),
 ]).then(function(files) {
     sunburstSVG.node().appendChild(zoomableSunburst(files[0], files[1], 3));
     // chordSVG.node().appendChild(chord_dependency(files[1], 4));
@@ -147,6 +140,8 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
 
         visibleLevels = stopLvl - startLvl + 1;
 
+        refreshStartStopSliders();
+
         const shortArcData = root.descendants().slice(1).filter(d => d.y0 <= stopLvl);
         const longArcData = root.descendants().slice(1).filter(d => (d.y0 <= stopLvl) && !d.children);
         // console.log(visibleLevels);
@@ -210,7 +205,9 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     //     .attr("step", "1")
     //     .on("change", redraw);
 
-    d3.select("#startLevelInput").on("change", adjustStart);
+    d3
+        .select("#startLevelSlider")
+        .on("change", adjustStart);
 
     function adjustStart(event) {
         console.log("Start Level Adjusted:" + event.target.value);
@@ -222,17 +219,52 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         callArcs();
     }
 
-    d3.select("#stopLevelInput").on("change", adjustStop);
+    d3
+        .select("#stopLevelSlider")
+        .on("change", adjustStop);
 
     function adjustStop(event) {
         console.log("Stop Level Adjusted:" + event.target.value);
+
+        d3.select("#stopLvlCurrLvl").html(event.target.value);
 
         sliderStopLvl = event.target.value;
 
         callArcs();
     }
 
-    const wholeGraphSVG = d3.create("svg");
+    function refreshStartStopSliders(){
+        d3
+            .select("#startLevelSlider")
+            .attr("value", startLvl)
+            .attr("max", hierarchyDepth);
+
+        d3
+            .select("#stopLevelSlider")
+            .attr("value", stopLvl)
+            .attr("max", hierarchyDepth);
+    }
+
+    //https://stackoverflow.com/a/51585981
+    let zoomBehaviour = d3.zoom()
+        .scaleExtent([1, 10])
+        .on("zoom", changeZoom);
+
+    const wholeGraphSVG = d3
+        .create("svg")
+        .call(zoomBehaviour);
+
+    wholeGraphSVG
+        .append("rect")
+        .attr("class","background")
+        .attr("width", windowHeight)
+        .attr("height", windowHeight)
+        .attr("opacity", "0");
+
+    function changeZoom(){
+        const zoomTransform = d3.zoomTransform(wholeGraphSVG.node());
+        wholeGraphSVG.attr("transform", zoomTransform);
+    }
 
     const sunburstSVG = wholeGraphSVG
         .append("svg")
@@ -265,8 +297,12 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
             .join("path")
             .attr("fill", "black")
             .attr("fill-opacity", 0.05)
-            .attr("d", d => longArc(d.current));
-
+            .attr("d", d => longArc(d.current)).append("title")
+            .text(d => `
+            ${d.data.path}\n
+            ${format(d.value)}\n
+            Depth: ${d.depth}
+            `);
 
         // Append the arcs.
         shortArcPath.selectAll("path")
@@ -280,7 +316,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
             .attr("d", d => sunburstArc(d.current))
             .append("title")
             .text(d => `
-            ${d.ancestors().map(d => d.data.name).reverse().join("/")}\n
+            ${d.data.path}\n
             ${format(d.value)}\n
             Depth: ${d.depth}
             `);
@@ -308,7 +344,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
             .data(shortData.filter(d => labelVisible(d.current)))
             .join("text")
             .attr("dy", "0.35em")
-            .attr("font-size", d => (outerCircleWidth / visibleLevels) / d.data.name.toString().length)
+            .attr("font-size", d => labelSize(d))
             .attr("font-family", "monospace")
             // .attr("dy", "10.00em")
             // .attr("fill-opacity", d=>labelVisible(d.current)?"1":"0")
@@ -395,32 +431,38 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         console.log(p);
         console.log(event);
 
-        startLvl = p.depth;
-        stopLvl = startLvl + 1;
 
-        visibleLevels = stopLvl - startLvl + 1;
-        // parent.datum(p.parent || root);
+        //https://stackoverflow.com/a/69036892
+        if (event.ctrlKey) {
+            d3.select(this).attr('stroke', 'black').attr('stroke-width', '5');
+        }
+        else{
+            startLvl = p.depth;
+            stopLvl = startLvl + 1;
 
-        root.each(d => d.current = {
-            x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-            x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-            // y0: Math.max(0, d.y0 - p.depth),
-            // y1: Math.max(0, d.y1 - p.depth),
-            y0: d.y0,
-            y1: d.y1
-            // hasChildren: d.hasChildren,
-            // name: d.data.name
-        });
+            visibleLevels = stopLvl - startLvl + 1;
+            // parent.datum(p.parent || root);
 
-        const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
-        const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
+            root.each(d => d.current = {
+                x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                // y0: Math.max(0, d.y0 - p.depth),
+                // y1: Math.max(0, d.y1 - p.depth),
+                y0: d.y0,
+                y1: d.y1
+                // hasChildren: d.hasChildren,
+                // name: d.data.name
+            });
 
-        // console.log(startLvl);
-        // console.log(stopLvl);
-        // console.log(shortArcData.map(d => d.current));
+            const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
+            const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
 
-        drawArcs(shortArcData, longArcData, false);
+            // console.log(startLvl);
+            // console.log(stopLvl);
+            // console.log(shortArcData.map(d => d.current));
 
+            drawArcs(shortArcData, longArcData, false);
+        }
     }
 
     function arcVisible(d) {
@@ -430,7 +472,18 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     }
 
     function labelVisible(d) {
-        return d.y0 >= startLvl && d.y0 <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+        return d.y0 >= startLvl && d.y0 <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.005;
+    }
+
+    function labelSize(d){
+        const interval = d.current.x1 - d.current.x0;
+
+        if(interval>0.01){
+            return (outerCircleWidth / visibleLevels) / d.data.name.toString().length;
+        }
+       else{
+            return 1000 * interval;
+        }
     }
 
     function labelTransform(d) {
@@ -441,8 +494,8 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     //______________________________________________________________________________________________
 
     const chordPlotSize = 10000;
-    const chordInnerRadius = chordPlotSize * 0.5 - 90;
-    const chordOuterRadius = chordInnerRadius + 100;
+    const chordInnerRadius = chordPlotSize * 0.5 - 200;
+    const chordOuterRadius = chordPlotSize * 0.5;
 
 
     let level = stopLvl;
@@ -469,7 +522,7 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         .outerRadius(chordOuterRadius);
 
     const ribbonGen = d3.ribbonArrow()
-        .radius(chordInnerRadius - 1)
+        .radius(chordOuterRadius)
         // .sourceRadius(innerRadius -1)
         // .headRadius(innerRadius - 1)
         .padAngle(1 / chordInnerRadius)
@@ -507,6 +560,8 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
         const allDepends = [];
         for (const d of currentLevelChordData) {
             const source = d.path;
+
+            
 
             for (const target of d.outgoing) {
                 if (d.isDirectory === true) {
@@ -590,6 +645,9 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
                 e.source.path = names[e.source.index];
                 e.target.path = names[e.target.index];
 
+                const sourceGroup = pChords.groups.find(g => g.path === e.source.path);
+                const targetGroup =  pChords.groups.find(g => g.path === e.target.path);
+
                 const sourceSunburstArc = fileList.get(e.source.path);
                 const targetSunburstArc = fileList.get(e.target.path);
                 // const targetColor = targetSunburstArc;
@@ -620,10 +678,10 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
                         return (start + (((end-start)/(oldEnd-oldStart))*(oldAngle-oldStart)));
                     }
 
-                    e.source.startAngle = newAngle(e.source.startAngle, pChords.groups.find(g => g.path === e.source.path));
-                    e.source.endAngle = newAngle(e.source.endAngle, pChords.groups.find(g => g.path === e.source.path));
-                    e.target.startAngle = newAngle(e.target.startAngle, pChords.groups.find(g => g.path === e.target.path));
-                    e.target.endAngle = newAngle(e.target.endAngle, pChords.groups.find(g => g.path === e.target.path));
+                    e.source.startAngle = newAngle(e.source.startAngle, sourceGroup);
+                    e.source.endAngle = newAngle(e.source.endAngle, sourceGroup);
+                    e.target.startAngle = newAngle(e.target.startAngle, targetGroup);
+                    e.target.endAngle = newAngle(e.target.endAngle, targetGroup);
 
                     // console.log(e.source.endAngle);
                 }
@@ -666,21 +724,21 @@ function zoomableSunburst(hierarchyData, dependencyData, startVisibleLevels) {
     function displayGraph(pData, names) {
         // console.log(pData);
 
-        const colors = d3.quantize(d3.interpolateSinebow, names.length);
+        // const colors = d3.quantize(d3.interpolateSinebow, names.length);
 
 
-        chordBorderArcs.selectAll("path")
-            // .data(chords.groups)
-            .data(pData.groups, function (d) {
-                return d;
-            })
-            .join("path")
-            .attr("fill", d => colors[d.index]) //outercircle
-            .attr("d", chordBorderArcGen)
-            .append("title")
-            .text(d => `${names[d.index]}
-${d3.sum(pData, c => (c.source.index === d.index) * c.source.value)} outgoing →
-${d3.sum(pData, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
+//         chordBorderArcs.selectAll("path")
+//             // .data(chords.groups)
+//             .data(pData.groups, function (d) {
+//                 return d;
+//             })
+//             .join("path")
+//             .attr("fill", "none") //outercircle
+//             .attr("d", chordBorderArcGen)
+//             .append("title")
+//             .text(d => `${names[d.index]}
+// ${d3.sum(pData, c => (c.source.index === d.index) * c.source.value)} outgoing →\n
+// ${d3.sum(pData, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
 
         chordObject
             .attr("fill-opacity", 0.75)
@@ -697,7 +755,14 @@ ${d3.sum(pData, c => (c.target.index === d.index) * c.source.value)} incoming �
             .attr("d", ribbonGen)
             // .attr("fake", d=>console.log(d))
             .insert("title",":first-child")
-            .text(d => `${d.source.path} → ${d.target.path} ${d.source.value}`);
+            .text(d =>
+                `Chord info:\n
+                ${d.source.path} →\n
+                ${d.target.path}\n
+                Value: ${d.source.value}\n`
+// ${d3.sum(pData.groups, c => (c.source.index === d.index) * c.source.value)} outgoing →\n
+// ${d3.sum(pData.groups, c => (c.target.index === d.index) * c.source.value)} incoming ←`
+            );
     }
 
     function chordVisible(chord){

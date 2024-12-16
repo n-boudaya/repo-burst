@@ -21,6 +21,8 @@ public class FileReader {
     ArrayList<processor> processors;
     ArrayList<String> accessibleFiletypes;
 
+    int pathCutoff = 4;
+
     public FileReader(Path directory) {
 
         searchDirectory = directory;
@@ -35,53 +37,70 @@ public class FileReader {
             accessibleFiletypes.addAll(p.getFileTypes());
         }
 
-        outputFiles(directory);
+        String currTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss"));
+        
+
+        Path outputLocation = Paths.get( "./data_and_processing/file_lists/"+ currTime +"/");
+
+        try {
+            Files.createDirectories(outputLocation);
+            Files.createDirectories(Paths.get(outputLocation.toString(),"/hierarchy/"));
+            Files.createDirectories(Paths.get(outputLocation.toString(),"/dependencies/"));
+        } catch (IOException e) {            
+            e.printStackTrace();
+        }
+
+        try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(directory)) {
+            for (Path directoryElement : directoryContentStream) {
+                                    System.out.println(directoryElement.getFileName());
+                               outputFiles(directoryElement, outputLocation.toString());
+//                System.out.println(directoryElement.getFileName().toString());
+            }
+        } catch (Exception e) {
+            System.err.println("Top Level Directory Access: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
         FileReader fR = new FileReader(Paths.get("./data_and_processing/raw_data/"));
     }
 
-    public void outputFiles(Path directory) {
+   public void outputFiles(Path directory, String outputDirectory) {
 
-//        try {
-//            Path realPath = directory.toRealPath();
-//
-//            for(int i=0;i<realPath.getNameCount();i++){
-//                System.out.println(realPath.toString());
-//                System.out.println("i:"+i+"\t"+realPath.getRoot()+realPath.subpath(0, i+1));
-//            }
-//
-//            System.out.println(realPath.getRoot());
-//        } catch (IOException e) {
-//            System.err.println("realPath: " + e.getMessage());
-//        }
+        String regex = "";
+       try {
+           System.out.println(directory.toRealPath());
 
+           String temp = "\"" + directory.toRealPath().toString();
 
-        String currTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss"));
+           regex = temp.replaceAll("\\\\","\\\\\\\\\\\\\\\\");
 
-        HierarchyAndDepends outputs = fileTreeToJSON(directory,
-                new HierarchyAndDepends(new JSONObject(), new JSONArray(), null, null, null) , 0);
+           System.out.println(regex);
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
 
-        addIncomingDependencies(outputs.getDependencies());
+       HierarchyAndDepends outputs = fileTreeToJSON(Paths.get(directory.toString(), "svelte"),
+               new HierarchyAndDepends(new JSONObject(), new JSONArray(), null, null, null) , 0);
 
-        File hierarchyFile = new File("./data_and_processing/file_lists/hierarchy/hierarchy_" + currTime + ".json");
+//        addIncomingDependencies(outputs.getDependencies());
 
-        try (BufferedWriter br = new BufferedWriter(new FileWriter(hierarchyFile, true))) {
-            br.write(outputs.getHierarchy().toString());
-        } catch (Exception e) {
-            System.err.println("Hierarchy Writer: " + e.getMessage());
-        }
+       File hierarchyFile = new File(outputDirectory + "/hierarchy/" + directory.getFileName() + ".json");
 
-        File dependenciesFile = new File(
-                "./data_and_processing/file_lists/dependencies/dependencies_" + currTime + ".json");
+       try (BufferedWriter br = new BufferedWriter(new FileWriter(hierarchyFile, true))) {
+           br.write(postProcessDepends(outputs.getHierarchy().toString(),regex));
+       } catch (Exception e) {
+           System.err.println("Hierarchy Writer: " + e.getMessage());
+       }
 
-        try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
-            br.write(outputs.getDependencies().toString());
-        } catch (Exception e) {
-            System.err.println("Depends Writer: " + e.getMessage());
-        }
-    }
+       File dependenciesFile = new File(outputDirectory + "/dependencies/" + directory.getFileName() + ".json");
+
+       try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
+           br.write(postProcessDepends(outputs.getDependencies().toString(),regex));
+       } catch (Exception e) {
+           System.err.println("Depends Writer: " + e.getMessage());
+       }
+   }
 
     private HierarchyAndDepends fileTreeToJSON(Path currentPath, HierarchyAndDepends lastHierarchyAndDepends, int currentLevel) {
         JSONObject hierarchy = new JSONObject();
@@ -212,7 +231,7 @@ public class FileReader {
 //                                    outgoing.replace(referencedFile, outgoing.get(referencedFile) + 1);
 //                                }
 //                                else {
-                                    outgoing.put(referencedFile, 1);
+                                outgoing.put(referencedFile, 1);
 //                                }
                             }
 //                            outgoingArray
@@ -282,57 +301,64 @@ public class FileReader {
         return new HierarchyAndDepends(hierarchy, dependencies, incoming, outgoing, externals);
     }
 
-    private JSONArray addIncomingDependencies(JSONArray dependencies) {
+    private String postProcessDepends(String input, String regex) {
+
+        String output = input.replaceAll(regex,"\"");
+
+        return output;
+    }
+
+   private JSONArray addIncomingDependencies(JSONArray dependencies) {
 //        System.out.println(dependencies.toString(2));
-        for(Object currEditedObject : dependencies){
-            JSONObject currEditedElement = (JSONObject) currEditedObject;
-            int endIndex = Paths.get(currEditedElement.get("path").toString()).getNameCount();
+       for(Object currEditedObject : dependencies){
+           JSONObject currEditedElement = (JSONObject) currEditedObject;
+           int endIndex = Paths.get(currEditedElement.get("path").toString()).getNameCount();
 
 
-            if(!currEditedElement.getBoolean("isDirectory")){
-                JSONArray incoming  = new JSONArray();
+           if(!currEditedElement.getBoolean("isDirectory")){
+               JSONArray incoming  = new JSONArray();
 
-                for(Object currViewingObject : dependencies){
-                    JSONObject currViewingElement = (JSONObject) currViewingObject;
+               for(Object currViewingObject : dependencies){
+                   JSONObject currViewingElement = (JSONObject) currViewingObject;
 
 
-                    JSONArray currViewingOutgoings = currViewingElement.getJSONArray("outgoing");
+                   JSONArray currViewingOutgoings = currViewingElement.getJSONArray("outgoing");
 
-                    for (Object outgoingObject : currViewingOutgoings) {
-                        String currOutgoingPath = outgoingObject.toString();
+                   for (Object outgoingObject : currViewingOutgoings) {
+                       String currOutgoingPath = outgoingObject.toString();
 
-                        //System.out.println(currOutgoingPath);
+                       //System.out.println(currOutgoingPath);
 
-                        if(currOutgoingPath.equals(currEditedElement.get("path").toString())){
-                            incoming.put(currViewingElement.get("path").toString());
-                        }
-                    }
-                }
+                       if(currOutgoingPath.equals(currEditedElement.get("path").toString())){
+                           incoming.put(currViewingElement.get("path").toString());
+                       }
+                   }
+               }
 
-                currEditedElement.put("incoming", incoming);
-            }
-            else {
-                HashMap<Path, Integer> newOutgoing = new HashMap<Path, Integer>();
+               currEditedElement.put("incoming", incoming);
+           }
+           else {
+               HashMap<Path, Integer> newOutgoing = new HashMap<Path, Integer>();
 
-                for(Object currentOutObject : currEditedElement.getJSONArray("outgoing")){
+               for(Object currentOutObject : currEditedElement.getJSONArray("outgoing")){
 
-                    Map.Entry<Path, Integer> currEntry = new AbstractMap.SimpleEntry<Path, Integer>(Paths.get(((JSONObject)currentOutObject).get("path").toString()), (Integer)((JSONObject)currentOutObject).get("value"));
+                   Map.Entry<Path, Integer> currEntry = new AbstractMap.SimpleEntry<Path, Integer>(Paths.get(((JSONObject)currentOutObject).get("path").toString()), (Integer)((JSONObject)currentOutObject).get("value"));
 
 //                    System.out.println(currEntry);
 
-                    if(currEntry.getKey().getNameCount()>endIndex){
-                        Path newPath = Paths.get(currEntry.getKey().getRoot().toString(),currEntry.getKey().subpath(0, endIndex).toString());
+                   if(currEntry.getKey().getNameCount()>endIndex){
+                       Path newPath = Paths.get(currEntry.getKey().getRoot().toString(),currEntry.getKey().subpath(0, endIndex).toString());
 
-                        if(newOutgoing.containsKey(newPath)) {
-                            newOutgoing.replace(newPath, newOutgoing.get(newPath) + currEntry.getValue());
-                        }
-                        else{
-                            newOutgoing.put(newPath, currEntry.getValue());
-                        }
-                    }
-                    else{
-                        newOutgoing.put(currEntry.getKey(), currEntry.getValue());
-                    }
+                       if(newOutgoing.containsKey(newPath)) {
+                           newOutgoing.replace(newPath, newOutgoing.get(newPath) + currEntry.getValue());
+                       }
+                       else{
+                           newOutgoing.put(newPath, currEntry.getValue());
+                       }
+                   }
+                   else{
+                       newOutgoing.put(currEntry.getKey(), currEntry.getValue());
+                   }
 
 
 //                for(int i=0;i<realPath.getNameCount();i++){
@@ -341,36 +367,36 @@ public class FileReader {
 //                }
 
 
-                }
-                currEditedElement.remove("outgoing");
+               }
+               currEditedElement.remove("outgoing");
 
-                JSONArray newOutgoingJSON = new JSONArray();
+               JSONArray newOutgoingJSON = new JSONArray();
 
-                for(Map.Entry<Path, Integer> entry : newOutgoing.entrySet()) {
-                    JSONObject outgoingJSONEntry = new JSONObject();
-                    outgoingJSONEntry.put("path", entry.getKey().toString());
-                    outgoingJSONEntry.put("value", entry.getValue());
+               for(Map.Entry<Path, Integer> entry : newOutgoing.entrySet()) {
+                   JSONObject outgoingJSONEntry = new JSONObject();
+                   outgoingJSONEntry.put("path", entry.getKey().toString());
+                   outgoingJSONEntry.put("value", entry.getValue());
 
-                    newOutgoingJSON.put(outgoingJSONEntry);
-                }
+                   newOutgoingJSON.put(outgoingJSONEntry);
+               }
 
-                currEditedElement.put("outgoing", newOutgoingJSON);
-            }
-        }
+               currEditedElement.put("outgoing", newOutgoingJSON);
+           }
+       }
 
-        return dependencies;
-    }
+       return dependencies;
+   }
 
-    private void mapAdder(Map<Path, Integer> oldMap, Map<Path, Integer> newMap) {
-        for(Map.Entry<Path, Integer> entry : newMap.entrySet()) {
-            if(oldMap.containsKey(entry.getKey())) {
-                oldMap.replace(entry.getKey(), oldMap.get(entry.getKey()) + entry.getValue());
-            }
-            else{
-                oldMap.put(entry.getKey(), entry.getValue());
-            }
-        }
-    }
+   private void mapAdder(Map<Path, Integer> oldMap, Map<Path, Integer> newMap) {
+       for(Map.Entry<Path, Integer> entry : newMap.entrySet()) {
+           if(oldMap.containsKey(entry.getKey())) {
+               oldMap.replace(entry.getKey(), oldMap.get(entry.getKey()) + entry.getValue());
+           }
+           else{
+               oldMap.put(entry.getKey(), entry.getValue());
+           }
+       }
+   }
 
 //    private void collapseMap(Map<Path, Integer> map, Path referencePath){
 //        int endIndex = referencePath.getNameCount();
