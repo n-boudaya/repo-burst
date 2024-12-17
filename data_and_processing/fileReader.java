@@ -17,15 +17,14 @@ import data_and_processing.processors.processor;
  */
 public class FileReader {
 
-    Path searchDirectory;
+    static Path searchDirectory = Paths.get("./data_and_processing/raw_data/");
+    static String searchDirectorySeparator = "svelte";
+    static Path indexOutput = Paths.get("./data_and_processing/index.json");
+
     ArrayList<processor> processors;
     ArrayList<String> accessibleFiletypes;
 
-    int pathCutoff = 4;
-
-    public FileReader(Path directory) {
-
-        searchDirectory = directory;
+    public FileReader(Path directory, String separatorFolder) {
 
         processors = new ArrayList<>();
 
@@ -41,11 +40,14 @@ public class FileReader {
         
 
         Path outputLocation = Paths.get( "./data_and_processing/file_lists/"+ currTime +"/");
+        Path dependencyLocation = Paths.get(outputLocation.toString(),"/dependencies/");
+        Path hierarchyLocation = Paths.get(outputLocation.toString(),"/hierarchy/");
+
 
         try {
             Files.createDirectories(outputLocation);
-            Files.createDirectories(Paths.get(outputLocation.toString(),"/hierarchy/"));
-            Files.createDirectories(Paths.get(outputLocation.toString(),"/dependencies/"));
+            Files.createDirectories(dependencyLocation);
+            Files.createDirectories(hierarchyLocation);
         } catch (IOException e) {            
             e.printStackTrace();
         }
@@ -53,19 +55,58 @@ public class FileReader {
         try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(directory)) {
             for (Path directoryElement : directoryContentStream) {
                                     System.out.println(directoryElement.getFileName());
-                               outputFiles(directoryElement, outputLocation.toString());
+                               outputFiles(directoryElement, dependencyLocation, hierarchyLocation, separatorFolder);
 //                System.out.println(directoryElement.getFileName().toString());
             }
         } catch (Exception e) {
             System.err.println("Top Level Directory Access: " + e.getMessage());
         }
+
+        createIndexFile(dependencyLocation, hierarchyLocation);
     }
 
     public static void main(String[] args) {
-        FileReader fR = new FileReader(Paths.get("./data_and_processing/raw_data/"));
+        FileReader fR = new FileReader(searchDirectory,searchDirectorySeparator);
     }
 
-   public void outputFiles(Path directory, String outputDirectory) {
+    public void createIndexFile(Path dependencyLocation, Path hierarchyLocation){
+
+        ArrayList<String> dependencyFiles = new ArrayList<>();
+        ArrayList<String> hierarchyFiles = new ArrayList<>();
+
+        try (DirectoryStream<Path> dependStream = Files.newDirectoryStream(dependencyLocation); DirectoryStream<Path> hierarchyStream = Files.newDirectoryStream(hierarchyLocation);) {
+            for (Path directoryElement : dependStream) {
+                dependencyFiles.add(directoryElement.toString());
+            }
+            Collections.sort(dependencyFiles);
+
+            for (Path directoryElement : hierarchyStream) {
+                hierarchyFiles.add(directoryElement.toString());
+            }
+            Collections.sort(hierarchyFiles);
+        } catch (Exception e) {
+            System.err.println("Fetch dependency and hierarchy files: " + e.getMessage());
+        }
+
+        JSONArray indexFiles = new JSONArray();
+
+        for(int i = 0; i < dependencyFiles.size(); i++){
+            JSONObject indexEntry = new JSONObject();
+
+            indexEntry.put("dependency", dependencyFiles.get(i));
+            indexEntry.put("hierarchy", hierarchyFiles.get(i));
+
+            indexFiles.put(indexEntry);
+        }
+
+        try (BufferedWriter br = new BufferedWriter(new FileWriter(indexOutput.toFile(), true))) {
+            br.write(indexFiles.toString());
+        } catch (Exception e) {
+            System.err.println("indexFile Writer: " + e.getMessage());
+        }
+    }
+
+   public void outputFiles(Path directory, Path dependencyLocation, Path hierarchyLocation, String separatorFolder) {
 
         String regex = "";
        try {
@@ -80,12 +121,12 @@ public class FileReader {
            throw new RuntimeException(e);
        }
 
-       HierarchyAndDepends outputs = fileTreeToJSON(Paths.get(directory.toString(), "svelte"),
+       HierarchyAndDepends outputs = fileTreeToJSON(Paths.get(directory.toString(), separatorFolder),
                new HierarchyAndDepends(new JSONObject(), new JSONArray(), null, null, null) , 0);
 
-//        addIncomingDependencies(outputs.getDependencies());
+        addIncomingDependencies(outputs.getDependencies());
 
-       File hierarchyFile = new File(outputDirectory + "/hierarchy/" + directory.getFileName() + ".json");
+       File hierarchyFile = new File(hierarchyLocation.toString() + "\\" + directory.getFileName() + ".json");
 
        try (BufferedWriter br = new BufferedWriter(new FileWriter(hierarchyFile, true))) {
            br.write(postProcessDepends(outputs.getHierarchy().toString(),regex));
@@ -93,7 +134,7 @@ public class FileReader {
            System.err.println("Hierarchy Writer: " + e.getMessage());
        }
 
-       File dependenciesFile = new File(outputDirectory + "/dependencies/" + directory.getFileName() + ".json");
+       File dependenciesFile = new File(dependencyLocation.toString() + "\\" + directory.getFileName() + ".json");
 
        try (BufferedWriter br = new BufferedWriter(new FileWriter(dependenciesFile, true))) {
            br.write(postProcessDepends(outputs.getDependencies().toString(),regex));

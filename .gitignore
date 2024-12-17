@@ -7,6 +7,8 @@ data_and_processing/file_lists/hierarchy/*
 !data_and_processing/file_lists/hierarchy/.gitkeep
 data_and_processing/file_lists/dependencies/*
 !data_and_processing/file_lists/dependencies/.gitkeep
+data_and_processing/file_lists/*
+!data_and_processing/file_lists/.gitkeep
 out/*
 bundle.js
 bundle.js.map
