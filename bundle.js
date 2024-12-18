@@ -20,12 +20,22 @@
 
     var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
-    const windowHeight = window.innerHeight;
+    const windowHeight = Math.min(window.innerHeight*(3/4), window.innerWidth/2);
 
-    const sunburstSVG = d3__namespace
+    const mainGraphSVG = d3__namespace
         .select("body")
         .append("div")
-        .attr("id", "zoomableSunburstComponent")
+        .attr("class","column")
+        .attr("id", "mainGraph")
+        .append("svg")
+        .attr('width', windowHeight)
+        .attr('height', windowHeight);
+
+    const secondaryGraphSVG = d3__namespace
+        .select("body")
+        .append("div")
+        .attr("class","column")
+        .attr("id", "secondaryGraph")
         .append("svg")
         .attr('width', windowHeight)
         .attr('height', windowHeight);
@@ -34,53 +44,119 @@
     Promise.all([
         d3__namespace.json("data_and_processing\\index.json"),
     ]).then(function (files) {
-        let currentTimeStep = 0;
 
-        refreshChart(files[0][0].hierarchy, files[0][0].dependency);
+        const mainUI = createUI("mainGraph", "mainUI");
 
+        let currentTimeStepMain = 0;
 
-        d3__namespace.select("#timeStepSlider").on("change", changeTimestep);
-        d3__namespace.select("#timeStepInput").on("change", changeTimestep);
-        d3__namespace.select("#timeStepSlider").property("max", files[0].length);
-        d3__namespace.select("#timeStepInput").property("max", files[0].length);
-        d3__namespace.select("#timeStepName").html(files[0][0].hierarchy);
-
-        function changeTimestep(event) {
+        function changeTimestepMain(event) {
             console.log(event);
 
-            currentTimeStep = event.target.value;
+            currentTimeStepMain = event.target.value;
 
-            d3__namespace.select("#timeStepSlider").property("value", currentTimeStep);
-            d3__namespace.select("#timeStepInput").property("value", currentTimeStep);
-            d3__namespace.select("#timeStepName").html(files[0][currentTimeStep-1].hierarchy);
+            d3__namespace.select(mainUI.get("timeStepSlider")).property("value", currentTimeStepMain);
+            d3__namespace.select(mainUI.get("timeStepField")).property("value", currentTimeStepMain);
+            d3__namespace.select(mainUI.get("timeStepName")).html(files[0][currentTimeStepMain-1].hierarchy);
 
-            refreshChart(files[0][currentTimeStep-1].hierarchy, files[0][currentTimeStep-1].dependency);
+            const start = d3__namespace.select(mainUI.get("startLevelSlider")).property("value");
+            const stop = d3__namespace.select(mainUI.get("stopLevelSlider")).property("value");
+
+            refreshChart(files[0][currentTimeStepMain-1].hierarchy, files[0][currentTimeStepMain-1].dependency, mainGraphSVG, mainUI, start, stop);
         }
+
+        const secondaryUI = createUI("secondaryGraph", "secondaryUI");
+
+        let currentTimeStepSecond = 0;
+
+        function changeTimestepSecond(event) {
+            console.log(event);
+
+            currentTimeStepSecond = event.target.value;
+
+            d3__namespace.select(secondaryUI.get("timeStepSlider")).property("value", currentTimeStepSecond);
+            d3__namespace.select(secondaryUI.get("timeStepField")).property("value", currentTimeStepSecond);
+            d3__namespace.select(secondaryUI.get("timeStepName")).html(files[0][currentTimeStepSecond-1].hierarchy);
+
+            const start = d3__namespace.select(secondaryUI.get("startLevelSlider")).property("value");
+            const stop = d3__namespace.select(secondaryUI.get("stopLevelSlider")).property("value");
+
+            refreshChart(files[0][currentTimeStepSecond-1].hierarchy, files[0][currentTimeStepSecond-1].dependency, secondaryGraphSVG, secondaryUI, start, stop);
+        }
+
+        d3__namespace.select("#reset").on("click", setup);
+
+        function setup(){
+            currentTimeStepMain = 0;
+
+            currentTimeStepSecond = 0;
+
+            refreshChart(files[0][0].hierarchy, files[0][0].dependency, mainGraphSVG, mainUI, 0, 3);
+
+            refreshChart(files[0][0].hierarchy, files[0][0].dependency, secondaryGraphSVG, secondaryUI, 0, 3);
+
+            d3__namespace.select(mainUI.get("timeStepSlider")).on("change", changeTimestepMain);
+            d3__namespace.select(mainUI.get("timeStepField")).on("change", changeTimestepMain);
+            d3__namespace.select(mainUI.get("timeStepSlider")).property("max", files[0].length);
+            d3__namespace.select(mainUI.get("timeStepField")).property("max", files[0].length);
+            d3__namespace.select(mainUI.get("maxStepValue")).html(files[0].length);
+            d3__namespace.select(mainUI.get("timeStepSlider")).property("value", 1);
+            d3__namespace.select(mainUI.get("timeStepField")).property("value", 1);
+            d3__namespace.select(mainUI.get("timeStepName")).html(files[0][0].hierarchy);
+
+            d3__namespace.select(secondaryUI.get("timeStepSlider")).on("change", changeTimestepSecond);
+            d3__namespace.select(secondaryUI.get("timeStepField")).on("change", changeTimestepSecond);
+            d3__namespace.select(secondaryUI.get("timeStepSlider")).property("max", files[0].length);
+            d3__namespace.select(secondaryUI.get("timeStepField")).property("max", files[0].length);
+            d3__namespace.select(secondaryUI.get("maxStepValue")).html(files[0].length);
+            d3__namespace.select(secondaryUI.get("timeStepSlider")).property("value", 1);
+            d3__namespace.select(secondaryUI.get("timeStepField")).property("value", 1);
+            d3__namespace.select(secondaryUI.get("timeStepName")).html(files[0][0].hierarchy);
+        }
+        setup();
     }).catch(function (err) {
         console.log(err);
     });
 
-    function refreshChart(hierarchy, dependency) {
+    function refreshChart(hierarchy, dependency, svg, uiElements, start, stop) {
         Promise.all([
             d3__namespace.json(hierarchy),
             d3__namespace.json(dependency),
         ]).then(function (files) {
-            sunburstSVG.node().replaceChildren(zoomableSunburst(files[0], files[1]));
+            svg.node().replaceChildren(zoomableSunburst(files[0], files[1], uiElements, start, stop));
             // console.log(sunburstSVG);
         }).catch(function (err) {
             console.log(err);
         });
     }
 
-    let startLvl = 0;
-    let stopLvl = startLvl + 3;
+    d3__namespace.select("body").append("button").html("testSelect").on("click", selectAllArcs);
 
-    let sliderStartLvl = startLvl;
-    let sliderStopLvl = stopLvl;
+    function selectAllArcs(){
+        const mainSelection = d3__namespace.select("#mainGraph").selectAll("#shortArcs").selectAll("path");
+        const secondarySelection = d3__namespace.select("#secondaryGraph").selectAll("#shortArcs").selectAll("path");
 
-    let visibleLevels = stopLvl - startLvl + 1;
 
-    function zoomableSunburst(hierarchyData, dependencyData) {
+        console.log(mainSelection._groups[0]);
+
+        const mainArr = [];
+        const secondaryArr = [];
+
+        mainSelection._groups[0].values().forEach(e=>mainArr.push(e));
+        secondarySelection._groups[0].values().forEach(e=>secondaryArr.push(e));
+        console.log(mainArr.map(e=>e.getAttribute('path')));
+        // console.log(mainSelection.groups.map(e=>d3.select(e).attr("path")));
+
+
+        const difference = d3__namespace.difference(mainArr.map(e=>e.getAttribute('path')), secondaryArr.map(e=>e.getAttribute('path')));
+
+        console.log(difference);
+
+        // selection.attr("fill", "black");
+    }
+
+
+
+    function zoomableSunburst(hierarchyData, dependencyData, uiElements, start, stop) {
 
     // console.log(data);
 
@@ -95,6 +171,60 @@
 
         let hierarchyDepth;
         const levelPadding = 10;
+
+        let startLvl = start;
+        let stopLvl = stop;
+
+        let sliderStartLvl = startLvl;
+        let sliderStopLvl = stopLvl;
+
+        let visibleLevels = stopLvl - startLvl + 1;
+
+        // Converts the input json data to a hierarchical data structure.
+    // Then calculates a partition layout out of that.
+    // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
+    // Each element in the partition layout has the coordinates x0, x1, y0, y1
+    // The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
+        function calculateSunburstData(hierarchyData) {
+            hierarchy = d3__namespace.hierarchy(hierarchyData)
+                .sum(d => d.value)
+                .sort((a, b) => b.value - a.value);
+
+            hierarchyDepth = d3__namespace.max(hierarchy.leaves().map(d => d.depth));
+
+            // console.log("Hierarchy depth:"+hierarchyDepth);
+
+            root = d3__namespace.partition()
+                .size([2 * Math.PI, hierarchy.height + 1])
+                (hierarchy);
+            root.each(d => d.current = d);
+            root.each(d => d.hasChildren = hasChildren(d));
+        }
+
+    //Create UI
+
+        // d3.select("#applyLevels").remove();
+        //
+        // const applyLevelsButton = d3.select("#generalButtons")
+        //     .append("button")
+        //     .attr("id", "applyLevels")
+        //     .html("Apply level settings")
+        //     .on("click", callArcs);
+
+        d3__namespace.select(uiElements.get("fileSearchText")).on("input", changeFileSearchText);
+        d3__namespace.select(uiElements.get("fileSearchButton")).on("click", fileSearch);
+
+        d3__namespace.select(uiElements.get("showResultsButton")).on("click", showSearchResult);
+
+        d3__namespace.select(uiElements.get("goUpButton")).on("click", goUpOneLevel);
+
+        d3__namespace
+            .select(uiElements.get("startLevelSlider"))
+            .on("change", adjustStart);
+
+        d3__namespace
+            .select(uiElements.get("stopLevelSlider"))
+            .on("change", adjustStop);
 
     // Create the arc generator for the normal files and folders of the sunburst.
     // Is used to convert each element of the partition layout to an arc in the sunburst.
@@ -127,26 +257,7 @@
             }
         }
 
-    // Converts the input json data to a hierarchical data structure.
-    // Then calculates a partition layout out of that.
-    // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
-    // Each element in the partition layout has the coordinates x0, x1, y0, y1
-    // The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
-        function calculateSunburstData(hierarchyData) {
-            hierarchy = d3__namespace.hierarchy(hierarchyData)
-                .sum(d => d.value)
-                .sort((a, b) => b.value - a.value);
 
-            hierarchyDepth = d3__namespace.max(hierarchy.leaves().map(d => d.depth));
-
-            // console.log("Hierarchy depth:"+hierarchyDepth);
-
-            root = d3__namespace.partition()
-                .size([2 * Math.PI, hierarchy.height + 1])
-                (hierarchy);
-            root.each(d => d.current = d);
-            root.each(d => d.hasChildren = hasChildren(d));
-        }
 
         function hasChildren(d) {
             if (typeof d.data.children !== "undefined") {
@@ -158,17 +269,19 @@
 
         function refreshStartStopSliders() {
             d3__namespace
-                .select("#startLevelSlider")
+                .select(uiElements.get("startLevelSlider"))
                 .property("value", startLvl)
                 .property("max", hierarchyDepth);
 
             d3__namespace
-                .select("#stopLevelSlider")
+                .select(uiElements.get("stopLevelSlider"))
                 .property("value", stopLvl)
                 .property("max", hierarchyDepth);
         }
 
-        d3__namespace.select("#applyLevels").on("click", callArcs);
+
+
+
 
         function callArcs() {
             root.each(d => d.current = d);
@@ -200,28 +313,24 @@
         }
 
 
-        d3__namespace
-            .select("#startLevelSlider")
-            .on("change", adjustStart);
+
 
         function adjustStart(event) {
             console.log("Start Level Adjusted:" + event.target.value);
 
-            d3__namespace.select("#startLvlCurrLvl").html(event.target.value);
+            d3__namespace.select(uiElements.get("currentStartValue")).html(event.target.value);
 
             sliderStartLvl = event.target.value;
 
             callArcs();
         }
 
-        d3__namespace
-            .select("#stopLevelSlider")
-            .on("change", adjustStop);
+
 
         function adjustStop(event) {
             console.log("Stop Level Adjusted:" + event.target.value);
 
-            d3__namespace.select("#stopLvlCurrLvl").html(event.target.value);
+            d3__namespace.select(uiElements.get("currentStopValue")).html(event.target.value);
 
             sliderStopLvl = event.target.value;
 
@@ -256,7 +365,7 @@
             .attr("class", "sunburst");
 
         const longArcPath = sunburstSVG.append("g").attr("class", "group1");
-        const shortArcPath = sunburstSVG.append("g").attr("class", "group2");
+        const shortArcPath = sunburstSVG.append("g").attr("class", "group2").attr("id", "shortArcs");
         const label = sunburstSVG.append("g")
             .attr("class", "group3")
             .attr("pointer-events", "none")
@@ -297,6 +406,7 @@
                 .attr("fill", d => d3__namespace.interpolateWarm(d.current.x0 / (2 * Math.PI)))
                 .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
                 .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
+                .attr("path", d => d.data.path)
                 .attr("d", d => sunburstArc(d.current))
                 .append("title")
                 .text(d => `
@@ -344,22 +454,21 @@
 
         let searchText = "";
 
-        d3__namespace.select("#fileSearchText").on("input", changeFileSearchText);
-
         function changeFileSearchText() {
             // console.log(event.target.value);
 
             searchText = event.target.value;
         }
 
-        d3__namespace.select("#fileSearchButton").on("click", fileSearch);
+
+        let focusedSearchResult;
+
+
 
         function fileSearch() {
-
             shortArcPath.selectAll("path").filter(function (d) {
-                return d.data.path.endsWith(searchText);
+                return d.data.path === searchText;
             })
-                .sort((a, b) => a.depth - b.depth)
                 // .attr("fill", (d, i) => {
                 //     if (i === 0) {
                 //         return "black";
@@ -368,7 +477,8 @@
                 //     }
                 // })
                 .attr("stroke", "black")
-                .attr("stroke-width", "1em");
+                .attr("stroke-width", "1em")
+                .attr("fake",d=>focusedSearchResult=d);
 
             chordObject.selectAll("path").filter(function (d) {
                 return d.source.path === searchText;
@@ -376,12 +486,35 @@
                 .attr("stroke", "red")
                 .attr("stroke-width", "1em");
 
-            chordObject.selectAll("path").filter(function (d) {
-                return d.target.path === searchText;
-            })
-                .attr("stroke", "blue")
-                .attr("stroke-width", "1em");
+            // chordObject.selectAll("path").filter(function (d) {
+            //     return d.target.path === searchText;
+            // })
+            //     .attr("stroke", "blue")
+            //     .attr("stroke-width", "1em");
+
+            // options
+            //     .data(shortArcPath
+            //         .selectAll("path")
+            //         .filter(function (d) {
+            //         return d.data.path.includes(searchText);
+            //     })
+            //         .sort((a, b) => a.depth - b.depth))
+            //     .join('option')
+            //     // .enter()
+            //     // .append('option')
+            //     .text(function (d) {
+            //         console.log(d);
+            //         return d.property('path'); });
+
         }
+
+        function showSearchResult() {
+            fileFocus(focusedSearchResult);
+        }
+
+
+
+        let currentlyClicked;
 
         // Handle zoom on click.
         function clicked(event, p) {
@@ -393,32 +526,41 @@
             if (event.ctrlKey) {
                 d3__namespace.select(this).attr('stroke', 'black').attr('stroke-width', '5');
             } else {
-                startLvl = p.depth;
-                stopLvl = startLvl + 2;
-
-                visibleLevels = stopLvl - startLvl + 1;
-                // parent.datum(p.parent || root);
-
-                root.each(d => d.current = {
-                    x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-                    x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-                    // y0: Math.max(0, d.y0 - p.depth),
-                    // y1: Math.max(0, d.y1 - p.depth),
-                    y0: d.y0,
-                    y1: d.y1
-                    // hasChildren: d.hasChildren,
-                    // name: d.data.name
-                });
-
-                const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
-                const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
-
-                // console.log(startLvl);
-                // console.log(stopLvl);
-                // console.log(shortArcData.map(d => d.current));
-
-                drawArcs(shortArcData, longArcData);
+                fileFocus(p);
             }
+        }
+
+        function fileFocus(p){
+            currentlyClicked = p;
+
+            startLvl = p.depth;
+            stopLvl = startLvl + 2;
+
+            visibleLevels = stopLvl - startLvl + 1;
+
+            root.each(d => d.current = {
+                x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                // y0: Math.max(0, d.y0 - p.depth),
+                // y1: Math.max(0, d.y1 - p.depth),
+                y0: d.y0,
+                y1: d.y1
+                // hasChildren: d.hasChildren,
+                // name: d.data.name
+            });
+
+            const shortArcData = root.descendants().slice(1).filter(d => d.current.y0 <= stopLvl);
+            const longArcData = root.descendants().slice(1).filter(d => (d.current.y0 <= stopLvl) && !d.children);
+
+            // console.log(startLvl);
+            // console.log(stopLvl);
+            // console.log(shortArcData.map(d => d.current));
+
+            drawArcs(shortArcData, longArcData);
+        }
+
+        function goUpOneLevel(){
+            fileFocus(currentlyClicked.parent);
         }
 
         function arcVisible(d) {
@@ -712,6 +854,211 @@
         calculateSunburstData(hierarchyData);
         callArcs();
         return wholeGraphSVG.node();
+    }
+
+    function createUI(divName, uiDivName){
+        const uiElementMap = new Map();
+
+        const searchDivName = "#"+uiDivName;
+
+        d3__namespace.select(uiDivName).remove();
+
+        d3__namespace
+            .select("#"+divName).append("div")
+            .attr("id",uiDivName);
+
+        const timeStepDivName = divName+"timeStepDiv";
+        const timeStepDiv = d3__namespace
+            .select(searchDivName).append("div")
+            .attr("id",timeStepDivName);
+
+        const timeStepSlider = divName+"timeStepSlider";
+        uiElementMap.set("timeStepSlider",timeStepSlider);
+        timeStepDiv.append("label")
+            .attr("for",timeStepSlider)
+            .html("Time step|");
+        timeStepDiv.append("label")
+            .attr("for",timeStepSlider)
+            .html(" Min step:");
+        const minStepValue = timeStepSlider+"min";
+        uiElementMap.set("minStartValue",minStepValue);
+        timeStepDiv.append("label")
+            .attr("id",minStepValue)
+            .attr("for",timeStepSlider)
+            .html("1");
+        timeStepDiv.append("label")
+            .attr("for",timeStepSlider)
+            .html(" Max step:");
+        const maxStepValue = timeStepSlider+"curr";
+        uiElementMap.set("maxStepValue",maxStepValue);
+        timeStepDiv.append("label")
+            .attr("id",maxStepValue)
+            .attr("for",timeStepSlider)
+            .html("1");
+        timeStepDiv.append("input")
+            .attr("type","range")
+            .attr("id",timeStepSlider)
+            .attr("value",0)
+            .attr("min",1)
+            .attr("max",1)
+            .attr("step",1);
+        const timeStepField = divName+"timeStepField";
+        uiElementMap.set("timeStepField",timeStepField);
+        timeStepDiv.append("input")
+            .attr("type","number")
+            .attr("id",timeStepField)
+            .attr("value",0)
+            .attr("min",1)
+            .attr("max",10);
+        const timeStepName = divName+"timeStepName";
+        uiElementMap.set("timeStepName",timeStepName);
+        timeStepDiv.append("p")
+            .attr("id",timeStepName)
+            .html("xxxx");
+
+
+        const startLevelDivName = divName+"startLevelDiv";
+        const startLevelDiv = d3__namespace
+            .select(searchDivName).append("div")
+            .attr("id",startLevelDivName);
+
+        const startLevelSlider = divName+"startLevelSlider";
+        uiElementMap.set("startLevelSlider",startLevelSlider);
+        startLevelDiv.append("label")
+            .attr("for",startLevelSlider)
+            .html("First level|");
+        startLevelDiv.append("label")
+            .attr("for",startLevelSlider)
+            .html(" Current level:");
+        const currentStartValue = startLevelSlider+"curr";
+        uiElementMap.set("currentStartValue",currentStartValue);
+        startLevelDiv.append("label")
+            .attr("id",currentStartValue)
+            .attr("for",startLevelSlider)
+            .html("0");
+        startLevelDiv.append("label")
+            .attr("for",startLevelSlider)
+            .html(" Min level:");
+        const minStartValue = startLevelSlider+"min";
+        uiElementMap.set("minStartValue",minStartValue);
+        startLevelDiv.append("label")
+            .attr("id",minStartValue)
+            .attr("for",startLevelSlider)
+            .html("1");
+        startLevelDiv.append("label")
+            .attr("for",startLevelSlider)
+            .html(" Max level:");
+        const maxStartValue = startLevelSlider+"curr";
+        uiElementMap.set("maxStartValue",maxStartValue);
+        startLevelDiv.append("label")
+            .attr("id",maxStartValue)
+            .attr("for",startLevelSlider)
+            .html("1");
+        startLevelDiv.append("input")
+            .attr("type","range")
+            .attr("id",startLevelSlider)
+            .attr("value",0)
+            .attr("min",0)
+            .attr("max",1)
+            .attr("step",1);
+
+        const stopLevelDivName = divName+"stopLevelDiv";
+        const stopLevelDiv = d3__namespace
+            .select(searchDivName).append("div")
+            .attr("id",stopLevelDivName);
+
+        const stopLevelSlider = divName+"stopLevelSlider";
+        uiElementMap.set("stopLevelSlider",stopLevelSlider);
+        stopLevelDiv.append("label")
+            .attr("for",stopLevelSlider)
+            .html("Last level|");
+        stopLevelDiv.append("label")
+            .attr("for",stopLevelSlider)
+            .html(" Current level:");
+        const currentStopValue = stopLevelSlider+"curr";
+        uiElementMap.set("currentStopValue",currentStopValue);
+        stopLevelDiv.append("label")
+            .attr("id",currentStopValue)
+            .attr("for",stopLevelSlider)
+            .html("0");
+        stopLevelDiv.append("label")
+            .attr("for",stopLevelSlider)
+            .html(" Min level:");
+        const minStopValue = stopLevelSlider+"min";
+        uiElementMap.set("minStopValue",minStopValue);
+        stopLevelDiv.append("label")
+            .attr("id",minStopValue)
+            .attr("for",stopLevelSlider)
+            .html("1");
+        stopLevelDiv.append("label")
+            .attr("for",stopLevelSlider)
+            .html(" Max level:");
+        const maxStopValue = stopLevelSlider+"max";
+        uiElementMap.set("maxStopValue",maxStopValue);
+        stopLevelDiv.append("label")
+            .attr("id",maxStopValue)
+            .attr("for",stopLevelSlider)
+            .html("1");
+        stopLevelDiv.append("input")
+            .attr("type","range")
+            .attr("id",stopLevelSlider)
+            .attr("value",0)
+            .attr("min",0)
+            .attr("max",1)
+            .attr("step",1);
+
+        const fileSearchName = divName+"fileSearchDiv";
+        const fileSearchDivName = fileSearchName+"Div";
+        const fileSearchDiv = d3__namespace
+            .select(searchDivName).append("div")
+            .attr("id",fileSearchDivName);
+
+
+        const fileSearchText = fileSearchName+"Text";
+        uiElementMap.set("fileSearchText",fileSearchText);
+        fileSearchDiv.append("label")
+            .attr("for",fileSearchText)
+            .html("File search:");
+        fileSearchDiv.append("input")
+            .attr("type","text")
+            .attr("name",fileSearchText)
+            .attr("id",fileSearchText);
+        const fileSearchButton = fileSearchName+"Button";
+        uiElementMap.set("fileSearchButton",fileSearchButton);
+        fileSearchDiv.append("button")
+            .attr("id",fileSearchButton)
+            .html("Search");
+        const showResultsButton = divName+"showResultButton";
+        uiElementMap.set("showResultsButton",showResultsButton);
+        fileSearchDiv.append("button")
+            .attr("id",showResultsButton)
+            .html("Show results");
+
+        const generalFunctionsDivName = divName+"generalFunctionsDiv";
+        const generalFunctionsDiv = d3__namespace
+            .select(searchDivName).append("div")
+            .attr("id",generalFunctionsDivName);
+
+        const resetButton = divName+"resetButton";
+        uiElementMap.set("resetButton",resetButton);
+        generalFunctionsDiv.append("button")
+            .attr("id",resetButton)
+            .html("RESET");
+        const goUpButton = divName+"goUpButton";
+        uiElementMap.set("goUpButton",goUpButton);
+        generalFunctionsDiv.append("button")
+            .attr("id",goUpButton)
+            .html("Go up one level");
+        const exitFilteredButton = divName+"exitFilteredButton";
+        uiElementMap.set("exitFilteredButton",exitFilteredButton);
+        generalFunctionsDiv.append("button")
+            .attr("id",exitFilteredButton)
+            .html("Exit filtered view");
+
+
+        uiElementMap.keys().forEach(e=>uiElementMap.set(e,"#"+uiElementMap.get(e)));
+        console.log(uiElementMap);
+        return(uiElementMap);
     }
 
 })(d3);

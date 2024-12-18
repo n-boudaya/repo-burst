@@ -3,15 +3,31 @@
 <head>
     <title>This is a test</title>
     <style>
-        body {
-            margin: 0;
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
         }
     </style>
     <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
 
 </head>
 <body>
-<div id="ui">
+<script src='bundle.js'></script>
+
 
 <!--    &lt;!&ndash;      https://stackoverflow.com/a/18936328&ndash;&gt;-->
 <!--    <input type="range" id="startLevelInput" name="startLevelInput" value="1" min="1" max="10" step="1"-->
@@ -26,59 +42,24 @@
 
 
 
-    <div id="generalButtons">
-        <button id="reset">RESET</button>
-        <button id="applyLevels">Apply level settings</button>
-        <button id="upOneLevel">Go up one level</button>
-        <button id="exitFilterView">Exit filtered view</button>
-    </div>
+<!--    <div id="generalButtons">-->
+<!--        <button id="reset">RESET</button>-->
+<!--&lt;!&ndash;        <button id="applyLevels">Apply level settings</button>&ndash;&gt;-->
+<!--        <button id="upOneLevel">Go up one level</button>-->
+<!--        <button id="exitFilterView">Exit filtered view</button>-->
+<!--    </div>-->
 
-    <div id="timeStepDiv">
-        <label for="timeStepSlider"><b>Time step </b></label>
-        <label for="timeStepSlider"> Current time step: </label>
-        <label for="timeStepSlider" id="currTimestep">6</label>
-        <label for="timeStepSlider"> Min time step: </label>
-        <label for="timeStepSlider" id="minTimestep">1</label>
-        <label for="timeStepSlider"> Max time step: </label>
-        <label for="timeStepSlider" id="maxTimestep">10</label>
-        <input type="range" id="timeStepSlider" value="0" min="1" max="10" step="1">
-        <input type="number" id="timeStepInput" value="0" min="1" max="10">
-        <p id="timeStepName">xxxx</p>
-    </div>
-
-    <div id="searchMenu">
-        <label for="fileSearchText">Search:</label>
-        <input type="text" id="fileSearchText" name="fileSearchText"/>
-        <button id="fileSearchButton">Search</button>
-        <button id="markSearchResult">Mark result</button>
-        <button id="showSearchResult">Show result</button>
-        <p id="searchResultConfirmation">No result.</p>
-    </div>
+<!--    <div id="timeStepDiv">-->
+<!--        <label for="timeStepSlider"><b>Time step </b></label>-->
+<!--        <label for="timeStepSlider"> Min time step: </label>-->
+<!--        <label for="timeStepSlider" id="minTimestep">1</label>-->
+<!--        <label for="timeStepSlider"> Max time step: </label>-->
+<!--        <label for="timeStepSlider" id="maxTimestep">10</label>-->
+<!--        <input type="range" id="timeStepSlider" value="0" min="1" max="10" step="1">-->
+<!--        <input type="number" id="timeStepInput" value="0" min="1" max="10">-->
+<!--        <p id="timeStepName">xxxx</p>-->
+<!--    </div>-->
 
 
-    <div id="startLevelSliderDiv">
-        <label for="startLevelSlider"><b>First level </b></label>
-        <label for="startLevelSlider"> Current Level: </label>
-        <label for="startLevelSlider" id="startLvlCurrLvl">1</label>
-        <label for="startLevelSlider"> Min Level: </label>
-        <label for="startLevelSlider" id="startLvlMinLvl">0</label>
-        <label for="startLevelSlider"> Max Level: </label>
-        <label for="startLevelSlider" id="startLvlMaxLvl">10</label>
-        <input type="range" id="startLevelSlider" value="0" min="1" max="10" step="1">
-    </div>
-
-    <div id="stopLevelSliderDiv">
-        <label for="stopLevelSlider"><b>Last level </b></label>
-        <label for="stopLevelSlider"> Current Level: </label>
-        <label for="stopLevelSlider" id="stopLvlCurrLvl">6</label>
-        <label for="stopLevelSlider"> Min Level: </label>
-        <label for="stopLevelSlider" id="stopLvlMinLvl">1</label>
-        <label for="stopLevelSlider"> Max Level: </label>
-        <label for="stopLevelSlider" id="stopLvlMaxLvl">10</label>
-        <input type="range" id="stopLevelSlider" value="3" min="1" max="10" step="1">
-    </div>
-
-</div>
-<script src='bundle.js'></script>
 </body>
 </html>
