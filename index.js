@@ -109,11 +109,18 @@ function refreshChart(hierarchy, dependency, svg, uiElements, start, stop) {
     });
 }
 
-d3.select("body").append("button").html("testSelect").on("click", selectAllArcs);
+d3.select("#showDiff").on("click", markDifference);
 
-function selectAllArcs(){
-    const mainSelection = d3.select("#mainGraph").selectAll("#shortArcs").selectAll("path");
-    const secondarySelection = d3.select("#secondaryGraph").selectAll("#shortArcs").selectAll("path");
+function markDifference(){
+    const mainSelection = d3.select("#mainGraph").selectAll("#shortArcs").selectAll("path").filter(
+        function(d){
+            // console.log(d);
+            return d.isVisible === true;
+        });
+    const secondarySelection = d3.select("#secondaryGraph").selectAll("#shortArcs").selectAll("path").filter(
+        function(d){
+            return d.isVisible === true;
+        });
 
 
     // console.log(mainSelection._groups[0]);
@@ -127,11 +134,67 @@ function selectAllArcs(){
     // console.log(mainSelection.groups.map(e=>d3.select(e).attr("path")));
 
 
-    const difference = d3.difference(mainArr.map(e=>e.getAttribute('path')), secondaryArr.map(e=>e.getAttribute('path')));
+    const onlyInMain = d3.difference(mainArr.map(e=>e.getAttribute('path')), secondaryArr.map(e=>e.getAttribute('path')));
+    const onlyInSecondary = d3.difference(secondaryArr.map(e=>e.getAttribute('path')), mainArr.map(e=>e.getAttribute('path')));
 
-    console.log(difference);
+    const mainFiltered = mainSelection.filter(function(d){
+        return onlyInMain.has(d.data.path);
+    });
 
+    const mainChords = d3.select("#mainGraph").selectAll("#chords").selectAll("path").filter(function(d){
+        return onlyInMain.has(d.source.path)||onlyInMain.has(d.target.path);
+    });
+
+    mainFiltered
+        .attr("stroke","blue")
+        .attr("stroke-width","2em")
+        .attr("stroke-opacity","1");
+
+    mainChords
+        .attr("stroke","blue")
+        .attr("stroke-width","2em")
+        .attr("stroke-opacity","1");
+
+    const secondaryFiltered = secondarySelection.filter(function(d){
+        return onlyInSecondary.has(d.data.path);
+    });
+
+    const secondaryChords = d3.select("#secondaryGraph").selectAll("#chords").selectAll("path").filter(function(d){
+        return onlyInSecondary.has(d.source.path)||onlyInSecondary.has(d.target.path);
+    });
+
+    secondaryFiltered
+        .attr("stroke","blue")
+        .attr("stroke-width","2em")
+        .attr("stroke-opacity","1");
+
+    secondaryChords
+        .attr("stroke","blue")
+        .attr("stroke-width","2em")
+        .attr("stroke-opacity","1");
+
+    console.log(onlyInMain);
+    console.log(onlyInSecondary);
     // selection.attr("fill", "black");
+
+    d3.select("#mainGraphDiffResults").remove();
+    const mainGraphDiv = d3.select("#mainGraph").append("div").attr("id","mainGraphDiffResults");
+
+    mainGraphDiv.append("p").html("These elements were only found in this graph:");
+    const mainBox = mainGraphDiv.append("select");
+    onlyInMain.forEach(e=>{
+        mainBox.append("option").html(e);
+    })
+
+    d3.select("#secondaryGraphDiffResults").remove();
+    const secondaryGraphDiv = d3.select("#secondaryGraph").append("div").attr("id","secondaryGraphDiffResults");
+
+    secondaryGraphDiv.append("p").html("These elements were only found in this graph:");
+    const secondaryBox = secondaryGraphDiv.append("select");
+    onlyInSecondary.forEach(e=>{
+        secondaryBox.append("option").html(e);
+    })
+
 }
 
 
@@ -384,14 +447,19 @@ function zoomableSunburst(hierarchyData, dependencyData, uiElements, start, stop
             })
             .join("path")
             .attr("fill", d => d3.interpolateWarm(d.current.x0 / (2 * Math.PI)))
-            .attr("fill-opacity", d => arcVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
-            .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
+            .attr("fill-opacity", d => arcTechnicallyVisible(d) ? (d.children ? 1 : 0.3) : 0.1)
+            .attr("isVisible", d => {
+                const visible = arcVisible(d);
+                d.isVisible = visible;
+                return visible})
+            .attr("pointer-events", d => arcTechnicallyVisible(d.current) ? "auto" : "none")
             .attr("path", d => d.data.path)
             .attr("d", d => sunburstArc(d.current))
             .append("title")
             .text(d => `
             ${d.data.path}\n
             ${format(d.value)}\n
+            ${arcVisible(d)}\n
             Depth: ${d.depth}
             `);
 
@@ -546,9 +614,33 @@ function zoomableSunburst(hierarchyData, dependencyData, uiElements, start, stop
         fileFocus(currentlyClicked.parent);
     }
 
-    function arcVisible(d) {
-        // return d.y1 <= visibleLevels+1 && d.y0 >= 1 && d.x1 > d.x0;
+    function arcVisible(d){
+        const interval = 0.1;
 
+        const allCloseToZero =
+            closeToZeroDegrees(d.current.x0)&&closeToZeroDegrees(d.current.x1)||
+        closeTo360Degrees(d.current.x0)&&closeTo360Degrees(d.current.x1);
+
+        function closeToZeroDegrees(angle){
+            const degrees = angle * (180/Math.PI);
+
+            if(degrees < interval){
+                return true;
+            }
+        }
+
+        function closeTo360Degrees(angle){
+            const degrees = angle * (180/Math.PI);
+
+            if(degrees > (360-interval)){
+                return true;
+            }
+        }
+
+        return d.y0 >= startLvl && d.y0 <= stopLvl && !allCloseToZero;
+    }
+
+    function arcTechnicallyVisible(d) {
         return d.y0 >= startLvl && d.y0 <= stopLvl;
     }
 
@@ -601,8 +693,8 @@ function zoomableSunburst(hierarchyData, dependencyData, uiElements, start, stop
         .attr("transform", "scale (0.5 0.5) translate(" + windowHeight / 2 + " " + windowHeight / 2 + ")")
         .attr("class", "chord diagram");
 
-    const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
-    const chordObject = chordSVG.append("g").attr("class", "chords");
+    // const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
+    const chordObject = chordSVG.append("g").attr("class", "chords").attr("id","chords");
 
     const chordGen = d3.chordDirected()
         // .padAngle(10 / chordInnerRadius)
