@@ -65,3 +65,63 @@ Möglichkeit hinzufügen, einen Ordner auszuwählen und durch alle child files d
 Suchfunktion einbauen! 
 
 Iterierung über Klicks, bei Iterierung immer das Vergleichsfenster mit links vorher und rechts nachher
+
+2024/12/19
+
+- Was muss genau abgegeben werden? Was muss auf die zwei CDs? Code und Arbeit? Dupliziert?
+Zwei CDs, auf beiden alles
+
+- Fristenbriefkasten. Wenn 02.01 Abgabedatum, wann letzte Abgabe?
+
+
+- Gute Copyshops
+
+- Visuell erklären gute Idee? Bspw. Zoom Hierarachiewechsel mit Zeichnung von Hierarchie Baum?
+Ja
+
+- Heranführung an Sunburst: Baum, Icicle, Sunburst
+
+
+- Heranführung an Chord: Graph mit Kanten, Signifikanz über Dicke der Kanten, Runde anordnung, Abwandlung von Donut Chart
+
+- Auswahlprozess in D3 erklären?
+
+
+- "Hacks" und Tricks erklären?
+
+Unterkapitel zur Implementierung
+selection und joining 
+
+Methodik: Was ich darstelle, sunburst chords differenz usw... NICHTS ÜBER D3
+Was sind ANforderungen, Designentscheidung
+
+- Anleitung zur Verwendung des Programms auf Github?
+Ja
+
+- Quellen von Implementationsdetails wo angeben? Im Code oder in der Arbeit?
+In Implementierungstext referenzen, links nicht im Fließtext
+
+- Ausführlichkeit von Kommentaren
+Ausführlich
+
+- Zur Präsentation
+30min
+
+-Findings besprechen
+Beispiele durchsprechen:
+ICh habe alte version vom code verwendet. Was hat sich seitdem verändert?
+
+Verschiedene Usecases
+Auch mal statische usecases
+oder explorativ
+
+Gasthörer darf mitkommen
+
+auf deutsch reden, folien vllt. auf english
+
+Timeline an verämnderten Zeilen über gitlog
+
+WIP:
+Historie pro person 
+
+SUche mit ergebnisbox
