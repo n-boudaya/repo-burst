@@ -23,12 +23,12 @@ export function barGraph (data, div){
     const marginTop = 5;
     const marginRight = 0;
     const marginBottom = 5;
-    const marginLeft = 40;
+    const marginLeft = 60;
 
     let indexArr = [];
 
     Array.from(data.keys()).forEach(e=>{
-        indexArr[e] = e+1;
+        indexArr[e] = e+1;        
     })
 
     // Create the horizontal scale and its axis generator.
@@ -41,12 +41,15 @@ export function barGraph (data, div){
 
     // Create the vertical scale.
     const yInsertions = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.insertions)])
+        .domain([0, d3.max(data, d => parseInt(d.insertions))])
         .range([(height - marginBottom)/2, marginTop]);
 
     const yDeletions = d3.scaleLinear()
-        .domain([0, d3.min(data, d => -d.deletions)])
+        .domain([0, d3.min(data, d => -(parseInt(d.deletions)))])
         .range([(height - marginBottom)/2, height - marginBottom]);
+
+        console.log("Minimum:"+d3.min(data, d => -(parseInt(d.deletions))));
+        console.log("Maximum:"+d3.max(data, d => parseInt(d.insertions)));
 
     // console.log(y(600));
     // console.log(y(-100));

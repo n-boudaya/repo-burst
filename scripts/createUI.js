@@ -73,7 +73,7 @@ export function createUI(divName, uiDivName){
     uiElementMap.set("startLevelSlider",startLevelSlider);
     labelMaker(startLevelDiv, startLevelSlider, "First level|");
 
-    labelValueCombo(startLevelDiv, startLevelSlider,"currentStartValue","curr"," Current level:","0");
+    labelValueCombo(startLevelDiv, startLevelSlider,"currentStartValue","curr"," Current level:","1");
     labelValueCombo(startLevelDiv, startLevelSlider,"minStartValue","min"," Min level:","1");
     labelValueCombo(startLevelDiv, startLevelSlider,"maxStartValue","max"," Max level:","1");
 
@@ -81,9 +81,9 @@ export function createUI(divName, uiDivName){
     startLevelDiv.append("input")
         .attr("type","range")
         .attr("id",startLevelSlider)
-        .attr("value",0)
-        .attr("min",0)
-        .attr("max",3)
+        .attr("value",1)
+        .attr("min",1)
+        .attr("max",1)
         .attr("step",1);
 
     const stopLevelDivName = divName+"stopLevelDiv";
@@ -95,16 +95,16 @@ export function createUI(divName, uiDivName){
     uiElementMap.set("stopLevelSlider",stopLevelSlider);
     labelMaker(stopLevelDiv, stopLevelSlider, "Last level|");
 
-    labelValueCombo(stopLevelDiv, stopLevelSlider,"currentStopValue","curr"," Current level:","0");
+    labelValueCombo(stopLevelDiv, stopLevelSlider,"currentStopValue","curr"," Current level:","1");
     labelValueCombo(stopLevelDiv, stopLevelSlider,"minStopValue","min"," Min level:","1");
     labelValueCombo(stopLevelDiv, stopLevelSlider,"maxStopValue","max"," Max level:","1");
 
     stopLevelDiv.append("input")
         .attr("type","range")
         .attr("id",stopLevelSlider)
-        .attr("value",0)
-        .attr("min",0)
-        .attr("max",3)
+        .attr("value",1)
+        .attr("min",1)
+        .attr("max",1)
         .attr("step",1);
 
     const fileSearchName = divName+"fileSearchDiv";

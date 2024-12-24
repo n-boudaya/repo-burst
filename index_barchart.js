@@ -19,6 +19,10 @@ Promise.all([
 
     for(let i=0; i < files[0].length; i++){
         files[0][i].index = i;
+
+        files[0][i].changes = parseInt(files[0][i].changes);
+        files[0][i].insertions = parseInt(files[0][i].insertions);
+        files[0][i].deletions = parseInt(files[0][i].deletions);
     }
 
     barGraph(files[0]);
@@ -53,11 +57,11 @@ function barGraph (data){
 
     // Create the vertical scale.
     const yInsertions = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.insertions)])
+        .domain([0, d3.max(data, function(d) { return d.insertions; })])
         .range([(height - marginBottom)/2, marginTop]);
 
     const yDeletions = d3.scaleLinear()
-        .domain([0, d3.min(data, d => -d.deletions)])
+        .domain([0, d3.min(data, function(d) { return -d.deletions; })])
         .range([(height - marginBottom)/2, height - marginBottom]);
 
     // console.log(y(600));

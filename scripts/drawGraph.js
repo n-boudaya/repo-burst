@@ -34,7 +34,10 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
         hierarchyDepth = d3.max(hierarchy.leaves().map(d => d.depth));
 
-        // console.log("Hierarchy depth:"+hierarchyDepth);
+        d3.select(uiElements.get("maxStartValue")).html(hierarchyDepth);
+        d3.select(uiElements.get("maxStopValue")).html(hierarchyDepth);
+
+        console.log("Hierarchy depth:"+hierarchyDepth);
 
         root = d3.partition()
             .size([2 * Math.PI, hierarchy.height + 1])

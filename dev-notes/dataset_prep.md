@@ -76,7 +76,7 @@ v2.0.0
 v3.0.0
 v4.0.0
 
-
+//https://stackoverflow.com/a/12101203
 9. Find the file "outputDiffCommands.bat" in the root directory repository of this tool. Move it to the repository of your data.
 10. Run "outputDiffCommands.bat" from the command line.
 11. The file "changes.txt" will be created in the root folder of your data repository. Open it. Use a tool like Notepad++ to format it as such: 

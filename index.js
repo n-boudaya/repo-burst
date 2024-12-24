@@ -35,6 +35,10 @@ Promise.all([
         // console.log(files);
         for(let i=0; i < files[1].length; i++){
             files[1][i].index = i+1;
+
+            files[0][i].changes = parseInt(files[0][i].changes);
+            files[0][i].insertions = parseInt(files[0][i].insertions);
+            files[0][i].deletions = parseInt(files[0][i].deletions);
         }
 
         barGraph(files[1], div);

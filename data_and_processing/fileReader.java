@@ -17,7 +17,7 @@ import data_and_processing.processors.processor;
  */
 public class FileReader {
 
-    static Path searchDirectory = Paths.get("G:/repo-burst_temp/extracted");
+    static Path searchDirectory = Paths.get("J:/repo-burst/data_and_processing/raw_data");
     static String searchDirectorySeparator = "svelte";
     static Path indexOutput = Paths.get("./data_and_processing/index.json");
 

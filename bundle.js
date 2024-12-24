@@ -93,7 +93,7 @@
         uiElementMap.set("startLevelSlider",startLevelSlider);
         labelMaker(startLevelDiv, startLevelSlider, "First level|");
 
-        labelValueCombo(startLevelDiv, startLevelSlider,"currentStartValue","curr"," Current level:","0");
+        labelValueCombo(startLevelDiv, startLevelSlider,"currentStartValue","curr"," Current level:","1");
         labelValueCombo(startLevelDiv, startLevelSlider,"minStartValue","min"," Min level:","1");
         labelValueCombo(startLevelDiv, startLevelSlider,"maxStartValue","max"," Max level:","1");
 
@@ -101,9 +101,9 @@
         startLevelDiv.append("input")
             .attr("type","range")
             .attr("id",startLevelSlider)
-            .attr("value",0)
-            .attr("min",0)
-            .attr("max",3)
+            .attr("value",1)
+            .attr("min",1)
+            .attr("max",1)
             .attr("step",1);
 
         const stopLevelDivName = divName+"stopLevelDiv";
@@ -115,16 +115,16 @@
         uiElementMap.set("stopLevelSlider",stopLevelSlider);
         labelMaker(stopLevelDiv, stopLevelSlider, "Last level|");
 
-        labelValueCombo(stopLevelDiv, stopLevelSlider,"currentStopValue","curr"," Current level:","0");
+        labelValueCombo(stopLevelDiv, stopLevelSlider,"currentStopValue","curr"," Current level:","1");
         labelValueCombo(stopLevelDiv, stopLevelSlider,"minStopValue","min"," Min level:","1");
         labelValueCombo(stopLevelDiv, stopLevelSlider,"maxStopValue","max"," Max level:","1");
 
         stopLevelDiv.append("input")
             .attr("type","range")
             .attr("id",stopLevelSlider)
-            .attr("value",0)
-            .attr("min",0)
-            .attr("max",3)
+            .attr("value",1)
+            .attr("min",1)
+            .attr("max",1)
             .attr("step",1);
 
         const fileSearchName = divName+"fileSearchDiv";
@@ -267,7 +267,7 @@
 
     function drawGraph(hierarchyData, dependencyData, uiElements, start, stop, size) {
 
-    // Specify the chart’s dimensions.
+        // Specify the chart’s dimensions.
         const sunburstSize = 8000;
         const innerCircleRadius = 2000;
         const outerCircleWidth = 2000;
@@ -287,10 +287,10 @@
         let visibleLevels = stopLvl - startLvl + 1;
 
         // Converts the input json data to a hierarchical data structure.
-    // Then calculates a partition layout out of that.
-    // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
-    // Each element in the partition layout has the coordinates x0, x1, y0, y1
-    // The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
+        // Then calculates a partition layout out of that.
+        // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
+        // Each element in the partition layout has the coordinates x0, x1, y0, y1
+        // The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
         function calculateSunburstData(hierarchyData) {
             hierarchy = d3__namespace.hierarchy(hierarchyData)
                 .sum(d => d.value)
@@ -298,7 +298,10 @@
 
             hierarchyDepth = d3__namespace.max(hierarchy.leaves().map(d => d.depth));
 
-            // console.log("Hierarchy depth:"+hierarchyDepth);
+            d3__namespace.select(uiElements.get("maxStartValue")).html(hierarchyDepth);
+            d3__namespace.select(uiElements.get("maxStopValue")).html(hierarchyDepth);
+
+            console.log("Hierarchy depth:"+hierarchyDepth);
 
             root = d3__namespace.partition()
                 .size([2 * Math.PI, hierarchy.height + 1])
@@ -364,7 +367,6 @@
         }
 
 
-
         function hasChildren(d) {
             if (typeof d.data.children !== "undefined") {
                 return d.data.children.length !== 0;
@@ -384,9 +386,6 @@
                 .property("value", stopLvl)
                 .property("max", hierarchyDepth);
         }
-
-
-
 
 
         function callArcs() {
@@ -419,8 +418,6 @@
         }
 
 
-
-
         function adjustStart(event) {
             console.log("Start Level Adjusted:" + event.target.value);
 
@@ -430,7 +427,6 @@
 
             callArcs();
         }
-
 
 
         function adjustStop(event) {
@@ -514,7 +510,8 @@
                 .attr("isVisible", d => {
                     const visible = arcVisible(d);
                     d.isVisible = visible;
-                    return visible})
+                    return visible
+                })
                 .attr("pointer-events", d => arcTechnicallyVisible(d.current) ? "auto" : "none")
                 .attr("path", d => d.data.path)
                 .attr("d", d => sunburstArc(d.current))
@@ -592,7 +589,7 @@
                 // })
                 .attr("stroke", "black")
                 .attr("stroke-width", "2em")
-                .attr("fake",d=>searchResults.add(d));
+                .attr("fake", d => searchResults.add(d));
 
             chordObject.selectAll("path")
                 .attr("stroke", d => d3__namespace.interpolateWarm(d.target.startAngle / (2 * Math.PI)))
@@ -605,16 +602,16 @@
                 // .attr("fake", d=>console.log(d))
                 .attr("stroke", "black")
                 .attr("stroke-width", "2em")
-                .attr("stroke-opacity","1");
+                .attr("stroke-opacity", "1");
 
 
             d3__namespace.select(uiElements.get("fileSearchDiv")).select("#searchResults").remove();
             const searchResultBox = d3__namespace
                 .select(uiElements.get("fileSearchDiv"))
                 .append("select")
-                .attr("id","searchResults");
+                .attr("id", "searchResults");
 
-            searchResults.forEach(e=>{
+            searchResults.forEach(e => {
                 searchResultBox.append("option").html(e.data.path);
             });
         }
@@ -623,13 +620,12 @@
             const selectedPath = d3__namespace.select(uiElements.get("fileSearchDiv")).select("#searchResults").property("value");
             const selectedArc = shortArcPath.selectAll("path").filter(function (d) {
                 return d.data.path === selectedPath;
-            }).attr("fake",d=>fileFocus(d));
+            }).attr("fake", d => fileFocus(d));
 
             console.log(selectedArc);
 
             // fileFocus(selectedArc);
         }
-
 
 
         let currentlyClicked;
@@ -648,7 +644,7 @@
             }
         }
 
-        function fileFocus(p){
+        function fileFocus(p) {
             currentlyClicked = p;
 
             startLvl = p.depth;
@@ -677,29 +673,29 @@
             drawArcs(shortArcData, longArcData);
         }
 
-        function goUpOneLevel(){
+        function goUpOneLevel() {
             fileFocus(currentlyClicked.parent);
         }
 
-        function arcVisible(d){
+        function arcVisible(d) {
             const interval = 0.1;
 
             const allCloseToZero =
-                closeToZeroDegrees(d.current.x0)&&closeToZeroDegrees(d.current.x1)||
-                closeTo360Degrees(d.current.x0)&&closeTo360Degrees(d.current.x1);
+                closeToZeroDegrees(d.current.x0) && closeToZeroDegrees(d.current.x1) ||
+                closeTo360Degrees(d.current.x0) && closeTo360Degrees(d.current.x1);
 
-            function closeToZeroDegrees(angle){
-                const degrees = angle * (180/Math.PI);
+            function closeToZeroDegrees(angle) {
+                const degrees = angle * (180 / Math.PI);
 
-                if(degrees < interval){
+                if (degrees < interval) {
                     return true;
                 }
             }
 
-            function closeTo360Degrees(angle){
-                const degrees = angle * (180/Math.PI);
+            function closeTo360Degrees(angle) {
+                const degrees = angle * (180 / Math.PI);
 
-                if(degrees > (360-interval)){
+                if (degrees > (360 - interval)) {
                     return true;
                 }
             }
@@ -761,7 +757,7 @@
             .attr("class", "chord diagram");
 
         // const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
-        const chordObject = chordSVG.append("g").attr("class", "chords").attr("id","chords");
+        const chordObject = chordSVG.append("g").attr("class", "chords").attr("id", "chords");
 
         const chordGen = d3__namespace.chordDirected()
             // .padAngle(10 / chordInnerRadius)
@@ -898,8 +894,7 @@
                         e.source.endAngle = newAngle(e.source.endAngle, sourceGroup);
                         e.target.startAngle = newAngle(e.target.startAngle, targetGroup);
                         e.target.endAngle = newAngle(e.target.endAngle, targetGroup);
-                    }
-                    else {
+                    } else {
                         // console.log(e.target.path.toString() + " not found.")
 
                         e.source.value = 0;
@@ -976,16 +971,15 @@
 
         function chordValid(chord) {
 
-            const maxValue = 359.999*(Math.PI/180);
+            const maxValue = 359.999 * (Math.PI / 180);
 
-            if((chord.source.startAngle === 0 && chord.source.endAngle === 0)||
-                (chord.target.startAngle === 0 && chord.target.endAngle === 0)||
-                (chord.source.startAngle >=maxValue && chord.source.endAngle >=maxValue)||
-                (chord.target.startAngle >=maxValue && chord.target.endAngle >=maxValue)){
+            if ((chord.source.startAngle === 0 && chord.source.endAngle === 0) ||
+                (chord.target.startAngle === 0 && chord.target.endAngle === 0) ||
+                (chord.source.startAngle >= maxValue && chord.source.endAngle >= maxValue) ||
+                (chord.target.startAngle >= maxValue && chord.target.endAngle >= maxValue)) {
 
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
@@ -1019,12 +1013,12 @@
         const marginTop = 5;
         const marginRight = 0;
         const marginBottom = 5;
-        const marginLeft = 40;
+        const marginLeft = 60;
 
         let indexArr = [];
 
         Array.from(data.keys()).forEach(e=>{
-            indexArr[e] = e+1;
+            indexArr[e] = e+1;        
         });
 
         // Create the horizontal scale and its axis generator.
@@ -1037,12 +1031,15 @@
 
         // Create the vertical scale.
         const yInsertions = d3__namespace.scaleLinear()
-            .domain([0, d3__namespace.max(data, d => d.insertions)])
+            .domain([0, d3__namespace.max(data, d => parseInt(d.insertions))])
             .range([(height - marginBottom)/2, marginTop]);
 
         const yDeletions = d3__namespace.scaleLinear()
-            .domain([0, d3__namespace.min(data, d => -d.deletions)])
+            .domain([0, d3__namespace.min(data, d => -(parseInt(d.deletions)))])
             .range([(height - marginBottom)/2, height - marginBottom]);
+
+            console.log("Minimum:"+d3__namespace.min(data, d => -(parseInt(d.deletions))));
+            console.log("Maximum:"+d3__namespace.max(data, d => parseInt(d.insertions)));
 
         // console.log(y(600));
         // console.log(y(-100));
@@ -1236,6 +1233,10 @@
             // console.log(files);
             for(let i=0; i < files[1].length; i++){
                 files[1][i].index = i+1;
+
+                files[0][i].changes = parseInt(files[0][i].changes);
+                files[0][i].insertions = parseInt(files[0][i].insertions);
+                files[0][i].deletions = parseInt(files[0][i].deletions);
             }
 
             barGraph(files[1], div);
