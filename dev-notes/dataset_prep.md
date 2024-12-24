@@ -1,5 +1,5 @@
-1. Clone the git repository you want to analyze.
-2. Write the names of all commits you want to analyze into a text file in the directory of the repository. Each name has to go on a new line. If you want to analyze all tagged commits of a repository, proceed with the next step. If you want to prepare a different set of commits, prepare that text file and proceed to step 6
+1. Clone the git repository you want to analyze to a folder outside of repo-burst.
+2. Write the names of all commits you want to analyze into a text file in the directory of the repository. Each name has to go on a new line. To do that for all tagged commits of a repository, proceed with the next step. If you want to prepare a different set of commits, prepare that text file and proceed to step 6
 3. Open a powershell in the repository directory.
 4. Now type 'git tag | Out-File -FilePath "[OUTPUT DIRECTORY AND FILENAME].txt"' (e.g. 'git tag | Out-File -FilePath "C:\output.txt')
 5. That output file contains the names of all tags in the repository. If you only want to analyze some of those tags, delete all the other lines. Make sure there are no gaps between lines and that each tag name is in its own, new line. Also make sure, that the commits are in chronological order, or in the order you want them in.
@@ -77,7 +77,7 @@ v3.0.0
 v4.0.0
 
 
-9. Find the file "outputDiffCommands.bat" in the root directory repository of this tool. Move it to the repository of of your data.
+9. Find the file "outputDiffCommands.bat" in the root directory repository of this tool. Move it to the repository of your data.
 10. Run "outputDiffCommands.bat" from the command line.
 11. The file "changes.txt" will be created in the root folder of your data repository. Open it. Use a tool like Notepad++ to format it as such: 
  5982 files changed, 12182 insertions(+), 25640 deletions(-)
@@ -104,7 +104,7 @@ Make sure that the first line of the changed file reads: changes,insertions,dele
 Make sure that there are no spaces in the changed file
 Make sure to insert the line reading 0,0,0 between the column names and the start of the data. 0,0,0 represents the changes, insertions and deletions at the first scanned commit. There are none, so all of the data is 0.
 
-12. Transfer "changes.txt" to the "data_and_processing" directory of the repo-curst repository.
+12. Transfer "changes.txt" to the "data_and_processing" directory of the repo-burst repository.
 
 https://stackoverflow.com/a/72564390
 

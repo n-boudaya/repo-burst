@@ -1,12 +1,10 @@
 import * as d3 from "d3";
 
+
 export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop, size) {
 
-// console.log(data);
-
-// Specify the chart’s dimensions.
+    // Specify the chart’s dimensions.
     const sunburstSize = 8000;
-    const radius = 500;
     const innerCircleRadius = 2000;
     const outerCircleWidth = 2000;
 
@@ -25,10 +23,10 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
     let visibleLevels = stopLvl - startLvl + 1;
 
     // Converts the input json data to a hierarchical data structure.
-// Then calculates a partition layout out of that.
-// The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
-// Each element in the partition layout has the coordinates x0, x1, y0, y1
-// The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
+    // Then calculates a partition layout out of that.
+    // The coordinates of that partition layout can directly be converted to the measurements of elements in the sunburst.
+    // Each element in the partition layout has the coordinates x0, x1, y0, y1
+    // The x coordinates contain the starting and end angles for elements in the partition, the y coordinates contain the hierarchy levels of the related file.
     function calculateSunburstData(hierarchyData) {
         hierarchy = d3.hierarchy(hierarchyData)
             .sum(d => d.value)
@@ -78,7 +76,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         // padAngle needs to scale in reference to the size of the element.
         // If this wasn't done, very small elements would completely disappear.
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
-        .padRadius(radius * 1.5)
+        .padRadius(innerCircleRadius * 0.5)
         .innerRadius(d => calculateRadius(d.y0, true, levelPadding))
         .outerRadius(d => calculateRadius(d.y0, false, levelPadding));
 
@@ -87,7 +85,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         .startAngle(d => d.x0)
         .endAngle(d => d.x1)
         .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.01))
-        .padRadius(radius * 1.5)
+        .padRadius(innerCircleRadius * 0.5)
         .innerRadius(innerCircleRadius)
         .outerRadius(d => Math.min((calculateRadius(d.y0 + 1, false, 0)), innerCircleRadius + outerCircleWidth - levelPadding));
 
@@ -100,7 +98,6 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             return (((visibleLevels - (yValue - startLvl)) * (outerCircleWidth / visibleLevels)) - padding) + innerCircleRadius;
         }
     }
-
 
 
     function hasChildren(d) {
@@ -122,9 +119,6 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             .property("value", stopLvl)
             .property("max", hierarchyDepth);
     }
-
-
-
 
 
     function callArcs() {
@@ -157,8 +151,6 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
     }
 
 
-
-
     function adjustStart(event) {
         console.log("Start Level Adjusted:" + event.target.value);
 
@@ -168,7 +160,6 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
         callArcs();
     }
-
 
 
     function adjustStop(event) {
@@ -252,7 +243,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             .attr("isVisible", d => {
                 const visible = arcVisible(d);
                 d.isVisible = visible;
-                return visible})
+                return visible
+            })
             .attr("pointer-events", d => arcTechnicallyVisible(d.current) ? "auto" : "none")
             .attr("path", d => d.data.path)
             .attr("d", d => sunburstArc(d.current))
@@ -330,7 +322,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             // })
             .attr("stroke", "black")
             .attr("stroke-width", "2em")
-            .attr("fake",d=>searchResults.add(d));
+            .attr("fake", d => searchResults.add(d));
 
         chordObject.selectAll("path")
             .attr("stroke", d => d3.interpolateWarm(d.target.startAngle / (2 * Math.PI)))
@@ -343,16 +335,16 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             // .attr("fake", d=>console.log(d))
             .attr("stroke", "black")
             .attr("stroke-width", "2em")
-            .attr("stroke-opacity","1");
+            .attr("stroke-opacity", "1");
 
 
         d3.select(uiElements.get("fileSearchDiv")).select("#searchResults").remove();
         const searchResultBox = d3
             .select(uiElements.get("fileSearchDiv"))
             .append("select")
-            .attr("id","searchResults");
+            .attr("id", "searchResults");
 
-        searchResults.forEach(e=>{
+        searchResults.forEach(e => {
             searchResultBox.append("option").html(e.data.path);
         });
     }
@@ -361,13 +353,12 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         const selectedPath = d3.select(uiElements.get("fileSearchDiv")).select("#searchResults").property("value");
         const selectedArc = shortArcPath.selectAll("path").filter(function (d) {
             return d.data.path === selectedPath;
-        }).attr("fake",d=>fileFocus(d));
+        }).attr("fake", d => fileFocus(d));
 
         console.log(selectedArc);
 
         // fileFocus(selectedArc);
     }
-
 
 
     let currentlyClicked;
@@ -386,7 +377,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         }
     }
 
-    function fileFocus(p){
+    function fileFocus(p) {
         currentlyClicked = p;
 
         startLvl = p.depth;
@@ -418,29 +409,29 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         drawArcs(shortArcData, longArcData, false);
     }
 
-    function goUpOneLevel(){
+    function goUpOneLevel() {
         fileFocus(currentlyClicked.parent);
     }
 
-    function arcVisible(d){
+    function arcVisible(d) {
         const interval = 0.1;
 
         const allCloseToZero =
-            closeToZeroDegrees(d.current.x0)&&closeToZeroDegrees(d.current.x1)||
-            closeTo360Degrees(d.current.x0)&&closeTo360Degrees(d.current.x1);
+            closeToZeroDegrees(d.current.x0) && closeToZeroDegrees(d.current.x1) ||
+            closeTo360Degrees(d.current.x0) && closeTo360Degrees(d.current.x1);
 
-        function closeToZeroDegrees(angle){
-            const degrees = angle * (180/Math.PI);
+        function closeToZeroDegrees(angle) {
+            const degrees = angle * (180 / Math.PI);
 
-            if(degrees < interval){
+            if (degrees < interval) {
                 return true;
             }
         }
 
-        function closeTo360Degrees(angle){
-            const degrees = angle * (180/Math.PI);
+        function closeTo360Degrees(angle) {
+            const degrees = angle * (180 / Math.PI);
 
-            if(degrees > (360-interval)){
+            if (degrees > (360 - interval)) {
                 return true;
             }
         }
@@ -502,7 +493,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         .attr("class", "chord diagram");
 
     // const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
-    const chordObject = chordSVG.append("g").attr("class", "chords").attr("id","chords");
+    const chordObject = chordSVG.append("g").attr("class", "chords").attr("id", "chords");
 
     const chordGen = d3.chordDirected()
         // .padAngle(10 / chordInnerRadius)
@@ -639,8 +630,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
                     e.source.endAngle = newAngle(e.source.endAngle, sourceGroup);
                     e.target.startAngle = newAngle(e.target.startAngle, targetGroup);
                     e.target.endAngle = newAngle(e.target.endAngle, targetGroup);
-                }
-                else {
+                } else {
                     // console.log(e.target.path.toString() + " not found.")
 
                     e.source.value = 0;
@@ -717,16 +707,15 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
     function chordValid(chord) {
 
-        const maxValue = 359.999*(Math.PI/180);
+        const maxValue = 359.999 * (Math.PI / 180);
 
-        if((chord.source.startAngle === 0 && chord.source.endAngle === 0)||
-            (chord.target.startAngle === 0 && chord.target.endAngle === 0)||
-            (chord.source.startAngle >=maxValue && chord.source.endAngle >=maxValue)||
-            (chord.target.startAngle >=maxValue && chord.target.endAngle >=maxValue)){
+        if ((chord.source.startAngle === 0 && chord.source.endAngle === 0) ||
+            (chord.target.startAngle === 0 && chord.target.endAngle === 0) ||
+            (chord.source.startAngle >= maxValue && chord.source.endAngle >= maxValue) ||
+            (chord.target.startAngle >= maxValue && chord.target.endAngle >= maxValue)) {
 
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }

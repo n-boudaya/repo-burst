@@ -139,21 +139,21 @@ export function createUI(divName, uiDivName){
         .select(searchDivName).append("div")
         .attr("id",generalFunctionsDivName);
 
-    const resetButton = divName+"resetButton";
-    uiElementMap.set("resetButton",resetButton);
-    generalFunctionsDiv.append("button")
-        .attr("id",resetButton)
-        .html("RESET");
+    // const resetButton = divName+"resetButton";
+    // uiElementMap.set("resetButton",resetButton);
+    // generalFunctionsDiv.append("button")
+    //     .attr("id",resetButton)
+    //     .html("RESET");
     const goUpButton = divName+"goUpButton";
     uiElementMap.set("goUpButton",goUpButton);
     generalFunctionsDiv.append("button")
         .attr("id",goUpButton)
         .html("Go up one level");
-    const exitFilteredButton = divName+"exitFilteredButton";
-    uiElementMap.set("exitFilteredButton",exitFilteredButton);
-    generalFunctionsDiv.append("button")
-        .attr("id",exitFilteredButton)
-        .html("Exit filtered view");
+    // const exitFilteredButton = divName+"exitFilteredButton";
+    // uiElementMap.set("exitFilteredButton",exitFilteredButton);
+    // generalFunctionsDiv.append("button")
+    //     .attr("id",exitFilteredButton)
+    //     .html("Exit filtered view");
 
 
     uiElementMap.keys().forEach(e=>uiElementMap.set(e,"#"+uiElementMap.get(e)));
