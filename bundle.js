@@ -1029,9 +1029,10 @@
 
         const xAxis = d3__namespace.axisBottom(x).tickValues([]);
 
+
         // Create the vertical scale.
         const yInsertions = d3__namespace.scaleLinear()
-            .domain([0, d3__namespace.max(data, d => parseInt(d.insertions))])
+            .domain([0, d3__namespace.max(data, d => parseInt(d.insertions))]) //https://stackoverflow.com/a/30876582
             .range([(height - marginBottom)/2, marginTop]);
 
         const yDeletions = d3__namespace.scaleLinear()
@@ -1226,17 +1227,17 @@
 
     //https://stackoverflow.com/a/51113326
     Promise.all([
-        d3__namespace.json("data_and_processing\\index.json"),
-        d3__namespace.csv("data_and_processing\\changes.txt"),
+        d3__namespace.json("data\\index.json"),
+        d3__namespace.csv("data\\changes.txt"),
     ]).then(function (files) {
         function callBarChart(div){
             // console.log(files);
             for(let i=0; i < files[1].length; i++){
                 files[1][i].index = i+1;
 
-                files[0][i].changes = parseInt(files[0][i].changes);
-                files[0][i].insertions = parseInt(files[0][i].insertions);
-                files[0][i].deletions = parseInt(files[0][i].deletions);
+                files[1][i].changes = parseInt(files[1][i].changes);
+                files[1][i].insertions = parseInt(files[1][i].insertions);
+                files[1][i].deletions = parseInt(files[1][i].deletions);
             }
 
             barGraph(files[1], div);

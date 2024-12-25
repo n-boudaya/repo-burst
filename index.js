@@ -26,8 +26,8 @@ const secondaryGraphSVG = d3
 
 //https://stackoverflow.com/a/51113326
 Promise.all([
-    d3.json("data_and_processing\\index.json"),
-    d3.csv("data_and_processing\\changes.txt"),
+    d3.json("data\\index.json"),
+    d3.csv("data\\changes.txt"),
 ]).then(function (files) {
 
     let firstBarchart;
@@ -36,9 +36,9 @@ Promise.all([
         for(let i=0; i < files[1].length; i++){
             files[1][i].index = i+1;
 
-            files[0][i].changes = parseInt(files[0][i].changes);
-            files[0][i].insertions = parseInt(files[0][i].insertions);
-            files[0][i].deletions = parseInt(files[0][i].deletions);
+            files[1][i].changes = parseInt(files[1][i].changes);
+            files[1][i].insertions = parseInt(files[1][i].insertions);
+            files[1][i].deletions = parseInt(files[1][i].deletions);
         }
 
         barGraph(files[1], div);

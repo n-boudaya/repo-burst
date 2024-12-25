@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="preprocessor:jar">
+    <output-path>$PROJECT_DIR$/..</output-path>
+    <root id="archive" name="preprocessor.jar">
+      <element id="module-output" name="preprocessor" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-io-2.16.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20240303.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

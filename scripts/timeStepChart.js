@@ -39,9 +39,10 @@ export function barGraph (data, div){
 
     const xAxis = d3.axisBottom(x).tickValues([]);
 
+
     // Create the vertical scale.
     const yInsertions = d3.scaleLinear()
-        .domain([0, d3.max(data, d => parseInt(d.insertions))])
+        .domain([0, d3.max(data, d => parseInt(d.insertions))]) //https://stackoverflow.com/a/30876582
         .range([(height - marginBottom)/2, marginTop]);
 
     const yDeletions = d3.scaleLinear()
