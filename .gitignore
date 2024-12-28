@@ -1,9 +1,10 @@
 node_modules
 package-lock.json
 .DS_Store
-data_and_processing/raw_data/*
-!data_and_processing/raw_data/.gitkeep
-!data_and_processing/file_lists/.gitkeep
+data/raw_data/*
+!data/raw_data/.gitkeep
+!data/file_lists/.gitkeep
+!data/backup/svelte/*
 out/*
 bundle.js
 bundle.js.map

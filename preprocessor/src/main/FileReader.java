@@ -153,9 +153,9 @@ public class FileReader {
 
         String regex = "";
        try {
-           System.out.println(directory.toRealPath());
+           System.out.println(directory.toRealPath(LinkOption.NOFOLLOW_LINKS));
 
-           String temp = "\"" + directory.toRealPath().toString();
+           String temp = "\"" + directory.toRealPath(LinkOption.NOFOLLOW_LINKS).toString();
 
            regex = temp.replaceAll("\\\\","\\\\\\\\\\\\\\\\");
 
@@ -260,7 +260,7 @@ public class FileReader {
             }
 
             try {
-                dependenciesEntry.put("path", currentPath.toRealPath());
+                dependenciesEntry.put("path", currentPath.toRealPath(LinkOption.NOFOLLOW_LINKS));
                 dependenciesEntry.put("isDirectory", isDirectory);
                 dependenciesEntry.put("dirLevel", currentLevel);
                 dependenciesEntry.put("value", 1);
@@ -330,7 +330,7 @@ public class FileReader {
 
 
                     try {
-                        dependenciesEntry.put("path", currentPath.toRealPath());
+                        dependenciesEntry.put("path", currentPath.toRealPath(LinkOption.NOFOLLOW_LINKS));
                         dependenciesEntry.put("isDirectory", isDirectory);
                         dependenciesEntry.put("dirLevel", currentLevel);
                         dependenciesEntry.put("value", 1);
@@ -378,7 +378,7 @@ public class FileReader {
 
 
         try {
-            hierarchy.put("path", currentPath.toRealPath());
+            hierarchy.put("path", currentPath.toRealPath(LinkOption.NOFOLLOW_LINKS));
         } catch (IOException e) {
             System.err.println("Path Access Hierarchy: " + e.getMessage());
         }
