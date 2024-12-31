@@ -141,9 +141,9 @@ changes,insertions,deletions
 19,95,27
 47,428,320
 ```
-Make sure that the first line of the changed file reads: `changes,insertions,deletions`  
+Make sure that the first line of the changed file reads: ```changes,insertions,deletions```  
 Make sure that there are no spaces in the changed file.
-Make sure to insert the line reading `0,0,0` between the column names and the start of the data. `0,0,0` represents the changes, insertions and deletions at the first scanned commit. There are none, so all of the data is `0`.
+Make sure to insert the line reading ```0,0,0``` between the column names and the start of the data. ```0,0,0``` represents the changes, insertions and deletions at the first scanned commit. There are none, so all of the data is `0`.
 
 12. Transfer `changes.txt` to  ```repo-burst/data/```.
 
