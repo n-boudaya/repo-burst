@@ -6,14 +6,14 @@ The directory of this repository "repo-burst" will be referred to as `repo-burst
 
 3. Open a powershell in `data_repository`.
 
-4. Now type: `git tag | Out-File -FilePath "[PATH TO DATA_REPOSITORY]\data_repository\output.txt"`  
-(e.g. `git tag | Out-File -FilePath "C:\data_repository\output.txt"`)
+4. Now type: ```git tag | Out-File -FilePath "[PATH TO DATA_REPOSITORY]\data_repository\output.txt"```  
+(e.g. ```git tag | Out-File -FilePath "C:\data_repository\output.txt"```)
 
 5. That output file contains the names of all tags in the repository. If you only want to analyze some of those tags, delete all the other lines. Make sure there are no gaps between lines, that each tag name is in its own new line and that the commits are in chronological order, or in the order you want them in. Also make sure that the file is UTF-8 encoded or the next step won't work.
 
 6. Now open a command prompt in `data_repository.`  
-Execute this command: `for /F "tokens=*" %A in (output.txt) do git archive %A -o "[OUTPUT PATH]%A.zip"`  
-(e.g. `for /F "tokens=*" %A in (output.txt) do git archive %A -o "C:\archives\%A.zip"`).  
+Execute this command: ```for /F "tokens=*" %A in (output.txt) do git archive %A -o "[OUTPUT PATH]%A.zip"```  
+(e.g. ```for /F "tokens=*" %A in (output.txt) do git archive %A -o "C:\archives\%A.zip"```).  
 The output path shouldn't be in `data_repository`. Make sure the output folder already exists! (Source for actions up to here: https://stackoverflow.com/a/72564390)
 
 7. Navigate to the output directory of that command. Rename the archives in such a way that, when ordered lexicographically, their order corresponds to the order you had your commit names in step 5.
@@ -76,9 +76,9 @@ repo-burst
         └── v1.10.0/[PLACEHOLDER]/...
 ```
 
-12. Go back to `data_repository`. Create 2 copies of `output.txt`. Call those copies `startcommits.txt` and `endcommits.txt`.
+12. Go back to `data_repository`. Create 2 copies of `output.txt`. Call those copies ```startcommits.txt``` and ```endcommits.txt```.
 
-13. Open `startcommits.txt` and duplicate the first line so that it repeats on line 1 and 2.  
+13. Open ```startcommits.txt``` and duplicate the first line so that it repeats on line 1 and 2.  
 Then delete the last line of `startcommits.txt`. `endcommits.txt` remains unchanged.
 
 **startcommits.txt before:**
@@ -104,16 +104,16 @@ v3.0.0
 v4.0.0
 ```
 
-9. Find the file `outputDiffCommands.bat` in `repo_burst`. Copy it to `data_repository`.  
+9. Find the file ```outputDiffCommands.bat``` in `repo_burst`. Copy it to `data_repository`.  
 (Source for the `.bat` file: https://stackoverflow.com/a/12101203)
 
-10. Run `outputDiffCommands.bat` from the command line. When you are working with large repositories, two warnings may appear:
+10. Run ```outputDiffCommands.bat``` from the command line. When you are working with large repositories, two warnings may appear:
 ```
 warning: exhaustive rename detection was skipped due to too many files.
 warning: you may want to set your diff.renameLimit variable to at least XXXX and retry the command.
 ```
-If those appear, you can run the command `git config diff.renameLimit XXXX`. This will increase the accuracy of the logged changes. 
-If you had to do that, delete the newly created `changes.txt` in `data_repository` and run `outputDiffCommands.bat` again.
+If those appear, you can run the command ```git config diff.renameLimit XXXX```. This will increase the accuracy of the logged changes. 
+If you had to do that, delete the newly created `changes.txt` in `data_repository` and run ```outputDiffCommands.bat``` again.
 
 11. The file `changes.txt` will be created in `data_repository`. Open it. Use a tool like `Notepad++` to format it as such:  
 
@@ -145,7 +145,7 @@ Make sure that the first line of the changed file reads: `changes,insertions,del
 Make sure that there are no spaces in the changed file.
 Make sure to insert the line reading `0,0,0` between the column names and the start of the data. `0,0,0` represents the changes, insertions and deletions at the first scanned commit. There are none, so all of the data is `0`.
 
-12. Transfer `changes.txt` to the `repo-burst/data/`.
+12. Transfer `changes.txt` to  ```repo-burst/data/```.
 
 https://stackoverflow.com/a/72564390
 
