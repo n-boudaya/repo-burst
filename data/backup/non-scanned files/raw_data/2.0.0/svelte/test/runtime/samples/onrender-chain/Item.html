@@ -1,0 +1,14 @@
+<span>{foo}</span>
+
+<script>
+	export default {
+		data() {
+			return {
+				foo: 'XX'
+			};
+		},
+		onstate({ changed, current }) {
+			this.set({ foo: current.item });
+		}
+	};
+</script>

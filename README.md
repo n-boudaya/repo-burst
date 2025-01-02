@@ -13,8 +13,8 @@ A tool to visualize dependency changes of large code repositories using a hybrid
 
 - If you want to visualize your own dataset, see [this document.](./dataset_preparation.md)
 
-- Two different datasets have been prepared. One dataset consisting of all tagged commits of [svelte](https://github.com/sveltejs/svelte). Another dataset consisting of all tagged commits of [d3](https://github.com/d3/d3).   
-To use either of those, copy the contents of the repsective folder in `repo-burst\data\backup\` to `repo-burst\data\` and replace files if prompted.
+- Three different datasets have been prepared. One dataset consisting of all tagged commits of [svelte](https://github.com/sveltejs/svelte). Another dataset consisting of all tagged commits of [d3](https://github.com/d3/d3). The third dataset has not yet been processed and contains some formatted commits of [svelte](https://github.com/sveltejs/svelte), and can be used to test the file preprocessing.
+To use any of those, copy the contents of the repsective folder in `repo-burst\data\backup\` to `repo-burst\data\` and replace files if prompted.
 
 1. Open a command line in the root directory of this repository.
 

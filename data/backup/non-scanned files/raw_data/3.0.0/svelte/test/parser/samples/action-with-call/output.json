@@ -1,0 +1,48 @@
+{
+	"html": {
+		"start": 0,
+		"end": 40,
+		"type": "Fragment",
+		"children": [
+			{
+				"start": 0,
+				"end": 40,
+				"type": "Element",
+				"name": "input",
+				"attributes": [
+					{
+						"start": 7,
+						"end": 39,
+						"type": "Action",
+						"name": "tooltip",
+						"modifiers": [],
+						"expression": {
+							"type": "CallExpression",
+							"start": 21,
+							"end": 37,
+							"callee": {
+								"type": "Identifier",
+								"start": 21,
+								"end": 22,
+								"name": "t"
+							},
+							"arguments": [
+								{
+									"type": "Literal",
+									"start": 23,
+									"end": 36,
+									"value": "tooltip msg",
+									"raw": "'tooltip msg'"
+								}
+							]
+						}
+					}
+				],
+				"children": []
+			}
+		]
+	},
+	"css": null,
+	"instance": null,
+	"module": null
+}
