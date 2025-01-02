@@ -1,9 +1,13 @@
 import * as d3 from "d3";
 
-
+//Draws one hybrid sunburst chord graph
+//uiElements - contains the names of uiElements that have to be accessed
+//start - the lowest displayed sunburst level
+//stop - the highest displayed sunburst level
+//size - the size of the chart
 export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop, size) {
 
-    // Specify the chart’s dimensions.
+    // Specify the chart’s internal dimensions.
     const sunburstSize = 8000;
     const innerCircleRadius = 2000;
     const outerCircleWidth = 2000;
@@ -14,9 +18,11 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
     let hierarchyDepth;
     const levelPadding = 10;
 
+    //Actually used start and stop levels
     let startLvl = start;
     let stopLvl = stop;
 
+    //Only get used to keep track of UI changes
     let sliderStartLvl = startLvl;
     let sliderStopLvl = stopLvl;
 
@@ -46,30 +52,13 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         root.each(d => d.hasChildren = hasChildren(d));
     }
 
-//Create UI
-
-    // d3.select("#applyLevels").remove();
-    //
-    // const applyLevelsButton = d3.select("#generalButtons")
-    //     .append("button")
-    //     .attr("id", "applyLevels")
-    //     .html("Apply level settings")
-    //     .on("click", callArcs);
-
+    //Specify UI interactions
     d3.select(uiElements.get("fileSearchText")).on("input", changeFileSearchText);
     d3.select(uiElements.get("fileSearchButton")).on("click", fileSearch);
-
     d3.select(uiElements.get("showResultsButton")).on("click", showSearchResult);
-
     d3.select(uiElements.get("goUpButton")).on("click", goUpOneLevel);
-
-    d3
-        .select(uiElements.get("startLevelSlider"))
-        .on("change", adjustStart);
-
-    d3
-        .select(uiElements.get("stopLevelSlider"))
-        .on("change", adjustStop);
+    d3.select(uiElements.get("startLevelSlider")).on("change", adjustStart);
+    d3.select(uiElements.get("stopLevelSlider")).on("change", adjustStop);
 
 // Create the arc generator for the normal files and folders of the sunburst.
 // Is used to convert each element of the partition layout to an arc in the sunburst.
@@ -92,6 +81,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         .innerRadius(innerCircleRadius)
         .outerRadius(d => Math.min((calculateRadius(d.y0 + 1, false, 0)), innerCircleRadius + outerCircleWidth - levelPadding));
 
+    //Calculates the inner or outer radius of an arc segment, according to its hierarchy level
+    //Is so convoluted because the total size of the sunburst should stay constant
     function calculateRadius(yValue, isInnerRadius, padding) {
         const result = ((visibleLevels - (yValue - startLvl) - 1) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
 
@@ -111,6 +102,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         }
     }
 
+
     function refreshStartStopSliders() {
         d3
             .select(uiElements.get("startLevelSlider"))
@@ -123,7 +115,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             .property("max", hierarchyDepth);
     }
 
-
+    //Redraws arcs with the current state of both the data and displayed levels
     function callArcs() {
         root.each(d => d.current = d);
 
@@ -181,6 +173,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         .scaleExtent([1, 10])
         .on("zoom", changeZoom);
 
+    //svg element all of the graph will be attached to
     const wholeGraphSVG = d3
         .create("svg")
         .call(zoomBehaviour);
@@ -197,12 +190,16 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         wholeGraphSVG.attr("transform", zoomTransform);
     }
 
+    //svg element the sunburst will be attached to
     const sunburstSVG = wholeGraphSVG
         .append("svg")
-        .attr("viewBox", [-sunburstSize / 2, -sunburstSize / 2, sunburstSize, sunburstSize])
+        .attr("viewBox", [-sunburstSize / 2, -sunburstSize / 2, sunburstSize, sunburstSize]) //Arcs and partitions normally get drawn originating in 0,0, so viewbox has to be moved
         .attr("class", "sunburst");
 
+    //longArcs get used to extend arcs that don't have children to the inner radius of the sunburst
     const longArcPath = sunburstSVG.append("g").attr("class", "group1");
+
+    //shortArcs are the actual arc elements representing the data
     const shortArcPath = sunburstSVG.append("g").attr("class", "group2").attr("id", "shortArcs");
     const label = sunburstSVG.append("g")
         .attr("class", "group3")
@@ -213,9 +210,10 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
     const format = d3.format(",d");
 
-
+    //Later gets used to decide which chords should be drawn
     let innerMostElements = new Map();
 
+    //draws the arcs, gets called by callArcs with the data adjusted to only contain the levels that should be displayed
     function drawArcs(shortData, longData) {
 
         // console.log(longData);
@@ -249,28 +247,29 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
                 return visible
             })
             .attr("pointer-events", d => arcTechnicallyVisible(d.current) ? "auto" : "none")
-            .attr("path", d => d.data.path)
+            .attr("path", d => d.data.path) //file path, not vector path
             .attr("d", d => sunburstArc(d.current))
             .append("title")
             .text(d => `
             ${d.data.path}\n
-            ${format(d.value)}\n
-            ${arcVisible(d)}\n
+            Size: ${format(d.value)}\n
             Depth: ${d.depth}
             `);
 
 
         // console.log(shortArcPath);
 
+        //makes all elements that have children clickable, so they can be zoomed in on
         shortArcPath.selectAll("path").filter(d => d.children)
             .style("cursor", "pointer")
             .on("click", clicked);
 
         innerMostElements = new Map();
 
-        // longArcPath.selectAll("path").attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
+        //adds all the innermost elements of the sunburst to the map, this includes the longArcs even though they don't reach the innerRadius,
+        //since they always reference leaves
+        //the fake attribute gets used to access all datums once and get their data. it is not used in any other way
         longArcPath.selectAll("path").attr("fake", d => innerMostElements.set(d.data.path, d));
-        // shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
         shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fake", d => innerMostElements.set(d.data.path, d));
 
         // console.log("innerMostElements:");
@@ -296,8 +295,10 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         redraw();
     }
 
+    //contains the currently entered search text
     let searchText = "";
 
+    //gets called when search text box gets used
     function changeFileSearchText() {
         // console.log(event.target.value);
 
@@ -307,6 +308,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
     let searchResults = new Set();
 
+    //searches for all files and dependencies that have a path that ends wit the currently entered search text,
+    // marks them black and adds them to searchResults
     function fileSearch() {
         searchResults = new Set();
 
@@ -314,15 +317,10 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             .attr("stroke", "none");
 
         shortArcPath.selectAll("path").filter(function (d) {
-            return d.data.path.endsWith(searchText);
+            if(!(typeof d === "undefined")&&!(typeof d.data.path === "undefined")){
+                return d.data.path.endsWith(searchText);
+            }
         })
-            // .attr("fill", (d, i) => {
-            //     if (i === 0) {
-            //         return "black";
-            //     } else {
-            //         return "red";
-            //     }
-            // })
             .attr("stroke", "black")
             .attr("stroke-width", "2em")
             .attr("fake", d => searchResults.add(d));
@@ -352,6 +350,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         });
     }
 
+    //zooms in on the selected searchResult
     function showSearchResult() {
         const selectedPath = d3.select(uiElements.get("fileSearchDiv")).select("#searchResults").property("value");
         const selectedArc = shortArcPath.selectAll("path").filter(function (d) {
@@ -363,7 +362,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         // fileFocus(selectedArc);
     }
 
-
+    //contains the last subdirectory that was zoomed in on
     let currentlyClicked;
 
     // Handle zoom on click.
@@ -380,6 +379,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         }
     }
 
+    //Zooms in on subdirectories by changing the levels and transforming all arcs, so that they appear as if the
+    //focussed on file p is the new root of the hierarchy
     function fileFocus(p) {
         currentlyClicked = p;
 
@@ -387,10 +388,9 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         stopLvl = startLvl + 2;
 
         visibleLevels = stopLvl - startLvl + 1;
-        // parent.datum(p.parent || root);
 
-        d3.select
-
+        //Transforms all arcs so that they are either invisible if they are not a child of p
+        //or that they adhere to the new layout that assumes that p is the root
         root.each(d => d.current = {
             x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
             x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -412,10 +412,13 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         drawArcs(shortArcData, longArcData, false);
     }
 
+    //When focused on a file, focuses on its parent directory
     function goUpOneLevel() {
         fileFocus(currentlyClicked.parent);
     }
 
+    //Checks if an arc is visible. Arcs that are transformed so that they can't be seen,
+    // because the sunburst is zoomed in a file, also count as not visible
     function arcVisible(d) {
         const interval = 0.1;
 
@@ -442,6 +445,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         return d.y0 >= startLvl && d.y0 <= stopLvl && !allCloseToZero;
     }
 
+    //Arcs invisible due to zooming transformations get counted as visible
     function arcTechnicallyVisible(d) {
         return d.y0 >= startLvl && d.y0 <= stopLvl;
     }
@@ -450,6 +454,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         return d.y0 >= startLvl && d.y0 <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.005;
     }
 
+    //calculates the label size, taking into account the size of arc the label is in
     function labelSize(d) {
         const interval = d.current.x1 - d.current.x0;
 
@@ -481,6 +486,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
     }
 
     //______________________________________________________________________________________________
+    // chord visualization from here onward
+
 
     const chordPlotSize = 10000;
     const chordInnerRadius = chordPlotSize * 0.5 - 200;
@@ -489,6 +496,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
     let level = stopLvl;
 
+    //svg element the chords get attached to
     const chordSVG = wholeGraphSVG
         .append("svg")
         .attr("viewBox", [-chordPlotSize / 2, -chordPlotSize / 2, chordPlotSize, chordPlotSize])
@@ -498,33 +506,33 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
     // const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
     const chordObject = chordSVG.append("g").attr("class", "chords").attr("id", "chords");
 
+    //the chord generator. this specifically generates the starting and ending areas the ribbons attach to
     const chordGen = d3.chordDirected()
         // .padAngle(10 / chordInnerRadius)
         .padAngle(0)
         .sortSubgroups(d3.descending)
         .sortChords(d3.descending);
 
-    const chordBorderArcGen = d3.arc()
-        // .padAngle(1 / chordInnerRadius)
-        .padAngle(0)
-        .innerRadius(chordInnerRadius)
-        .outerRadius(chordOuterRadius);
-
+    //the ribbon generator. this generates the svg elements that one would normally describe as chords
     const ribbonGen = d3.ribbonArrow()
         .radius(chordOuterRadius)
         .padAngle(1 / chordInnerRadius)
         .headRadius(chordInnerRadius / 50);
 
+    //refreshes the chord viz
     function redraw() {
         level = stopLvl;
 
         const result = calculateChordData(innerMostElements);
     }
 
+    //calculates the matrix of dependency relationships from the data
     function calculateChordData(fileList) {
 
+        //only load data that could get displayed
         const currentLevelChordData = dependencyData.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)));
 
+        //contains all dependencies in the data in the format of [source,target,value]
         const allDepends = [];
         for (const d of currentLevelChordData) {
             const source = d.path;
@@ -541,6 +549,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         }
 
 
+        //contains all unique files that get referenced or reference another file
         const uniqueFiles = new Set;
 
         allDepends.forEach(e => {
@@ -550,8 +559,11 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
 
         const names = d3.sort(uniqueFiles);
 
+        //array of indices for the names of the uniqueFiles
         const indices = new Map(names.map((name, i) => [name, i]));
 
+        //matrix of relationships between files. x and y axis are both represent the files, the values in the matrix later
+        //represents the values of the chords
         const matrix = Array.from(indices, () => new Array(names.length).fill(0));
 
         for (const e of allDepends) {
@@ -568,6 +580,8 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             matrix[indices.get(e[0])][indices.get(e[1])] += Math.max(e[2], 1);
         }
 
+
+        //transform the chords to match the layout of the sunburst, especially when zoomed in
         function chordTransform(pChords) {
             pChords.groups.forEach(e => {
                 const currentPath = names[e.index];
@@ -591,6 +605,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             })
             // console.log(pChords.groups);
 
+            //All the chords get rearranged and distributed to their new place
             pChords.forEach(e => {
                 e.source.path = names[e.source.index];
                 e.target.path = names[e.target.index];
@@ -653,7 +668,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         displayGraph(chordTransform(chordGen(matrix)), names)
     }
 
-
+    //draws the hords
     function displayGraph(pData) {
 
 //         chordBorderArcs.selectAll("path")
@@ -672,7 +687,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         chordObject
             .attr("fill-opacity", 0.75)
             .selectAll("path")
-            .data(pData.filter(d => chordValid(d)), function (d) {
+            .data(pData.filter(d => chordValid(d)), function (d) {//does draw invisible chords
                 return d;
             })
             .join("path")
@@ -686,15 +701,12 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
             .insert("title", ":first-child")
             .text(d =>
                 `Chord info:\n
-                ${d.source.path} →\n
-                ${d.target.path}\n
-                ${d.source.startAngle}\n                
-                ${d.source.endAngle}\n                
-                ${d.target.startAngle}\n                
-                ${d.target.endAngle}\n                
+                Source: ${d.source.path} →\n
+                Target: ${d.target.path}\n               
                 Value: ${d.source.value}\n`);
     }
 
+    //similar to arc visible, doesn't draw infinitely thin chords
     function chordVisible(chord) {
         const sourceInterval = Math.abs(chord.source.endAngle - chord.source.startAngle);
         const targetInterval = Math.abs(chord.target.endAngle - chord.target.startAngle);
@@ -708,6 +720,7 @@ export function drawGraph(hierarchyData, dependencyData, uiElements, start, stop
         }
     }
 
+    //decides if the chord should be invisible, due to transformation by the zooming function
     function chordValid(chord) {
 
         const maxValue = 359.999 * (Math.PI / 180);

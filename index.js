@@ -6,21 +6,25 @@ import {barGraph} from "./scripts/timeStepChart.js";
 
 const windowHeight = Math.min(window.innerHeight*(3/4), window.innerWidth/2);
 
+//contains the left graph
 const mainGraphSVG = d3
     .select("body")
     .append("div")
     .attr("class","column")
     .attr("id", "mainGraph")
     .append("svg")
+    .attr("xmlns","http://www.w3.org/2000/svg")
     .attr('width', windowHeight)
     .attr('height', windowHeight);
 
+//contains the right graph
 const secondaryGraphSVG = d3
     .select("body")
     .append("div")
     .attr("class","column")
     .attr("id", "secondaryGraph")
     .append("svg")
+    .attr("xmlns","http://www.w3.org/2000/svg")
     .attr('width', windowHeight)
     .attr('height', windowHeight);
 
@@ -31,11 +35,15 @@ Promise.all([
 ]).then(function (files) {
 
     let firstBarchart;
+
+    //calls a time step bar chart
     function callBarChart(div){
-        // console.log(files);
+
+        //correctly casts all values of changes.txt
         for(let i=0; i < files[1].length; i++){
             files[1][i].index = i+1;
 
+            //read values don't always get parsed correctly, this forces correct parsing
             files[1][i].changes = parseInt(files[1][i].changes);
             files[1][i].insertions = parseInt(files[1][i].insertions);
             files[1][i].deletions = parseInt(files[1][i].deletions);
@@ -44,24 +52,11 @@ Promise.all([
         barGraph(files[1], div);
     }
 
+    //creates both left and right UI
     const mainUI = createUI("mainGraph", "mainUI");
     const secondaryUI = createUI("secondaryGraph", "secondaryUI");
 
-    // function changeTimeStep(event, uiElement, svgElement){
-    //     console.log(event);
-    //
-    //     const timeStep = event.target.value;
-    //
-    //     callBarChart(uiElement.get("timeStepDivName"),timeStep.toString());
-    //     d3.select(uiElement.get("timeStepField")).property("value", timeStep);
-    //     d3.select(uiElement.get("timeStepName")).html(files[0][timeStep-1].hierarchy);
-    //
-    //     const start = d3.select(uiElement.get("startLevelSlider")).property("value");
-    //     const stop = d3.select(uiElement.get("stopLevelSlider")).property("value");
-    //
-    //     refreshChart(files[0][timeStep-1].hierarchy, files[0][timeStep-1].dependency, svgElement, uiElement, start, stop);
-    // }
-
+    //changes the timestep after clicking on a new one on a time step bar chart
     function changeTimeStepChart(event, uiElement, svgElement){
         console.log(event);
 
@@ -76,14 +71,7 @@ Promise.all([
         refreshChart(files[0][timeStep-1].hierarchy, files[0][timeStep-1].dependency, svgElement, uiElement, start, stop);
     }
 
-    // function changeTimeStepMain(event) {
-    //     changeTimeStep(event, mainUI, mainGraphSVG);
-    // }
-    //
-    // function changeTimeStepSecond(event) {
-    //     changeTimeStep(event, secondaryUI, secondaryGraphSVG);
-    // }
-
+    //both are necessary since event listeners don't call functions with parameters
     function changeTimeStepChartMain(event) {
         changeTimeStepChart(event, mainUI, mainGraphSVG);
     }
@@ -92,11 +80,13 @@ Promise.all([
         changeTimeStepChart(event, secondaryUI, secondaryGraphSVG);
     }
 
+    //sets up all the visualizations
     function setup(){
         initialize(changeTimeStepChartMain, mainGraphSVG, mainUI);
         initialize(changeTimeStepChartSecond, secondaryGraphSVG, secondaryUI);
     }
 
+    //initializes the whole page
     function initialize(changeFnctChart,svgElement, uiElement){
 
         refreshChart(files[0][0].hierarchy, files[0][0].dependency, svgElement, uiElement, 0, 3);
@@ -114,7 +104,6 @@ Promise.all([
         d3.select(uiElement.get("maxStopValue")).html(files[0].length);
         d3.select(uiElement.get("timeStepName")).html(files[0][0].hierarchy);
     }
-
 
 
     d3.select("#reset").on("click", setup);

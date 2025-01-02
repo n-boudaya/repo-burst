@@ -1,5 +1,10 @@
 import * as d3 from "d3";
 
+//Helper function, solely used to create labels
+// parent - the div the label gets attached to
+// forElement - the element the label is for
+// text - text of the label
+// id - id of the label
 function labelMaker(parent, forElement, text, id){
     const label = parent.append("label")
         .attr("for",forElement)
@@ -10,9 +15,12 @@ function labelMaker(parent, forElement, text, id){
     }
 }
 
+//creates the necessary ui for the sunbursts
 export function createUI(divName, uiDivName){
     const uiElementMap = new Map();
 
+    //creates a set of two labels, used for labels like "Current level: 0"
+    //The "0" might have to be modified, so two labels have to be created
     function labelValueCombo(parent, forElement,referenceName,idText,firstLabel,secondLabel){
         const labelReference = idText+forElement;
         uiElementMap.set(referenceName,labelReference);
@@ -156,6 +164,7 @@ export function createUI(divName, uiDivName){
     //     .html("Exit filtered view");
 
 
+    //Adds all the created elements to the uiElementsMap, so their IDs can be saved and accessed
     uiElementMap.keys().forEach(e=>uiElementMap.set(e,"#"+uiElementMap.get(e)));
     console.log(uiElementMap);
     return(uiElementMap);

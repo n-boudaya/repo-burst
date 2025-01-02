@@ -25,7 +25,7 @@ To use either of those, copy the contents of the repsective folder in `repo-burs
 You can interact with them by zooming and panning like on any navigation app.  
 You can hover over arc segments and chords to get more information about them.  
 You can also click on any arc segment to open it as a root folder.  
-Click the "Go up one level" button on the bottom of the page to change the displayed root folder to the parent of the current root folder.
+Click the `Go up one level` button on the bottom of the page to change the displayed root folder to the parent of the current root folder.
 - Directly below the sunbursts is the file path of the currently displayed time step.  
 Below that is the time step navigation bar. You can zoom in and out of it by hovering over it and scrolling.  
 When hovering over the time step navigation bar, a time step will be selected. The green bar signifies how many lines were inserted from the last time step to the time step you are hovering over. The red bar does the same for lines that were deleted. Clicking on the bar selects it and displays it on the sunburst view.

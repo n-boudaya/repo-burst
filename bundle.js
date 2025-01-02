@@ -20,6 +20,11 @@
 
     var d3__namespace = /*#__PURE__*/_interopNamespaceDefault(d3);
 
+    //Helper function, solely used to create labels
+    // parent - the div the label gets attached to
+    // forElement - the element the label is for
+    // text - text of the label
+    // id - id of the label
     function labelMaker(parent, forElement, text, id){
         const label = parent.append("label")
             .attr("for",forElement)
@@ -30,9 +35,12 @@
         }
     }
 
+    //creates the necessary ui for the sunbursts
     function createUI(divName, uiDivName){
         const uiElementMap = new Map();
 
+        //creates a set of two labels, used for labels like "Current level: 0"
+        //The "0" might have to be modified, so two labels have to be created
         function labelValueCombo(parent, forElement,referenceName,idText,firstLabel,secondLabel){
             const labelReference = idText+forElement;
             uiElementMap.set(referenceName,labelReference);
@@ -176,6 +184,7 @@
         //     .html("Exit filtered view");
 
 
+        //Adds all the created elements to the uiElementsMap, so their IDs can be saved and accessed
         uiElementMap.keys().forEach(e=>uiElementMap.set(e,"#"+uiElementMap.get(e)));
         console.log(uiElementMap);
         return(uiElementMap);
@@ -265,9 +274,14 @@
 
     }
 
+    //Draws one hybrid sunburst chord graph
+    //uiElements - contains the names of uiElements that have to be accessed
+    //start - the lowest displayed sunburst level
+    //stop - the highest displayed sunburst level
+    //size - the size of the chart
     function drawGraph(hierarchyData, dependencyData, uiElements, start, stop, size) {
 
-        // Specify the chart’s dimensions.
+        // Specify the chart’s internal dimensions.
         const sunburstSize = 8000;
         const innerCircleRadius = 2000;
         const outerCircleWidth = 2000;
@@ -278,9 +292,11 @@
         let hierarchyDepth;
         const levelPadding = 10;
 
+        //Actually used start and stop levels
         let startLvl = start;
         let stopLvl = stop;
 
+        //Only get used to keep track of UI changes
         let sliderStartLvl = startLvl;
         let sliderStopLvl = stopLvl;
 
@@ -310,30 +326,13 @@
             root.each(d => d.hasChildren = hasChildren(d));
         }
 
-    //Create UI
-
-        // d3.select("#applyLevels").remove();
-        //
-        // const applyLevelsButton = d3.select("#generalButtons")
-        //     .append("button")
-        //     .attr("id", "applyLevels")
-        //     .html("Apply level settings")
-        //     .on("click", callArcs);
-
+        //Specify UI interactions
         d3__namespace.select(uiElements.get("fileSearchText")).on("input", changeFileSearchText);
         d3__namespace.select(uiElements.get("fileSearchButton")).on("click", fileSearch);
-
         d3__namespace.select(uiElements.get("showResultsButton")).on("click", showSearchResult);
-
         d3__namespace.select(uiElements.get("goUpButton")).on("click", goUpOneLevel);
-
-        d3__namespace
-            .select(uiElements.get("startLevelSlider"))
-            .on("change", adjustStart);
-
-        d3__namespace
-            .select(uiElements.get("stopLevelSlider"))
-            .on("change", adjustStop);
+        d3__namespace.select(uiElements.get("startLevelSlider")).on("change", adjustStart);
+        d3__namespace.select(uiElements.get("stopLevelSlider")).on("change", adjustStop);
 
     // Create the arc generator for the normal files and folders of the sunburst.
     // Is used to convert each element of the partition layout to an arc in the sunburst.
@@ -356,6 +355,8 @@
             .innerRadius(innerCircleRadius)
             .outerRadius(d => Math.min((calculateRadius(d.y0 + 1, false, 0)), innerCircleRadius + outerCircleWidth - levelPadding));
 
+        //Calculates the inner or outer radius of an arc segment, according to its hierarchy level
+        //Is so convoluted because the total size of the sunburst should stay constant
         function calculateRadius(yValue, isInnerRadius, padding) {
             const result = ((visibleLevels - (yValue - startLvl) - 1) * (outerCircleWidth / visibleLevels)) + innerCircleRadius;
 
@@ -375,6 +376,7 @@
             }
         }
 
+
         function refreshStartStopSliders() {
             d3__namespace
                 .select(uiElements.get("startLevelSlider"))
@@ -387,7 +389,7 @@
                 .property("max", hierarchyDepth);
         }
 
-
+        //Redraws arcs with the current state of both the data and displayed levels
         function callArcs() {
             root.each(d => d.current = d);
 
@@ -445,6 +447,7 @@
             .scaleExtent([1, 10])
             .on("zoom", changeZoom);
 
+        //svg element all of the graph will be attached to
         const wholeGraphSVG = d3__namespace
             .create("svg")
             .call(zoomBehaviour);
@@ -461,12 +464,16 @@
             wholeGraphSVG.attr("transform", zoomTransform);
         }
 
+        //svg element the sunburst will be attached to
         const sunburstSVG = wholeGraphSVG
             .append("svg")
-            .attr("viewBox", [-sunburstSize / 2, -sunburstSize / 2, sunburstSize, sunburstSize])
+            .attr("viewBox", [-sunburstSize / 2, -sunburstSize / 2, sunburstSize, sunburstSize]) //Arcs and partitions normally get drawn originating in 0,0, so viewbox has to be moved
             .attr("class", "sunburst");
 
+        //longArcs get used to extend arcs that don't have children to the inner radius of the sunburst
         const longArcPath = sunburstSVG.append("g").attr("class", "group1");
+
+        //shortArcs are the actual arc elements representing the data
         const shortArcPath = sunburstSVG.append("g").attr("class", "group2").attr("id", "shortArcs");
         const label = sunburstSVG.append("g")
             .attr("class", "group3")
@@ -477,9 +484,10 @@
 
         const format = d3__namespace.format(",d");
 
-
+        //Later gets used to decide which chords should be drawn
         let innerMostElements = new Map();
 
+        //draws the arcs, gets called by callArcs with the data adjusted to only contain the levels that should be displayed
         function drawArcs(shortData, longData) {
 
             // console.log(longData);
@@ -513,28 +521,29 @@
                     return visible
                 })
                 .attr("pointer-events", d => arcTechnicallyVisible(d.current) ? "auto" : "none")
-                .attr("path", d => d.data.path)
+                .attr("path", d => d.data.path) //file path, not vector path
                 .attr("d", d => sunburstArc(d.current))
                 .append("title")
                 .text(d => `
             ${d.data.path}\n
-            ${format(d.value)}\n
-            ${arcVisible(d)}\n
+            Size: ${format(d.value)}\n
             Depth: ${d.depth}
             `);
 
 
             // console.log(shortArcPath);
 
+            //makes all elements that have children clickable, so they can be zoomed in on
             shortArcPath.selectAll("path").filter(d => d.children)
                 .style("cursor", "pointer")
                 .on("click", clicked);
 
             innerMostElements = new Map();
 
-            // longArcPath.selectAll("path").attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
+            //adds all the innermost elements of the sunburst to the map, this includes the longArcs even though they don't reach the innerRadius,
+            //since they always reference leaves
+            //the fake attribute gets used to access all datums once and get their data. it is not used in any other way
             longArcPath.selectAll("path").attr("fake", d => innerMostElements.set(d.data.path, d));
-            // shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fill", "red").attr("fill-opacity", "1.0").attr("fake",d=>innerMostElements.set(d.data.path, d));
             shortArcPath.selectAll("path").filter(d => d.current.y0 == stopLvl).attr("fake", d => innerMostElements.set(d.data.path, d));
 
             // console.log("innerMostElements:");
@@ -560,8 +569,10 @@
             redraw();
         }
 
+        //contains the currently entered search text
         let searchText = "";
 
+        //gets called when search text box gets used
         function changeFileSearchText() {
             // console.log(event.target.value);
 
@@ -571,6 +582,8 @@
 
         let searchResults = new Set();
 
+        //searches for all files and dependencies that have a path that ends wit the currently entered search text,
+        // marks them black and adds them to searchResults
         function fileSearch() {
             searchResults = new Set();
 
@@ -578,15 +591,10 @@
                 .attr("stroke", "none");
 
             shortArcPath.selectAll("path").filter(function (d) {
-                return d.data.path.endsWith(searchText);
+                if(!(typeof d === "undefined")&&!(typeof d.data.path === "undefined")){
+                    return d.data.path.endsWith(searchText);
+                }
             })
-                // .attr("fill", (d, i) => {
-                //     if (i === 0) {
-                //         return "black";
-                //     } else {
-                //         return "red";
-                //     }
-                // })
                 .attr("stroke", "black")
                 .attr("stroke-width", "2em")
                 .attr("fake", d => searchResults.add(d));
@@ -616,6 +624,7 @@
             });
         }
 
+        //zooms in on the selected searchResult
         function showSearchResult() {
             const selectedPath = d3__namespace.select(uiElements.get("fileSearchDiv")).select("#searchResults").property("value");
             const selectedArc = shortArcPath.selectAll("path").filter(function (d) {
@@ -627,7 +636,7 @@
             // fileFocus(selectedArc);
         }
 
-
+        //contains the last subdirectory that was zoomed in on
         let currentlyClicked;
 
         // Handle zoom on click.
@@ -644,6 +653,8 @@
             }
         }
 
+        //Zooms in on subdirectories by changing the levels and transforming all arcs, so that they appear as if the
+        //focussed on file p is the new root of the hierarchy
         function fileFocus(p) {
             currentlyClicked = p;
 
@@ -652,6 +663,8 @@
 
             visibleLevels = stopLvl - startLvl + 1;
 
+            //Transforms all arcs so that they are either invisible if they are not a child of p
+            //or that they adhere to the new layout that assumes that p is the root
             root.each(d => d.current = {
                 x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
                 x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -673,10 +686,13 @@
             drawArcs(shortArcData, longArcData);
         }
 
+        //When focused on a file, focuses on its parent directory
         function goUpOneLevel() {
             fileFocus(currentlyClicked.parent);
         }
 
+        //Checks if an arc is visible. Arcs that are transformed so that they can't be seen,
+        // because the sunburst is zoomed in a file, also count as not visible
         function arcVisible(d) {
             const interval = 0.1;
 
@@ -703,6 +719,7 @@
             return d.y0 >= startLvl && d.y0 <= stopLvl && !allCloseToZero;
         }
 
+        //Arcs invisible due to zooming transformations get counted as visible
         function arcTechnicallyVisible(d) {
             return d.y0 >= startLvl && d.y0 <= stopLvl;
         }
@@ -711,6 +728,7 @@
             return d.y0 >= startLvl && d.y0 <= stopLvl && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.005;
         }
 
+        //calculates the label size, taking into account the size of arc the label is in
         function labelSize(d) {
             const interval = d.current.x1 - d.current.x0;
 
@@ -742,6 +760,8 @@
         }
 
         //______________________________________________________________________________________________
+        // chord visualization from here onward
+
 
         const chordPlotSize = 10000;
         const chordInnerRadius = chordPlotSize * 0.5 - 200;
@@ -750,6 +770,7 @@
 
         let level = stopLvl;
 
+        //svg element the chords get attached to
         const chordSVG = wholeGraphSVG
             .append("svg")
             .attr("viewBox", [-chordPlotSize / 2, -chordPlotSize / 2, chordPlotSize, chordPlotSize])
@@ -759,33 +780,33 @@
         // const chordBorderArcs = chordSVG.append("g").attr("class", "chordBorderArcs");
         const chordObject = chordSVG.append("g").attr("class", "chords").attr("id", "chords");
 
+        //the chord generator. this specifically generates the starting and ending areas the ribbons attach to
         const chordGen = d3__namespace.chordDirected()
             // .padAngle(10 / chordInnerRadius)
             .padAngle(0)
             .sortSubgroups(d3__namespace.descending)
             .sortChords(d3__namespace.descending);
 
-        d3__namespace.arc()
-            // .padAngle(1 / chordInnerRadius)
-            .padAngle(0)
-            .innerRadius(chordInnerRadius)
-            .outerRadius(chordOuterRadius);
-
+        //the ribbon generator. this generates the svg elements that one would normally describe as chords
         const ribbonGen = d3__namespace.ribbonArrow()
             .radius(chordOuterRadius)
             .padAngle(1 / chordInnerRadius)
             .headRadius(chordInnerRadius / 50);
 
+        //refreshes the chord viz
         function redraw() {
             level = stopLvl;
 
             calculateChordData(innerMostElements);
         }
 
+        //calculates the matrix of dependency relationships from the data
         function calculateChordData(fileList) {
 
+            //only load data that could get displayed
             const currentLevelChordData = dependencyData.filter(d => ((d.dirLevel <= level && d.isDirectory === false) || (d.dirLevel === level && d.isDirectory === true)));
 
+            //contains all dependencies in the data in the format of [source,target,value]
             const allDepends = [];
             for (const d of currentLevelChordData) {
                 const source = d.path;
@@ -802,6 +823,7 @@
             }
 
 
+            //contains all unique files that get referenced or reference another file
             const uniqueFiles = new Set;
 
             allDepends.forEach(e => {
@@ -811,8 +833,11 @@
 
             const names = d3__namespace.sort(uniqueFiles);
 
+            //array of indices for the names of the uniqueFiles
             const indices = new Map(names.map((name, i) => [name, i]));
 
+            //matrix of relationships between files. x and y axis are both represent the files, the values in the matrix later
+            //represents the values of the chords
             const matrix = Array.from(indices, () => new Array(names.length).fill(0));
 
             for (const e of allDepends) {
@@ -829,6 +854,8 @@
                 matrix[indices.get(e[0])][indices.get(e[1])] += Math.max(e[2], 1);
             }
 
+
+            //transform the chords to match the layout of the sunburst, especially when zoomed in
             function chordTransform(pChords) {
                 pChords.groups.forEach(e => {
                     const currentPath = names[e.index];
@@ -852,6 +879,7 @@
                 });
                 // console.log(pChords.groups);
 
+                //All the chords get rearranged and distributed to their new place
                 pChords.forEach(e => {
                     e.source.path = names[e.source.index];
                     e.target.path = names[e.target.index];
@@ -914,7 +942,7 @@
             displayGraph(chordTransform(chordGen(matrix)));
         }
 
-
+        //draws the hords
         function displayGraph(pData) {
 
     //         chordBorderArcs.selectAll("path")
@@ -933,7 +961,7 @@
             chordObject
                 .attr("fill-opacity", 0.75)
                 .selectAll("path")
-                .data(pData.filter(d => chordValid(d)), function (d) {
+                .data(pData.filter(d => chordValid(d)), function (d) {//does draw invisible chords
                     return d;
                 })
                 .join("path")
@@ -947,15 +975,12 @@
                 .insert("title", ":first-child")
                 .text(d =>
                     `Chord info:\n
-                ${d.source.path} →\n
-                ${d.target.path}\n
-                ${d.source.startAngle}\n                
-                ${d.source.endAngle}\n                
-                ${d.target.startAngle}\n                
-                ${d.target.endAngle}\n                
+                Source: ${d.source.path} →\n
+                Target: ${d.target.path}\n               
                 Value: ${d.source.value}\n`);
         }
 
+        //similar to arc visible, doesn't draw infinitely thin chords
         function chordVisible(chord) {
             const sourceInterval = Math.abs(chord.source.endAngle - chord.source.startAngle);
             const targetInterval = Math.abs(chord.target.endAngle - chord.target.startAngle);
@@ -969,6 +994,7 @@
             }
         }
 
+        //decides if the chord should be invisible, due to transformation by the zooming function
         function chordValid(chord) {
 
             const maxValue = 359.999 * (Math.PI / 180);
@@ -1021,6 +1047,7 @@
             indexArr[e] = e+1;        
         });
 
+
         // Create the horizontal scale and its axis generator.
         const x = d3__namespace.scaleBand()
             .domain(indexArr) //https://stackoverflow.com/a/33352604
@@ -1046,6 +1073,7 @@
         // console.log(y(-100));
 
         d3__namespace.select(div).select("#barChart").remove();
+
         // Create the SVG container and call the zoom behavior.
         const svg = d3__namespace.select(div)
             .append("svg")
@@ -1057,6 +1085,8 @@
             .call(zoom);
 
         // Append the bars.
+
+        //Green insertions bars
         svg.append("g")
             .attr("class", "insertions")
             .attr("opacity", "0.75")
@@ -1069,6 +1099,7 @@
             .attr("height", d => yInsertions(0) - yInsertions(d.insertions))
             .attr("width", x.bandwidth());
 
+        //Red deletions bars
         svg.append("g")
             .attr("class", "deletions")
             .attr("opacity", "0.75")
@@ -1081,6 +1112,9 @@
             .attr("height", d => yDeletions(0) - yDeletions(d.deletions))
             .attr("width", x.bandwidth());
 
+        //These are invisible bars that overlay the whole time step bar chart
+        //Their only purpose is to be interacted with, so that the user can also click on areas where no
+        //insertions or deletions bar is, but still select that step
         svg.append("g")
             .attr("class", "selectables")
             .attr("id", "selectables")
@@ -1088,7 +1122,7 @@
             .data(data)
             .join("rect")
             .attr("fill", "white")
-            .attr("opacity","0.01")
+            .attr("opacity","0.01") //can't be 0, since some browsers cull invisible objects
             .attr("x", d => x(d.index))
             .attr("height", height)
             .attr("width", x.bandwidth())
@@ -1103,12 +1137,15 @@
             )
             .raise();
 
+        //Create the seekhead, is always placed at the selected time step
         const seekHead = svg.append("g")
             .attr("class","seekHead")
             .attr("opacity", "0.75")
             .lower();
 
         let currentIndex = [];
+
+        //Draws the seekhead at the specified index
         function drawSeekHead(index){
             seekHead
                 .selectAll("rect")
@@ -1124,6 +1161,7 @@
                 .attr("width", x.bandwidth());
         }
 
+        //Creates the hoverhead, follows the users cursor and highlights the time step the user is hovering over
         const hoverHead = svg.append("g")
             .attr("class","hoverHead")
             .attr("opacity", "0.25")
@@ -1207,21 +1245,25 @@
 
     const windowHeight = Math.min(window.innerHeight*(3/4), window.innerWidth/2);
 
+    //contains the left graph
     const mainGraphSVG = d3__namespace
         .select("body")
         .append("div")
         .attr("class","column")
         .attr("id", "mainGraph")
         .append("svg")
+        .attr("xmlns","http://www.w3.org/2000/svg")
         .attr('width', windowHeight)
         .attr('height', windowHeight);
 
+    //contains the right graph
     const secondaryGraphSVG = d3__namespace
         .select("body")
         .append("div")
         .attr("class","column")
         .attr("id", "secondaryGraph")
         .append("svg")
+        .attr("xmlns","http://www.w3.org/2000/svg")
         .attr('width', windowHeight)
         .attr('height', windowHeight);
 
@@ -1230,11 +1272,15 @@
         d3__namespace.json("data\\index.json"),
         d3__namespace.csv("data\\changes.txt"),
     ]).then(function (files) {
+
+        //calls a time step bar chart
         function callBarChart(div){
-            // console.log(files);
+
+            //correctly casts all values of changes.txt
             for(let i=0; i < files[1].length; i++){
                 files[1][i].index = i+1;
 
+                //read values don't always get parsed correctly, this forces correct parsing
                 files[1][i].changes = parseInt(files[1][i].changes);
                 files[1][i].insertions = parseInt(files[1][i].insertions);
                 files[1][i].deletions = parseInt(files[1][i].deletions);
@@ -1243,24 +1289,11 @@
             barGraph(files[1], div);
         }
 
+        //creates both left and right UI
         const mainUI = createUI("mainGraph", "mainUI");
         const secondaryUI = createUI("secondaryGraph", "secondaryUI");
 
-        // function changeTimeStep(event, uiElement, svgElement){
-        //     console.log(event);
-        //
-        //     const timeStep = event.target.value;
-        //
-        //     callBarChart(uiElement.get("timeStepDivName"),timeStep.toString());
-        //     d3.select(uiElement.get("timeStepField")).property("value", timeStep);
-        //     d3.select(uiElement.get("timeStepName")).html(files[0][timeStep-1].hierarchy);
-        //
-        //     const start = d3.select(uiElement.get("startLevelSlider")).property("value");
-        //     const stop = d3.select(uiElement.get("stopLevelSlider")).property("value");
-        //
-        //     refreshChart(files[0][timeStep-1].hierarchy, files[0][timeStep-1].dependency, svgElement, uiElement, start, stop);
-        // }
-
+        //changes the timestep after clicking on a new one on a time step bar chart
         function changeTimeStepChart(event, uiElement, svgElement){
             console.log(event);
 
@@ -1275,14 +1308,7 @@
             refreshChart(files[0][timeStep-1].hierarchy, files[0][timeStep-1].dependency, svgElement, uiElement, start, stop);
         }
 
-        // function changeTimeStepMain(event) {
-        //     changeTimeStep(event, mainUI, mainGraphSVG);
-        // }
-        //
-        // function changeTimeStepSecond(event) {
-        //     changeTimeStep(event, secondaryUI, secondaryGraphSVG);
-        // }
-
+        //both are necessary since event listeners don't call functions with parameters
         function changeTimeStepChartMain(event) {
             changeTimeStepChart(event, mainUI, mainGraphSVG);
         }
@@ -1291,11 +1317,13 @@
             changeTimeStepChart(event, secondaryUI, secondaryGraphSVG);
         }
 
+        //sets up all the visualizations
         function setup(){
             initialize(changeTimeStepChartMain, mainGraphSVG, mainUI);
             initialize(changeTimeStepChartSecond, secondaryGraphSVG, secondaryUI);
         }
 
+        //initializes the whole page
         function initialize(changeFnctChart,svgElement, uiElement){
 
             refreshChart(files[0][0].hierarchy, files[0][0].dependency, svgElement, uiElement, 0, 3);
@@ -1313,7 +1341,6 @@
             d3__namespace.select(uiElement.get("maxStopValue")).html(files[0].length);
             d3__namespace.select(uiElement.get("timeStepName")).html(files[0][0].hierarchy);
         }
-
 
 
         d3__namespace.select("#reset").on("click", setup);

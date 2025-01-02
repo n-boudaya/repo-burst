@@ -31,6 +31,7 @@ export function barGraph (data, div){
         indexArr[e] = e+1;        
     })
 
+
     // Create the horizontal scale and its axis generator.
     const x = d3.scaleBand()
         .domain(indexArr) //https://stackoverflow.com/a/33352604
@@ -56,6 +57,7 @@ export function barGraph (data, div){
     // console.log(y(-100));
 
     d3.select(div).select("#barChart").remove();
+
     // Create the SVG container and call the zoom behavior.
     const svg = d3.select(div)
         .append("svg")
@@ -67,6 +69,8 @@ export function barGraph (data, div){
         .call(zoom);
 
     // Append the bars.
+
+    //Green insertions bars
     svg.append("g")
         .attr("class", "insertions")
         .attr("opacity", "0.75")
@@ -79,6 +83,7 @@ export function barGraph (data, div){
         .attr("height", d => yInsertions(0) - yInsertions(d.insertions))
         .attr("width", x.bandwidth());
 
+    //Red deletions bars
     svg.append("g")
         .attr("class", "deletions")
         .attr("opacity", "0.75")
@@ -91,6 +96,9 @@ export function barGraph (data, div){
         .attr("height", d => yDeletions(0) - yDeletions(d.deletions))
         .attr("width", x.bandwidth());
 
+    //These are invisible bars that overlay the whole time step bar chart
+    //Their only purpose is to be interacted with, so that the user can also click on areas where no
+    //insertions or deletions bar is, but still select that step
     svg.append("g")
         .attr("class", "selectables")
         .attr("id", "selectables")
@@ -98,7 +106,7 @@ export function barGraph (data, div){
         .data(data)
         .join("rect")
         .attr("fill", "white")
-        .attr("opacity","0.01")
+        .attr("opacity","0.01") //can't be 0, since some browsers cull invisible objects
         .attr("x", d => x(d.index))
         .attr("height", height)
         .attr("width", x.bandwidth())
@@ -113,12 +121,15 @@ export function barGraph (data, div){
         )
         .raise();
 
+    //Create the seekhead, is always placed at the selected time step
     const seekHead = svg.append("g")
         .attr("class","seekHead")
         .attr("opacity", "0.75")
         .lower();
 
     let currentIndex = [];
+
+    //Draws the seekhead at the specified index
     function drawSeekHead(index){
         seekHead
             .selectAll("rect")
@@ -134,6 +145,7 @@ export function barGraph (data, div){
             .attr("width", x.bandwidth());
     }
 
+    //Creates the hoverhead, follows the users cursor and highlights the time step the user is hovering over
     const hoverHead = svg.append("g")
         .attr("class","hoverHead")
         .attr("opacity", "0.25")

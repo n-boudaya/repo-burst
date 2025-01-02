@@ -19,16 +19,14 @@ import processors.processor;
  */
 public class FileReader {
 
-//    static Path searchDirectory = Paths.get("J:/repo-burst/data_and_processing/raw_data");
-//    static String searchDirectorySeparator = "svelte";
-//    static Path indexOutput = Paths.get("./data_and_processing/index.json");
-
     static Path indexPath = Paths.get("./data/index.json");
     static Path backupLocation = Paths.get("./data/backup/");
 
     ArrayList<processor> processors;
     ArrayList<String> accessibleFiletypes;
 
+    //directory is the location of the commits that should be scanned. separator folder is the folder that is inserted behind the numbered commits,
+    //to easily remove any deanonymizing parts from saved paths.
     public FileReader(Path directory, String separatorFolder) {
 
         processors = new ArrayList<>();
@@ -51,6 +49,7 @@ public class FileReader {
 
         System.out.println(backupPath.toAbsolutePath());
 
+        //creates the output folders if they don't already exist
         try {
             Files.createDirectories(outputLocation);
             Files.createDirectories(dependencyLocation);
@@ -59,6 +58,7 @@ public class FileReader {
             e.printStackTrace();
         }
 
+        //Scans and processes each folder in the given path
         try (DirectoryStream<Path> directoryContentStream = Files.newDirectoryStream(directory)) {
             for (Path directoryElement : directoryContentStream) {
                                     System.out.println(directoryElement.getFileName());
@@ -72,7 +72,11 @@ public class FileReader {
         createIndexFile(dependencyLocation, hierarchyLocation, indexPath, backupPath);
     }
 
+    //when called from cmd, the user should firstly supply the folder containing the commits that should be scanned, and the separator string.
+    //Explanations for that can be found in the manual about dataset preparation.
     public static void main(String[] args) {
+
+        //default values
         Path directory = Paths.get("./data/raw_data");
         String separatorFolder = "separator";
 
@@ -97,6 +101,7 @@ public class FileReader {
         }
     }
 
+    //Creates the index file that contains paths to all hierarchy and dependency files for the current dataset
     public void createIndexFile(Path dependencyLocation, Path hierarchyLocation, Path indexPath, Path backupPath){
 
         try {
@@ -149,8 +154,14 @@ public class FileReader {
         }
     }
 
+    //Gets a path to process (directory), the location the dependency and hierarchy files should be written to (dependencyLocation,hierarchyLocation)
+    //and the unique separator separating the raw data folder names from their contents.
+    //Processes all the files contained in directory, extracting the file structure and dependencies and writing JSON files containing those
+    //in a machine-readable format to the given directories
    public void outputFiles(Path directory, Path dependencyLocation, Path hierarchyLocation, String separatorFolder) {
 
+        //Due to conversions between JSON files and java strings, which both handle escaping backslashes differently,
+       //the backslashes in the file path have to be excaped 16 times.
         String regex = "";
        try {
            System.out.println(directory.toRealPath(LinkOption.NOFOLLOW_LINKS));
@@ -164,11 +175,15 @@ public class FileReader {
            throw new RuntimeException(e);
        }
 
+       //Processes the data
        HierarchyAndDepends outputs = fileTreeToJSON(Paths.get(directory.toString(), separatorFolder),
                new HierarchyAndDepends(new JSONObject(), new JSONArray(), null, null, null) , 0);
 
+       //Adds incoming dependencies and adjusts outgoing dependencies of directories to not go down the hierarchy
         addIncomingDependencies(outputs.getDependencies());
 
+
+        //Writes the results to two separate files.
        File hierarchyFile = new File(hierarchyLocation.toString() + "\\" + directory.getFileName() + ".json");
 
        try (BufferedWriter br = new BufferedWriter(new FileWriter(hierarchyFile, true))) {
@@ -186,6 +201,8 @@ public class FileReader {
        }
    }
 
+   //Writes the structure of all children of currentPath to a HierarchyAndDepends file, scans all compatible code files for dependencies and also adds those.
+    //currentLevel is used to keep track of the hierarchy depth relative to the root of the data instead of the root of this program.
     private HierarchyAndDepends fileTreeToJSON(Path currentPath, HierarchyAndDepends lastHierarchyAndDepends, int currentLevel) {
         JSONObject hierarchy = new JSONObject();
         JSONArray dependencies = lastHierarchyAndDepends.getDependencies();
@@ -234,22 +251,13 @@ public class FileReader {
 
                     directoryContentArray.put(childOutputs.getHierarchy());
 
-
-//                    incoming.addAll(childOutputs.getIncoming());
-
                     mapAdder(outgoing, childOutputs.getOutgoing());
-//                    collapseMap(outgoing, currentPath);
-
-
-//                    externals.addAll(childOutputs.getExternal());
-//                    System.out.println(outgoing);
                 }
             } catch (Exception e) {
                 System.err.println("Directory Access: " + e.getMessage() + " Current path: " + currentPath.toString());
             }
 
             isDirectory = true;
-
 
             for(Map.Entry<Path, Integer> entry : outgoing.entrySet()) {
                 JSONObject outgoingJSONEntry = new JSONObject();
@@ -265,7 +273,6 @@ public class FileReader {
                 dependenciesEntry.put("dirLevel", currentLevel);
                 dependenciesEntry.put("value", 1);
                 dependenciesEntry.put("outgoing", outgoingArray);
-//                dependenciesEntry.put("external", externalArray);
                 dependencies.put(dependenciesEntry);
             } catch (IOException e) {
                 System.err.println("Path Access Depends: " + e.getMessage());
@@ -311,23 +318,10 @@ public class FileReader {
                             else {
                                 outgoingArray.put(referencedFile);
 
-//                                if(outgoing.containsKey(referencedFile)){
-//                                    outgoing.replace(referencedFile, outgoing.get(referencedFile) + 1);
-//                                }
-//                                else {
                                 outgoing.put(referencedFile, 1);
-//                                }
                             }
-//                            outgoingArray
-//                                    .put(Map.of("file", d.getReferencedFile(), "external", d.isExternal()));
                         }
                     }
-
-
-
-
-                    //outgoingEntry.put("importData", imports);
-
 
                     try {
                         dependenciesEntry.put("path", currentPath.toRealPath(LinkOption.NOFOLLOW_LINKS));
@@ -341,26 +335,10 @@ public class FileReader {
                         System.err.println("Path Access Depends: " + e.getMessage());
                     }
                 }
-//                else{
-//                    try {
-//                        dependenciesEntry.put("path", currentPath.toRealPath());
-//                        dependenciesEntry.put("isDirectory", isDirectory);
-//                        dependenciesEntry.put("dirLevel", currentLevel);
-//                        dependenciesEntry.put("value", 1);
-//                        dependenciesEntry.put("outgoing", outgoingArray);
-//                        dependenciesEntry.put("external", externalArray);
-//                        dependencies.put(dependenciesEntry);
-//                    } catch (IOException e) {
-//                        System.err.println("Path Access Depends: " + e.getMessage());
-//                    }
-//                }
             }
-
 
             hierarchy.put("extension", extension);
             hierarchy.put("imports", imports);
-
-
 
             try {
                 hierarchy.put("value", Files.size(currentPath));
@@ -370,12 +348,9 @@ public class FileReader {
             }
         }
 
-
-
         hierarchy.put("dirLevel", currentLevel);
         hierarchy.put("name", currentPath.getFileName());
         hierarchy.put("isDirectory", isDirectory);
-
 
         try {
             hierarchy.put("path", currentPath.toRealPath(LinkOption.NOFOLLOW_LINKS));
@@ -385,34 +360,30 @@ public class FileReader {
         return new HierarchyAndDepends(hierarchy, dependencies, incoming, outgoing, externals);
     }
 
-    private String postProcessDepends(String input, String regex) {
-
-        String output = input.replaceAll(regex,"\"");
-
-        return output;
-    }
-
+    //Iterates over all entries in dependencies, which currently only contains outgoing dependencies
+    //Adds incoming dependencies to the targets of the outgoing dependencies
+    //Also creates new dependency entries for directories, which contain all incoming and outgoing dependencies of their children
+    //Also formats outgoing dependencies from directories as such that they only reference directories at their same depth or lower
    private JSONArray addIncomingDependencies(JSONArray dependencies) {
-//        System.out.println(dependencies.toString(2));
+
+        //Iterate over all entries of dependencies
        for(Object currEditedObject : dependencies){
            JSONObject currEditedElement = (JSONObject) currEditedObject;
            int endIndex = Paths.get(currEditedElement.get("path").toString()).getNameCount();
 
-
+           //If this is a file, scan all outgoing dependencies for any that point to this file
+           //Add all those to the incoming dependencies for this file
            if(!currEditedElement.getBoolean("isDirectory")){
                JSONArray incoming  = new JSONArray();
 
                for(Object currViewingObject : dependencies){
                    JSONObject currViewingElement = (JSONObject) currViewingObject;
-
-
                    JSONArray currViewingOutgoings = currViewingElement.getJSONArray("outgoing");
 
                    for (Object outgoingObject : currViewingOutgoings) {
                        String currOutgoingPath = outgoingObject.toString();
 
                        //System.out.println(currOutgoingPath);
-
                        if(currOutgoingPath.equals(currEditedElement.get("path").toString())){
                            incoming.put(currViewingElement.get("path").toString());
                        }
@@ -421,18 +392,21 @@ public class FileReader {
 
                currEditedElement.put("incoming", incoming);
            }
+           //If this is a folder....
            else {
                HashMap<Path, Integer> newOutgoing = new HashMap<Path, Integer>();
 
+               //Add all outgoing
                for(Object currentOutObject : currEditedElement.getJSONArray("outgoing")){
 
                    Map.Entry<Path, Integer> currEntry = new AbstractMap.SimpleEntry<Path, Integer>(Paths.get(((JSONObject)currentOutObject).get("path").toString()), (Integer)((JSONObject)currentOutObject).get("value"));
 
-//                    System.out.println(currEntry);
-
+                    //If currEntry has a higher depth than the current directory
                    if(currEntry.getKey().getNameCount()>endIndex){
+                       //Finds the parent of currEntry with the same depth as the current directory
                        Path newPath = Paths.get(currEntry.getKey().getRoot().toString(),currEntry.getKey().subpath(0, endIndex).toString());
 
+                       //Either adds a new entry into outgoings, or adds the value of currEntry to the value of its parent that was found above
                        if(newOutgoing.containsKey(newPath)) {
                            newOutgoing.replace(newPath, newOutgoing.get(newPath) + currEntry.getValue());
                        }
@@ -443,14 +417,6 @@ public class FileReader {
                    else{
                        newOutgoing.put(currEntry.getKey(), currEntry.getValue());
                    }
-
-
-//                for(int i=0;i<realPath.getNameCount();i++){
-//                    System.out.println(realPath.toString());
-//                    System.out.println("i:"+i+"\t"+realPath.getRoot()+realPath.subpath(0, i+1));
-//                }
-
-
                }
                currEditedElement.remove("outgoing");
 
@@ -471,6 +437,8 @@ public class FileReader {
        return dependencies;
    }
 
+   //Adds newMaps contents to oldMap by either putting newMap entries into oldMap,
+   // or adding the value of newMap entries to oldMap entries with the same key
    private void mapAdder(Map<Path, Integer> oldMap, Map<Path, Integer> newMap) {
        for(Map.Entry<Path, Integer> entry : newMap.entrySet()) {
            if(oldMap.containsKey(entry.getKey())) {
@@ -481,4 +449,12 @@ public class FileReader {
            }
        }
    }
+
+   //Used to properly escape backslashes in file paths
+    private String postProcessDepends(String input, String regex) {
+
+        String output = input.replaceAll(regex,"\"");
+
+        return output;
+    }
 }
