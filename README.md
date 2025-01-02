@@ -9,6 +9,7 @@ A tool to visualize dependency changes of large code repositories using a hybrid
 - If you want to process your own dataset, install any flavor of JDK Development Kit v21. [Eclipse Temurin was used for development.](https://adoptium.net/temurin/releases/?package=jdk&version=21)  
 - If you want to modify the code, install both the [JDK](https://adoptium.net/temurin/releases/?package=jdk&version=21) and [Rollup](https://rollupjs.org/) as the build tool.
 
+- Tested on Windows 10 and 11 23H2, using Firefox v133.0.3
 ## Usage
 
 - If you want to visualize your own dataset, see [this document.](./dataset_preparation.md)
